@@ -48,10 +48,9 @@ public class HttpAsyncTaskLoader extends AsyncTaskLoader<Model> {
 
     @Override
     public Model loadInBackground() {
-        Utility utility = new Utility(context);
         switch (request.getRequestType()) {
             case POST:
-                serverResponse = Utility.doPost(request.getUrl(), getJsonParam(request.getParamMap(), true));
+                serverResponse = Utility.doPost(context, request.getUrl(), getJsonParam(request.getParamMap(), true));
                 break;
             case CLOUDINARY:
                 // PARKED FEATURE FOR EDIT PROFILE
@@ -171,7 +170,7 @@ public class HttpAsyncTaskLoader extends AsyncTaskLoader<Model> {
     private JSONObject getKeysJson() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put(ApiDetails.HEADER_SECRET_KEY, ApiDetails.SECRET_KEY);
+            jsonObject.put(ApiDetails.REQUEST_KEY_SECRET_KEY, ApiDetails.SECRET_KEY);
             jsonObject.put(ApiDetails.REQUEST_KEY_ACCESS_TOKEN, SharedPreference.getString(context, AppConstants.PREF_KEY_ACCESS_TOKEN));
         } catch (JSONException e) {
             e.printStackTrace();

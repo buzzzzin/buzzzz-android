@@ -4,6 +4,6 @@
     <string name="msg_404">Unable to send request to server. Please try again later.</string>
     <string name="msg_4xx">Something happened. Please login again to continue</string>
     <string name="msg_5xx">Oops!! Something happened. Please try again</string>
-    <string name="error_no_email_facebook">You don\'t have any email id associated with your Facebook account. Try other registration</string>
-    medium.
+    <string name="error_no_email_facebook">You don\'t have any email id associated with your Facebook account. Try other registration medium</string>
+    <string name="no_network">No Network connectivity. Check your internet connection</string>
 </resources>

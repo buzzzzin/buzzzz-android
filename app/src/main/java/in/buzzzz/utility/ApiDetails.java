@@ -6,14 +6,72 @@ package in.buzzzz.utility;
 public final class ApiDetails {
 
     public enum ACTION_NAME {
-        GET, POST
+        LOGIN("/auth/login"),
+        NONE("");
+
+        private final String value;
+
+        ACTION_NAME(String value) {
+            this.value = value;
+        }
+
+        public String getActionName() {
+            return this.value;
+        }
+
+        public static ACTION_NAME getActionName(String period) {
+            for (ACTION_NAME actionName : values()) {
+                if (actionName.getActionName().equals(period)) {
+                    return actionName;
+                }
+            }
+            return NONE;
+        }
     }
+
+    public enum MEDIUM {
+        FACEBOOK, GPLUS, MANUAL
+    }
+
+    public enum GENDER {
+        MALE, FEMALE, NOT_SET
+    }
+
+    public static final int STATUS_SUCCESS = 1;
+    public static final int STATUS_FAILURE = 0;
 
     public static final String SECRET_KEY = "myAppKey";
 
     // HEADER KEYS
-    public static final String HEADER_SECRET_KEY = "SecretKey";
+    public static final String HEADER_SECRET_KEY = "Secret-Key";
+    public static final String HEADER_X_AUTH_TOKEN = "X-Auth-Token";
 
-    //    REQUEST KEYS
-    public static final String REQUEST_KEY_ACCESS_TOKEN = "access";
+    // REQUEST KEYS
+//    Common keys
+    public static final String REQUEST_KEY_SECRET_KEY = "secretKey";
+    public static final String REQUEST_KEY_ACCESS_TOKEN = "accessToken";
+
+    //    Login keys
+    public static final String REQUEST_KEY_NAME = "name";
+    public static final String REQUEST_KEY_GENDER = "gender";
+    public static final String REQUEST_KEY_EMAIL = "email";
+    public static final String REQUEST_KEY_MEDIUM_ID = "mediumId";
+    public static final String REQUEST_KEY_MEDIUM_TYPE = "mediumType";
+
+    //    RESPONSE KEYS
+    public static final String RESPONSE_KEY_MESSAGE = "message";
+    public static final String RESPONSE_KEY_STATUS = "status";
+    public static final String RESPONSE_KEY_DATA = "data";
+
+    //    Login Keys
+    public static final String RESPONSE_KEY_USER = "user";
+    public static final String RESPONSE_KEY_ID = "id";
+    public static final String RESPONSE_KEY_NAME = "name";
+    public static final String RESPONSE_KEY_GENDER = "gender";
+    public static final String RESPONSE_KEY_EMAIL = "email";
+    public static final String RESPONSE_KEY_MEDIUM = "medium";
+    public static final String RESPONSE_KEY_MEDIUM_ID = "mediumId";
+    public static final String RESPONSE_KEY_MEDIUM_TYPE = "mediumType";
+    public static final String RESPONSE_KEY_AUTH_TOKEN = "authToken";
+    public static final String RESPONSE_KEY_HAS_INTERESTS = "hasInterests";
 }

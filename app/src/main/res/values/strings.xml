@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Buzzzz</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="msg_login_progress">Login</string>
 </resources>

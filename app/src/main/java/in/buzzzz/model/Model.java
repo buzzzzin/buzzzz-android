@@ -4,7 +4,7 @@ package in.buzzzz.model;
  * Created by Navkrishna on September 25, 2015
  */
 public class Model {
-    private int status, code;
+    private int status;
     private String message;
     private boolean isAccountVerified;
     private int httpStatusCode;
@@ -23,14 +23,6 @@ public class Model {
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
     }
 
     public String getMessage() {

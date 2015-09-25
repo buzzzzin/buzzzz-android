@@ -26,9 +26,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import in.buzzzz.R;
+import in.buzzzz.loader.APICaller;
+import in.buzzzz.loader.LoaderCallback;
+import in.buzzzz.model.Model;
+import in.buzzzz.model.Request;
+import in.buzzzz.parser.LoginParser;
+import in.buzzzz.utility.Api;
+import in.buzzzz.utility.ApiDetails;
 import in.buzzzz.utility.Logger;
 import in.buzzzz.utility.Utility;
 
@@ -114,14 +122,15 @@ public class LoginActivity extends BaseActivity {
                         Logger.i(TAG, "JSONObject: " + object);
                         Logger.i(TAG, "GraphResponse: " + response);
                         try {
-                            String id = object.getString("id");
+                            String mediumId = object.getString("id");
                             String email = object.optString("email");
                             String name = object.getString("name");
                             String gender = object.getString("gender");
                             if (email.isEmpty()) {
                                 Utility.showToastMessage(mActivity, getString(R.string.error_no_email_facebook));
                             } else {
-//                                loginRequest(imageUrl, email, ApiDetails.REGISTRATION_MEDIUM.FACEBOOK, loginResult.getAccessToken().getToken());
+                                requestLogin(name, Utility.getGender(gender),
+                                        email, mediumId, ApiDetails.MEDIUM.FACEBOOK);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -196,6 +205,11 @@ public class LoginActivity extends BaseActivity {
                 Logger.i(TAG, "Gender: " + currentPerson.getGender());
                 Logger.i(TAG, "Name: " + googleDisplayName + ", plusProfile: "
                         + ", email: " + googlePersonEmail);
+                requestLogin(googleDisplayName,
+                        Utility.getGender(currentPerson.getGender()),
+                        googlePersonEmail,
+                        currentPerson.getId(),
+                        ApiDetails.MEDIUM.GPLUS);
             } else {
                 Utility.showToastMessage(mActivity, "Person information is null");
             }
@@ -241,5 +255,33 @@ public class LoginActivity extends BaseActivity {
     protected void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
+    }
+
+    private void requestLogin(String name, ApiDetails.GENDER gender, String email, String mediumId, ApiDetails.MEDIUM medium) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put(ApiDetails.REQUEST_KEY_NAME, name);
+        params.put(ApiDetails.REQUEST_KEY_GENDER, String.valueOf(gender));
+        params.put(ApiDetails.REQUEST_KEY_EMAIL, email);
+        params.put(ApiDetails.REQUEST_KEY_MEDIUM_ID, mediumId);
+        params.put(ApiDetails.REQUEST_KEY_MEDIUM_TYPE, String.valueOf(medium));
+
+        Request request = new Request(ApiDetails.ACTION_NAME.LOGIN);
+        request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.LOGIN.getActionName());
+        request.setShowDialog(true);
+        request.setDialogMessage(getString(R.string.msg_login_progress));
+        request.setParamMap(params);
+        request.setRequestType(Request.HttpRequestType.POST);
+        LoaderCallback loaderCallback = new LoaderCallback(mActivity, new LoginParser());
+        boolean hasNetwork = loaderCallback.requestToServer(request);
+        loaderCallback.setServerResponse(new APICaller() {
+
+            @Override
+            public void onComplete(Model model) {
+
+            }
+        });
+        if (!hasNetwork) {
+            Utility.showToastMessage(mActivity, getString(R.string.no_network));
+        }
     }
 }
