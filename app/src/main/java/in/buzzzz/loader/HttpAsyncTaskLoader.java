@@ -171,7 +171,7 @@ public class HttpAsyncTaskLoader extends AsyncTaskLoader<Model> {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put(ApiDetails.REQUEST_KEY_SECRET_KEY, ApiDetails.SECRET_KEY);
-            jsonObject.put(ApiDetails.REQUEST_KEY_ACCESS_TOKEN, SharedPreference.getString(context, AppConstants.PREF_KEY_ACCESS_TOKEN));
+            jsonObject.put(ApiDetails.REQUEST_KEY_ACCESS_TOKEN, SharedPreference.getString(context, AppConstants.PREF_KEY_AUTH_TOKEN));
         } catch (JSONException e) {
             e.printStackTrace();
         }

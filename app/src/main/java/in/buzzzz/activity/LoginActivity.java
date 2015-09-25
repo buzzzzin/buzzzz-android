@@ -32,12 +32,14 @@ import java.util.List;
 import in.buzzzz.R;
 import in.buzzzz.loader.APICaller;
 import in.buzzzz.loader.LoaderCallback;
+import in.buzzzz.model.Login;
 import in.buzzzz.model.Model;
 import in.buzzzz.model.Request;
 import in.buzzzz.parser.LoginParser;
 import in.buzzzz.utility.Api;
 import in.buzzzz.utility.ApiDetails;
 import in.buzzzz.utility.Logger;
+import in.buzzzz.utility.SharedPreference;
 import in.buzzzz.utility.Utility;
 
 /**
@@ -277,7 +279,13 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onComplete(Model model) {
-
+                if (model.getStatus() == ApiDetails.STATUS_SUCCESS) {
+                    if (model instanceof Login) {
+                        SharedPreference.saveLoginInfo(mActivity, (Login) model);
+                    }
+                } else {
+                    Utility.showToastMessage(mActivity, model.getMessage());
+                }
             }
         });
         if (!hasNetwork) {

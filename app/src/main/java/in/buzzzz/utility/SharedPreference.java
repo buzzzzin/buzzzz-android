@@ -1,6 +1,9 @@
 package in.buzzzz.utility;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+
+import in.buzzzz.model.Login;
 
 /**
  * Created by Navkrishna on September 25, 2015
@@ -30,6 +33,20 @@ public final class SharedPreference {
     }
 
     public static void clearLoggedInInfo(Context context) {
+        getPref(context).edit().clear().commit();
+    }
 
+    public static void saveLoginInfo(Context context, Login login) {
+        SharedPreferences.Editor editor = getPref(context).edit();
+        editor.putBoolean(AppConstants.PREF_KEY_HAS_INTERESTS, login.hasInterests());
+        editor.putString(AppConstants.PREF_KEY_AUTH_TOKEN, login.getAuthToken());
+        editor.putString(AppConstants.PREF_KEY_USER_ID, login.getId());
+        editor.putString(AppConstants.PREF_KEY_USER_NAME, login.getName());
+        editor.putString(AppConstants.PREF_KEY_GENDER, login.getGender());
+        editor.putString(AppConstants.PREF_KEY_EMAIL, login.getEmail());
+        editor.putString(AppConstants.PREF_KEY_MEDIUM_TYPE, login.getMediumType());
+        editor.putString(AppConstants.PREF_KEY_MEDIUM_ID, login.getMediumId());
+        editor.putBoolean(AppConstants.PREF_KEY_IS_LOGGED_IN, true);
+        editor.commit();
     }
 }
