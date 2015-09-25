@@ -28,7 +28,8 @@
             android:layout_height="match_parent"
             android:layout_weight=".5"/>
 
-        <Button
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button_google_plus"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".5"/>

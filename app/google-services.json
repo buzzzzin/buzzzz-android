@@ -1,0 +1,51 @@
+{
+  "project_info": {
+    "project_id": "buzzzz-1079",
+    "project_number": "386200439531",
+    "name": "Buzzzz"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:386200439531:android:e54a402588ea6c54",
+        "client_id": "android:in.buzzzz",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "in.buzzzz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "386200439531-suc5gahbh1h0or8venug9u5f0nbvu6im.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.buzzzz",
+            "certificate_hash": "DC84E2E0828047C3048E760701C7E34B927EF972"
+          }
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}
