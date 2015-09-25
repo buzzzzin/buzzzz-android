@@ -22,9 +22,6 @@ import in.buzzzz.utility.Logger;
 import in.buzzzz.utility.SharedPreference;
 import in.buzzzz.utility.Utility;
 
-/**
- * Created by rajendra on 17/9/14.
- */
 public class HttpAsyncTaskLoader extends AsyncTaskLoader<Model> {
     private Request request;
     private Parser parser;
