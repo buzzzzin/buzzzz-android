@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="msg_401">Session expired. Please login again to continue</string>
+    <string name="msg_404">Unable to send request to server. Please try again later.</string>
+    <string name="msg_4xx">Something happened. Please login again to continue</string>
+    <string name="msg_5xx">Oops!! Something happened. Please try again</string>
+</resources>
