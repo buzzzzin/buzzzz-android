@@ -1,6 +1,8 @@
 package in.buzzzz.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 
 import in.buzzzz.R;
 
@@ -13,5 +15,12 @@ public class SplashActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(mActivity, MainActivity.class));
+            }
+        }, 2000);
     }
 }
