@@ -80,8 +80,7 @@ public class LoaderCallback implements LoaderManager.LoaderCallbacks<Model> {
             if (activity != null && !activity.isFinishing())
                 showDialog(activity);
         }
-//        return new HttpAsyncTaskLoader(activity, request, parser);
-        return null;
+        return new HttpAsyncTaskLoader(activity, request, parser);
     }
 
     public final boolean requestToServer(Request request) {
