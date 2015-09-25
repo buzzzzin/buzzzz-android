@@ -29,7 +29,7 @@ public final class SharedPreference {
         return getPref(context).getBoolean(key, false);
     }
 
-    public void clearLoggedInInfo(Context context) {
+    public static void clearLoggedInInfo(Context context) {
 
     }
 }

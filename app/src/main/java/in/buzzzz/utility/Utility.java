@@ -1,14 +1,18 @@
 package in.buzzzz.utility;
 
 import android.content.Context;
+import android.widget.Toast;
 
 /**
  * Created by Navkrishna on September 25, 2015
  */
 public final class Utility {
-    private Context mContext;
 
     public Utility(Context context) {
-        this.mContext = context;
+
+    }
+
+    public static void showToastMessage(Context context, String message) {
+        Toast.makeText(context, message + "", Toast.LENGTH_SHORT).show();
     }
 }
