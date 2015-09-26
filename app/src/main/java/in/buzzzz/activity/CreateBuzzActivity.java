@@ -217,10 +217,10 @@ public class CreateBuzzActivity extends BaseActivity {
                 DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 if (isStartDateTime) {
                     mStartDateTime = formatter.format(date);
-                    mTextViewStartTime.setText(mStartDateTime);
+                    mTextViewStartTime.setText("Start Time: " + mStartDateTime);
                 } else {
                     mEndDateTime = formatter.format(date);
-                    mTextViewEndTime.setText(mEndDateTime);
+                    mTextViewEndTime.setText("End Time: " + mEndDateTime);
                 }
                 alertDialog.dismiss();
             }
