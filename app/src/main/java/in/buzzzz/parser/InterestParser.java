@@ -31,7 +31,7 @@ public class InterestParser implements Parser<Model> {
                 interest.setImageName(jsonObject.getString(ApiDetails.RESPONSE_KEY_IMAGE));
                 interest.setId(jsonObject.getString(ApiDetails.RESPONSE_KEY_ID));
                 interest.setIsSubscribed(jsonObject.getString(ApiDetails.RESPONSE_KEY_IS_SUBSCRIBED));
-                interest.setName(ApiDetails.RESPONSE_KEY_NAME);
+                interest.setName(jsonObject.getString(ApiDetails.RESPONSE_KEY_NAME));
                 interestArrayList.add(interest);
             }
             interestInfo.setInterestList(interestArrayList);

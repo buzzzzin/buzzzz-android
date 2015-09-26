@@ -1,75 +1,92 @@
 package in.buzzzz.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
 import in.buzzzz.R;
-import in.buzzzz.model.ChatInfo;
 import in.buzzzz.model.Interest;
+import in.buzzzz.utility.Logger;
+import in.buzzzz.utility.Utility;
 
 /**
  * Created by Rajendra Singh on 26/9/15.
  */
 public class InterestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int FIRST_TYPE = 1;
-    private static final int SECOND_TYPE = 2;
     private Activity mActivity;
-    private List<Interest> mFollowingList;
+    private List<Interest> interestList;
     private LayoutInflater mLayoutInflater;
 
     public InterestAdapter(Activity context, List<Interest> FollowingList) {
         this.mActivity = context;
-        this.mFollowingList = FollowingList;
+        this.interestList = FollowingList;
         this.mLayoutInflater = LayoutInflater.from(context);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        View view;
-        view = mLayoutInflater.inflate(R.layout.interest_row, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.interest_row, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-
         if (holder instanceof ViewHolder) {
             ViewHolder viewHolder = (ViewHolder) holder;
-            final Interest chatInfo = mFollowingList.get(position);
-            viewHolder.textViewName.setText(chatInfo.getName());
+            final Interest interest = interestList.get(position);
+            viewHolder.textViewInterestName.setText(interest.getName());
+            Logger.i("name", interest.getName());
 
+            viewHolder.relativeLayoutFollowing.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showBuzzList(interest);
 
+                }
+            });
+            viewHolder.imageViewSubscribe.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    subscribeInterest(interest);
+                }
+            });
         }
+    }
+
+    private void subscribeInterest(Interest interest) {
+        Utility.showToastMessage(mActivity, interest.getName());
+    }
+
+    private void showBuzzList(Interest interest) {
+        Utility.showToastMessage(mActivity, interest.getId());
+
     }
 
 
     @Override
     public int getItemCount() {
-        return (mFollowingList == null) ? 0 : mFollowingList.size();
+        return (interestList == null) ? 0 : interestList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView textViewName;
-        private ImageView imageViewProfile, imageViewSubscribe;
+        ImageView imageViewProfilePic, imageViewSubscribe;
+        TextView textViewInterestName;
+        RelativeLayout relativeLayoutFollowing;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-            textViewName = (TextView) itemView.findViewById(R.id.textview_interest_name);
-            imageViewProfile = (ImageView) itemView.findViewById(R.id.imageview_interest_pic);
+            imageViewProfilePic = (ImageView) itemView.findViewById(R.id.imageview_interest_pic);
             imageViewSubscribe = (ImageView) itemView.findViewById(R.id.imageview_subscribe);
-
+            textViewInterestName = (TextView) itemView.findViewById(R.id.textview_interest_name);
+            relativeLayoutFollowing = (RelativeLayout) itemView.findViewById(R.id.relativelayt_interest);
         }
     }
-
 }

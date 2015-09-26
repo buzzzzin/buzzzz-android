@@ -3,7 +3,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="msg_login_progress">Login</string>
     <string name="progress_dialog_msg">Please wait...</string>
-    <string name="title_activity_interest">InterestActivity</string>
+    <string name="title_activity_interest">Interest</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>

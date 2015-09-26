@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout android:id="@+id/relativelayt_interest"
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tool="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/selector_interest"
                 android:orientation="vertical"
+
+                android:clickable="true"
                 android:padding="5dp"
     >
 
@@ -27,7 +31,7 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:textColor="@android:color/black"
-        tool:text="fdjfdjlkfj"/>
+        />
 
     <ImageView
         android:id="@+id/imageview_subscribe"
