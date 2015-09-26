@@ -11,6 +11,7 @@ public final class ApiDetails {
         HOME_BUZZ("/v1/home/buzz"),
         PREVIEW("/buzz/preview/"),
         RSVP("/buzz/rsvp"),
+        CREATE_BUZZ("/buzz/save"),
         NONE("");
 
         private final String value;
@@ -61,6 +62,14 @@ public final class ApiDetails {
             }
             return NONE;
         }
+    }
+
+    public enum Period {
+        ONCE,
+        DAILY,
+        MONTHLY,
+        WEEKLY,
+        CUSTOM
     }
 
     public static final int STATUS_SUCCESS = 1;
