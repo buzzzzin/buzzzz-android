@@ -54,15 +54,9 @@ public final class Utility {
             urlConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             urlConnection.setRequestProperty("User-Agent", System.getProperty("http.agent"));
             urlConnection.setRequestProperty("Accept-Language", getLocaleLanguageTag(context));
-            if (jsonObject.has(ApiDetails.REQUEST_KEY_ACCESS_TOKEN) && !jsonObject.getString(ApiDetails.REQUEST_KEY_ACCESS_TOKEN).isEmpty()) {
-                urlConnection.setRequestProperty(ApiDetails.HEADER_X_AUTH_TOKEN, jsonObject.getString(ApiDetails.REQUEST_KEY_ACCESS_TOKEN));
-                Logger.i(ApiDetails.HEADER_X_AUTH_TOKEN, jsonObject.getString(ApiDetails.REQUEST_KEY_ACCESS_TOKEN));
-            }
+            urlConnection.setRequestProperty(ApiDetails.HEADER_X_AUTH_TOKEN, SharedPreference.getString(context, AppConstants.PREF_KEY_AUTH_TOKEN));
             jsonObject.remove(ApiDetails.REQUEST_KEY_ACCESS_TOKEN);
-            if (jsonObject.has(ApiDetails.REQUEST_KEY_SECRET_KEY) && !jsonObject.getString(ApiDetails.REQUEST_KEY_SECRET_KEY).isEmpty()) {
-                urlConnection.setRequestProperty(ApiDetails.HEADER_SECRET_KEY, jsonObject.getString(ApiDetails.REQUEST_KEY_SECRET_KEY));
-                Logger.i(ApiDetails.HEADER_SECRET_KEY, jsonObject.getString(ApiDetails.REQUEST_KEY_SECRET_KEY));
-            }
+            urlConnection.setRequestProperty(ApiDetails.HEADER_SECRET_KEY, ApiDetails.SECRET_KEY);
             jsonObject.remove(ApiDetails.REQUEST_KEY_SECRET_KEY);
             urlConnection.setRequestMethod("POST");
             urlConnection.setConnectTimeout(timeoutConnection);
@@ -97,6 +91,7 @@ public final class Utility {
             urlConnection.setRequestProperty("User-Agent", System.getProperty("http.agent"));
             urlConnection.setRequestProperty("Accept-Language", getLocaleLanguageTag(context));
             urlConnection.setRequestProperty(ApiDetails.HEADER_X_AUTH_TOKEN, SharedPreference.getString(context, AppConstants.PREF_KEY_AUTH_TOKEN));
+            urlConnection.setRequestProperty(ApiDetails.HEADER_SECRET_KEY, ApiDetails.SECRET_KEY);
 
             urlConnection.setRequestMethod("GET");
             urlConnection.setConnectTimeout(timeoutConnection);
