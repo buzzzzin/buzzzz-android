@@ -36,8 +36,8 @@ import in.buzzzz.utility.Logger;
 import in.buzzzz.utility.SharedPreference;
 import in.buzzzz.utility.Utility;
 
-public class BuzzzzDetailActivity extends BaseActivity {
-    private static final String TAG = "BuzzzzDetailActivity";
+public class BuzzDetailActivity extends BaseActivity {
+    private static final String TAG = "BuzzDetailActivity";
     private WebSocketClient mWebSocketClient;
     private EditText mEditText;
     private TextView mTextViewRsvbMessage;
