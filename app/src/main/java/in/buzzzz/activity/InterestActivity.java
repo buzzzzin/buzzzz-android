@@ -99,10 +99,8 @@ public class InterestActivity extends BaseActivity {
             startActivity(intent);
             finish();
             return true;
-
         }
         return false;
-
     }
 
     @Override

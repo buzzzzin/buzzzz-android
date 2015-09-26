@@ -50,10 +50,8 @@ public class BuzzAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             viewHolder.textViewInterestName.setText(buzzPreview.getName());
             if (buzzPreview.getStats() != null && !buzzPreview.getStats().getGoingCount().equalsIgnoreCase("0")) {
                 viewHolder.textViewSubscriberCount.setText("Going:" + buzzPreview.getStats().getGoingCount());
-
             } else {
                 viewHolder.textViewSubscriberCount.setText("Awaiting response");
-
             }
 
             Utility.setImageFromUrl(Api.BASE_URL_CLOUDINARY_BUZZZZ + buzzPreview.getImageName(), viewHolder.imageViewProfilePic, R.mipmap.ic_launcher);

@@ -1,11 +1,13 @@
 package in.buzzzz.activity;
 
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -32,7 +34,7 @@ public class MyProfileActivity extends BaseActivity {
     private ViewPager mViewPagerProfile;
     private AppBarLayout mAppBarLayout;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
-    private RelativeLayout mRelativeLayoutProfilePagerContainer;
+    private RelativeLayout mRelativeLayoutProfileDetailContainer;
     private ImageView mImageViewProfile;
     private TabLayout mTabLayoutProfile;
 
@@ -42,6 +44,7 @@ public class MyProfileActivity extends BaseActivity {
         setContentView(R.layout.activity_my_profile);
         linkViews();
         requestProfileData();
+        updateDimension();
     }
 
     private void linkViews() {
@@ -50,9 +53,18 @@ public class MyProfileActivity extends BaseActivity {
         mViewPagerProfile = (ViewPager) findViewById(R.id.viewpager_profile);
         mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        mRelativeLayoutProfilePagerContainer = (RelativeLayout) findViewById(R.id.relativelayout_profile_pager_container);
+        mRelativeLayoutProfileDetailContainer = (RelativeLayout) findViewById(R.id.relativelayout_profile_detail_container);
         mImageViewProfile = (ImageView) findViewById(R.id.imageview_profile);
         mTabLayoutProfile = (TabLayout) findViewById(R.id.tablayout_profile);
+    }
+
+    private void updateDimension() {
+        Point point = Utility.getDisplayPoint(mActivity);
+        int width = point.x;
+        int height = (int) (point.y / 1.25);
+        ViewGroup.LayoutParams layoutParams = mRelativeLayoutProfileContainer.getLayoutParams();
+        layoutParams.width = width;
+        layoutParams.height = height;
     }
 
     private void requestProfileData() {
