@@ -11,6 +11,7 @@ public final class ApiDetails {
         HOME_BUZZ("/v1/home/buzz"),
         PREVIEW("/buzz/preview/"),
         RSVP("/buzz/rsvp"),
+        MY_PROFILE("/v1/user/myProfile"),
         NONE("");
 
         private final String value;
@@ -132,6 +133,12 @@ public final class ApiDetails {
     public static final String RESPONSE_KEY_GOING_COUNT = "goingCount";
     public static final String RESPONSE_KEY_NOT_COMING_COUNT = "notComingCount";
     public static final String RESPONSE_KEY_MAY_BE_COUNT = "mayBeCount";
+
+    //    My Profile
+    public static final String RESPONSE_KEY_MOBILE = "mobile";
+    public static final String RESPONSE_KEY_COUNTRY = "country";
+    public static final String RESPONSE_KEY_BUZZ_COUNT = "buzz_count";
+    public static final String RESPONSE_KEY_INTEREST_COUNT = "interest_count";
 
     //    REQUEST KEYS
     public static final String REQUEST_KEY_DESTINATION = "destination";

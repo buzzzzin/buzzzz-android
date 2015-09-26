@@ -58,7 +58,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
     List<BuzzPreview> mBuzzPreviewList;
     private static final String TAG = "HomeScreenActivity";
 
-
     private GoogleApiClient mGoogleApiClient;
     private FusedLocationProviderApi mFusedLocationProviderApi = LocationServices.FusedLocationApi;
     LocationListener mLocationListener = new LocationListener() {
@@ -82,7 +81,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
             } else {
 //                checkLocationSettings();*/
 
-
             LocationRequest mLocationRequest = new LocationRequest();
             mLocationRequest.setInterval(10000);
             mLocationRequest.setFastestInterval(5000);
@@ -96,8 +94,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
             builder.setAlwaysShow(true); //this is the key ingredient
             mLocationSettingsRequest = builder.build();
             checkLocationSettings();
-
-
         }
 
         @Override
@@ -153,7 +149,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
         mGoogleApiClient.connect();
         getViewsId();
 
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,15 +196,12 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
         buttonProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (SharedPreference.getBoolean(mActivity, AppConstants.PREF_KEY_IS_LOGGED_IN)) {
-                    //:TODO show profile screen
+                    startActivity(new Intent(mActivity, MyProfileActivity.class));
                 } else {
                     Intent intent = new Intent(mActivity, LoginActivity.class);
                     startActivity(intent);
                 }
-
-
             }
         });
 
@@ -222,11 +214,8 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                /* Intent intent = new Intent(mActivity,. class);
                 startActivity(intent);*/
 
-
             }
         });
-
-
     }
 
     private void requestHomeBuzz(boolean showProgressDialog, String latitude, String longitude) {
@@ -241,7 +230,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
             params.put(ApiDetails.REQUEST_KEY_LATITUDE, String.valueOf(latitude));
             params.put(ApiDetails.REQUEST_KEY_LONGITUDE, String.valueOf(longitude));
         }
-
 
         params.put(ApiDetails.REQUEST_KEY_RADIUS, "100");
         Request request = new Request(ApiDetails.ACTION_NAME.HOME_BUZZ);
@@ -266,7 +254,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                         mBuzzPreviewList = buzzList.getBuzzPreviewList();
                         setData();
                         setInterestData();
-
                     }
                 } else {
                     Utility.showToastMessage(mActivity, model.getMessage());
@@ -292,16 +279,12 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
             linearHorizontalView.addView(child);
             TextView textviewName = (TextView) child.findViewById(R.id.textview_interest_name);
             textviewName.setText(interest.getName());
-
-
         }
-
     }
 
     private void hideProgressBar() {
 //        mSwipeRefreshLayout.setRefreshing(false);
     }
-
 
     protected void checkLocationSettings() {
         PendingResult<LocationSettingsResult> result =
@@ -312,7 +295,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
 
         result.setResultCallback(HomeScreenActivity.this);
     }
-
 
     @Override
     public void onResult(LocationSettingsResult locationSettingsResult) {
@@ -332,7 +314,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                     // in onActivityResult().
 
                     status.startResolutionForResult(mActivity, REQUEST_CHECK_SETTINGS);
-
                 } catch (IntentSender.SendIntentException e) {
 
                     //unable to execute request
@@ -361,6 +342,5 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                 }
                 break;
         }
-
     }
 }
