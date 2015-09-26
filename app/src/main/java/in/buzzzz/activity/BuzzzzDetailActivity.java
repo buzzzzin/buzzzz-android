@@ -36,8 +36,10 @@ import in.buzzzz.utility.SharedPreference;
 import in.buzzzz.utility.Utility;
 
 public class BuzzzzDetailActivity extends BaseActivity {
+    private static final String TAG = "BuzzzzDetailActivity";
     private WebSocketClient mWebSocketClient;
     private EditText mEditText;
+    private CollapsingToolbarLayout mCollapsingToolbar;
 
     private RecyclerView mRecyclerViewChat;
     List<ChatInfo> chatInfoList = new ArrayList<>();
@@ -72,12 +74,11 @@ public class BuzzzzDetailActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        CollapsingToolbarLayout collapsingToolbar =
-                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         if (mBuzzzzName != null) {
-            collapsingToolbar.setTitle(mBuzzzzName);
+            mCollapsingToolbar.setTitle(mBuzzzzName);
         } else {
-            collapsingToolbar.setTitle("Buzzzz name");
+            mCollapsingToolbar.setTitle("Buzzzz name");
         }
         mRecyclerViewChat = (RecyclerView) findViewById(R.id.recyclerview_following);
 
@@ -214,9 +215,10 @@ public class BuzzzzDetailActivity extends BaseActivity {
 
             @Override
             public void onComplete(Model model) {
+                Logger.i(TAG, "model: " + model);
                 if (model.getStatus() == ApiDetails.STATUS_SUCCESS) {
                     if (model instanceof BuzzPreview) {
-                        displayBuzzzzPreview();
+                        displayBuzzPreview((BuzzPreview) model);
                     }
                 } else {
                     Utility.showToastMessage(mActivity, model.getMessage());
@@ -228,7 +230,7 @@ public class BuzzzzDetailActivity extends BaseActivity {
         }
     }
 
-    private void displayBuzzzzPreview() {
-
+    private void displayBuzzPreview(BuzzPreview buzzPreview) {
+        mCollapsingToolbar.setTitle(buzzPreview.getName());
     }
 }
