@@ -8,6 +8,7 @@ public final class ApiDetails {
     public enum ACTION_NAME {
         LOGIN("/auth/login"),
         INTEREST("/interest/list"),
+        HOME_BUZZ("/v1/home/buzz"),
         PREVIEW("/buzz/preview/"),
         NONE("");
 
@@ -59,6 +60,10 @@ public final class ApiDetails {
     public static final String REQUEST_KEY_EMAIL = "email";
     public static final String REQUEST_KEY_MEDIUM_ID = "mediumId";
     public static final String REQUEST_KEY_MEDIUM_TYPE = "mediumType";
+    public static final String REQUEST_KEY_LATITUDE = "latitude";
+    public static final String REQUEST_KEY_LONGITUDE = "longitude";
+    public static final String REQUEST_KEY_RADIUS = "radius";
+
 
     //    RESPONSE KEYS
     public static final String RESPONSE_KEY_MESSAGE = "message";
@@ -78,6 +83,7 @@ public final class ApiDetails {
     public static final String RESPONSE_KEY_HAS_INTERESTS = "hasInterests";
     public static final String RESPONSE_KEY_IMAGE = "image";
     public static final String RESPONSE_KEY_IS_SUBSCRIBED = "isSubscribed";
+    public static final String RESPONSE_KEY_INTERESTS= "interests";
 
     public static final String REQUEST_KEY_DESTINATION = "destination";
     public static final String REQUEST_KEY_SENDER_ID = "senderId";

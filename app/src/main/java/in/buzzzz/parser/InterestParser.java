@@ -23,11 +23,12 @@ public class InterestParser implements Parser<Model> {
         interestInfo.setStatus(json.getInt(ApiDetails.RESPONSE_KEY_STATUS));
         interestInfo.setMessage(json.getString(ApiDetails.RESPONSE_KEY_MESSAGE));
         if (interestInfo.getStatus() == ApiDetails.STATUS_SUCCESS) {
-            JSONArray dataJSONArray = json.getJSONArray(ApiDetails.RESPONSE_KEY_DATA);
+            JSONObject dataJSONObject = json.getJSONObject(ApiDetails.RESPONSE_KEY_DATA);
+            JSONArray interestsJSONArray = dataJSONObject.getJSONArray(ApiDetails.RESPONSE_KEY_INTERESTS);
             List<Interest> interestArrayList = new ArrayList<Interest>();
-            for (int i = 0; i < dataJSONArray.length(); i++) {
+            for (int i = 0; i < interestsJSONArray.length(); i++) {
                 Interest interest = new Interest();
-                JSONObject jsonObject = dataJSONArray.getJSONObject(i);
+                JSONObject jsonObject = interestsJSONArray.getJSONObject(i);
                 interest.setImageName(jsonObject.getString(ApiDetails.RESPONSE_KEY_IMAGE));
                 interest.setId(jsonObject.getString(ApiDetails.RESPONSE_KEY_ID));
                 interest.setIsSubscribed(jsonObject.getString(ApiDetails.RESPONSE_KEY_IS_SUBSCRIBED));

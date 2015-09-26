@@ -301,14 +301,15 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void showHomeScreen() {
-
         Intent intent = new Intent(mActivity, HomeScreenActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void showInterestScreen() {
         Intent intent = new Intent(mActivity, InterestActivity.class);
         startActivity(intent);
+        finish();
 
     }
 }
