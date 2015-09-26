@@ -98,6 +98,15 @@ public final class ApiDetails {
     //    RSVP keys
     public static final String REQUEST_KEY_STATUS = "status";
     public static final String REQUEST_KEY_BUZZ_ID = "buzzId";
+    //    Create Buzz
+    public static final String REQUEST_KEY_IMAGE_NAME = "imageName";
+    public static final String REQUEST_KEY_IS_RSVP = "isRSVP";
+    public static final String REQUEST_KEY_ADDRESS = "address";
+    public static final String REQUEST_KEY_START_TIME = "startTime";
+    public static final String REQUEST_KEY_END_TIME = "endTime";
+    public static final String REQUEST_KEY_PERIOD = "period";
+    public static final String REQUEST_KEY_TAGS = "tags";
+    public static final String REQUEST_KEY_INTERESTS = "interests";
 
     //    RESPONSE KEYS
     public static final String RESPONSE_KEY_MESSAGE = "message";
