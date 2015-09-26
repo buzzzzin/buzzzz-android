@@ -122,13 +122,12 @@ public class BuzzDetailActivity extends BaseActivity {
             public void onOpen(ServerHandshake serverHandshake) {
                 Logger.i("Websocket", "Opened");
                 if (SharedPreference.getBoolean(mActivity, AppConstants.PREF_KEY_IS_LOGGED_IN)) {
-                    String welcomeText = SharedPreference.getString(mActivity, AppConstants.PREF_KEY_USER_NAME) + " is here...";
-                    mEditText.setText(welcomeText);
+                    String welcomeText = "I am here...";
+                    joinExitMessage(welcomeText);
                 } else {
                     String text = "Login to join Buzzzz...";
-                    mEditText.setText(text);
+                    joinExitMessage(text);
                 }
-                sendMessage(null);
             }
 
             @Override
@@ -161,8 +160,19 @@ public class BuzzDetailActivity extends BaseActivity {
     /**
      * will be called if user joins or leaves chat
      */
-    private void joinedMessage(String message) {
-
+    private void joinExitMessage(String message) {
+        ChatInfo chatInfo = new ChatInfo();
+        chatInfo.setMessage(message);
+        chatInfo.setSenderId(mSenderId);
+        chatInfo.setSenderName(mSenderName);
+        String imageName = Api.BASE_URL_CLOUDINARY_SOCIAL
+                + SharedPreference.getString(mActivity, AppConstants.PREF_KEY_MEDIUM_TYPE).toLowerCase()
+                + "/"
+                + SharedPreference.getString(mActivity, AppConstants.PREF_KEY_MEDIUM_ID);
+        chatInfo.setImageUrl(imageName);
+        JSONObject jsonObject = getChatJson(chatInfo, Api.CHAT_CHANNEL + mChannelId);
+        mWebSocketClient.send(String.valueOf(jsonObject));
+        Logger.i("send msg", jsonObject.toString());
     }
 
     public void sendMessage(View view) {
