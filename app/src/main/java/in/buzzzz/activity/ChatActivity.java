@@ -136,6 +136,7 @@ public class ChatActivity extends BaseActivity {
         } else {
             mRecyclerViewChat.getAdapter().notifyDataSetChanged();
         }
+        mRecyclerViewChat.getLayoutManager().smoothScrollToPosition(mRecyclerViewChat, null, chatAdapter.getItemCount() - 1);
 
 
     }
