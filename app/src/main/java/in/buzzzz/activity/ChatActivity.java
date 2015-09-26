@@ -27,6 +27,7 @@ import java.util.List;
 import in.buzzzz.R;
 import in.buzzzz.adapter.ChatAdapter;
 import in.buzzzz.model.ChatInfo;
+import in.buzzzz.utility.Api;
 import in.buzzzz.utility.ApiDetails;
 import in.buzzzz.utility.AppConstants;
 import in.buzzzz.utility.ChatJSONMessage;
@@ -147,7 +148,7 @@ public class ChatActivity extends BaseActivity {
           /*  uri = new URI(
                     "ws://chatapi.cardekho.com:8080/CarDekhoChat/chatwebsocket");*/
 
-            uri = new URI(ApiDetails.CHAT_HOST_URL + ApiDetails.CHAT_CHANNEL +
+            uri = new URI(Api.CHAT_HOST_URL + Api.CHAT_CHANNEL +
                     mChannelId);
 
 
@@ -212,7 +213,7 @@ public class ChatActivity extends BaseActivity {
             chatInfo.setSenderId(mSenderId);
             chatInfo.setSenderName(mSenderName);
             chatInfo.setImageUrl("https://www.google.co.in");
-            JSONObject jsonObject = getChatJson(chatInfo, ApiDetails.CHAT_CHANNEL + mChannelId);
+            JSONObject jsonObject = getChatJson(chatInfo, Api.CHAT_CHANNEL + mChannelId);
             mWebSocketClient.send(String.valueOf(jsonObject));
             Log.e("send msg", jsonObject.toString());
             editText.setText("");

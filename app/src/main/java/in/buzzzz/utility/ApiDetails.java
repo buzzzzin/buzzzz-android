@@ -42,8 +42,6 @@ public final class ApiDetails {
     public static final int STATUS_SUCCESS = 1;
     public static final int STATUS_FAILURE = 0;
 
-    public static  final String CHAT_HOST_URL="ws://10.1.14.158:9091";
-    public static  final String CHAT_CHANNEL="/buzz/chat/";
     public static final String SECRET_KEY = "myAppKey";
 
     // HEADER KEYS
@@ -79,7 +77,6 @@ public final class ApiDetails {
     public static final String RESPONSE_KEY_AUTH_TOKEN = "authToken";
     public static final String RESPONSE_KEY_HAS_INTERESTS = "hasInterests";
     //    REQUEST KEYS
-    public static final String REQUEST_KEY_ACCESS_TOKEN = "access";
 
 
     public static final String REQUEST_KEY_DESTINATION = "destination";
