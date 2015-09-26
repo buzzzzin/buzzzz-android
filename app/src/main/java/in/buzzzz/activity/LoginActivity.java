@@ -3,6 +3,7 @@ package in.buzzzz.activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.facebook.AccessToken;
@@ -281,7 +282,13 @@ public class LoginActivity extends BaseActivity {
             public void onComplete(Model model) {
                 if (model.getStatus() == ApiDetails.STATUS_SUCCESS) {
                     if (model instanceof Login) {
+                        Login login = (Login) model;
                         SharedPreference.saveLoginInfo(mActivity, (Login) model);
+                        if (login.hasInterests()) {
+                            showHomeScreen();
+                        } else {
+                            showInterestScreen();
+                        }
                     }
                 } else {
                     Utility.showToastMessage(mActivity, model.getMessage());
@@ -291,5 +298,17 @@ public class LoginActivity extends BaseActivity {
         if (!hasNetwork) {
             Utility.showToastMessage(mActivity, getString(R.string.no_network));
         }
+    }
+
+    private void showHomeScreen() {
+
+        Intent intent = new Intent(mActivity, HomeScreenActivity.class);
+        startActivity(intent);
+    }
+
+    private void showInterestScreen() {
+        Intent intent = new Intent(mActivity, InterestActivity.class);
+        startActivity(intent);
+
     }
 }

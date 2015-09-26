@@ -22,10 +22,9 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void run() {
                 if (SharedPreference.getBoolean(mActivity, AppConstants.PREF_KEY_IS_LOGGED_IN)) {
-//                    startActivity(new Intent(mActivity, MainActivity.class));
-                    startActivity(new Intent(mActivity, InterestActivity.class));
+                    startActivity(new Intent(mActivity, HomeScreenActivity.class));
                 } else {
-//                    startActivity(new Intent(mActivity, LoginActivity.class));
+                    startActivity(new Intent(mActivity, LoginActivity.class));
                     startActivity(new Intent(mActivity, InterestActivity.class));
                 }
                 finish();
