@@ -1,6 +1,7 @@
 package in.buzzzz.utility;
 
 import android.content.Context;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
@@ -208,4 +209,24 @@ public final class Utility {
                 return ApiDetails.GENDER.NOT_SET;
         }
     }
+
+    public static boolean isLocationProviderEnabled(Context context) {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+
+        boolean gps_enabled = false;
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        boolean network_enabled = false;
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return gps_enabled || network_enabled;
+    }
+
 }

@@ -14,7 +14,7 @@ import java.util.List;
 
 import in.buzzzz.R;
 import in.buzzzz.activity.BuzzzzDetailActivity;
-import in.buzzzz.model.Interest;
+import in.buzzzz.model.BuzzPreview;
 import in.buzzzz.utility.AppConstants;
 import in.buzzzz.utility.Logger;
 import in.buzzzz.utility.Utility;
@@ -25,18 +25,19 @@ import in.buzzzz.utility.Utility;
 public class BuzzAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Activity mActivity;
-    private List<Interest> interestList;
+    List<BuzzPreview> buzzPreviewList;
+
     private LayoutInflater mLayoutInflater;
 
-    public BuzzAdapter(Activity context, List<Interest> FollowingList) {
+    public BuzzAdapter(Activity context, List<BuzzPreview> FollowingList) {
         this.mActivity = context;
-        this.interestList = FollowingList;
+        this.buzzPreviewList = FollowingList;
         this.mLayoutInflater = LayoutInflater.from(context);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.interest_row, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.buzz_preview_row, parent, false);
         return new ViewHolder(view);
     }
 
@@ -44,53 +45,53 @@ public class BuzzAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ViewHolder) {
             ViewHolder viewHolder = (ViewHolder) holder;
-            final Interest interest = interestList.get(position);
-            viewHolder.textViewInterestName.setText(interest.getName());
-            Logger.i("name", interest.getName());
+            final BuzzPreview buzzPreview = buzzPreviewList.get(position);
+            viewHolder.textViewInterestName.setText(buzzPreview.getName());
+            Logger.i("name", buzzPreview.getName());
 
-            viewHolder.relativeLayoutFollowing.setOnClickListener(new View.OnClickListener() {
+            viewHolder.relativeLayoutBuzz.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showBuzzList(interest);
+                    showBuzzList(buzzPreview);
                 }
             });
             viewHolder.imageViewSubscribe.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    subscribeInterest(interest);
+                    subscribeInterest(buzzPreview);
                 }
             });
         }
     }
 
-    private void subscribeInterest(Interest interest) {
+    private void subscribeInterest(BuzzPreview interest) {
         Utility.showToastMessage(mActivity, interest.getName());
     }
 
-    private void showBuzzList(Interest interest) {
-        Utility.showToastMessage(mActivity, interest.getId());
+    private void showBuzzList(BuzzPreview interest) {
+        Utility.showToastMessage(mActivity, interest.getBuzzId());
         Intent intent = new Intent(mActivity, BuzzzzDetailActivity.class);
-        intent.putExtra(AppConstants.EXTRA_BUZZZZ_ID, "560637acc830ec03dc42baae");
+        intent.putExtra(AppConstants.EXTRA_BUZZZZ_ID, interest.getBuzzId());
         intent.putExtra(AppConstants.EXTRA_BUZZZZ_NAME, interest.getName());
         mActivity.startActivity(intent);
     }
 
     @Override
     public int getItemCount() {
-        return (interestList == null) ? 0 : interestList.size();
+        return (buzzPreviewList == null) ? 0 : buzzPreviewList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewProfilePic, imageViewSubscribe;
         TextView textViewInterestName;
-        RelativeLayout relativeLayoutFollowing;
+        RelativeLayout relativeLayoutBuzz;
 
         public ViewHolder(View itemView) {
             super(itemView);
             imageViewProfilePic = (ImageView) itemView.findViewById(R.id.imageview_interest_pic);
             imageViewSubscribe = (ImageView) itemView.findViewById(R.id.imageview_subscribe);
             textViewInterestName = (TextView) itemView.findViewById(R.id.textview_interest_name);
-            relativeLayoutFollowing = (RelativeLayout) itemView.findViewById(R.id.relativelayt_interest);
+            relativeLayoutBuzz = (RelativeLayout) itemView.findViewById(R.id.relativelayt_interest);
         }
     }
 }

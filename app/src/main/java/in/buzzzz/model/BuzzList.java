@@ -7,13 +7,22 @@ import java.util.List;
  */
 public class BuzzList extends Model {
 
-    private List<Interest> mInterestList;
+    private List<Interest> interestList;
+    private  List<BuzzPreview> buzzPreviewList;
 
-    public List<Interest> getmInterestList() {
-        return mInterestList;
+    public List<Interest> getInterestList() {
+        return interestList;
     }
 
-    public void setmInterestList(List<Interest> mInterestList) {
-        this.mInterestList = mInterestList;
+    public void setInterestList(List<Interest> interestList) {
+        this.interestList = interestList;
+    }
+
+    public List<BuzzPreview> getBuzzPreviewList() {
+        return buzzPreviewList;
+    }
+
+    public void setBuzzPreviewList(List<BuzzPreview> buzzPreviewList) {
+        this.buzzPreviewList = buzzPreviewList;
     }
 }

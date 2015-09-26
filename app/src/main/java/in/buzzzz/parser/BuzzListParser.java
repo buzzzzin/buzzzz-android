@@ -26,7 +26,7 @@ public class BuzzListParser implements Parser<Model> {
             JSONObject dataJsonObject = json.getJSONObject(ApiDetails.RESPONSE_KEY_DATA);
             JSONArray buzzsJsonArray = dataJsonObject.getJSONArray(ApiDetails.RESPONSE_KEY_BUZZS);
             for (int index = 0; buzzsJsonArray != null && index < buzzsJsonArray.length(); index++) {
-                BuzzPreview buzzPreview = (BuzzPreview) new BuzzPreviewParser().parse(buzzsJsonArray.getJSONObject(index));
+                BuzzPreview buzzPreview = (BuzzPreview) new BuzzPreviewParser().buzzParser(buzzsJsonArray.getJSONObject(index));
                 buzzPreviews.add(buzzPreview);
             }
         }
