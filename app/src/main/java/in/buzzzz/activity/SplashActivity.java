@@ -19,7 +19,7 @@ public class SplashActivity extends BaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(mActivity, MainActivity.class));
+                startActivity(new Intent(mActivity, ChatActivity.class));
             }
         }, 2000);
     }

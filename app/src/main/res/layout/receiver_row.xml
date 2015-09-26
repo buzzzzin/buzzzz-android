@@ -1,17 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="5dp" >
+                xmlns:tool="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="5dp"
+                android:paddingRight="@dimen/chat_margin"
+    >
 
-    <TextView
-        android:id="@+id/txtview_chat"
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
         android:background="@android:color/holo_blue_light"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp" />
+        android:gravity="center_vertical">
 
+        <ImageView
+            android:id="@+id/imageview_profile_pic"
+            android:layout_width="@dimen/chat_profile_image"
+            android:layout_height="@dimen/chat_profile_image"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@mipmap/ic_launcher"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/imageview_profile_pic"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/txtview_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_toLeftOf="@+id/imageview_profile_pic"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                tool:text="fdjfdjlkfj"/>
+
+            <TextView
+                android:id="@+id/txtview_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtview_name"
+                android:layout_gravity="left"
+                android:layout_toLeftOf="@+id/imageview_profile_pic"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                tool:text="fdjfdjlkfj"/>
+
+        </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>
