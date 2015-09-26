@@ -1,21 +1,26 @@
 package in.buzzzz.activity;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,6 +46,7 @@ public class CreateBuzzActivity extends BaseActivity {
     private EditText mEditTextBuzzDesc;
     private TextView mTextViewBuzzVenue;
     private TextView mTextViewSelectedInterests;
+    private TextView mTextViewStartTime;
     private Button mButtonCreateBuzz;
     private CheckBox mCheckboxIsRsvp;
     private Spinner mSpinnerPeriod;
@@ -69,7 +75,9 @@ public class CreateBuzzActivity extends BaseActivity {
         mSpinnerPeriod = (Spinner) findViewById(R.id.spinner_rsvp_options);
         mAutoCompleteTextViewInterest = (AutoCompleteTextView) findViewById(R.id.autocompletetextview_interest);
         mTextViewSelectedInterests = (TextView) findViewById(R.id.textview_selected_interests);
+        mTextViewStartTime = (TextView) findViewById(R.id.textview_start_time);
         mButtonCreateBuzz.setOnClickListener(mOnClickListener);
+        mTextViewStartTime.setOnClickListener(mOnClickListener);
     }
 
     private void requestInterest() {
@@ -155,14 +163,50 @@ public class CreateBuzzActivity extends BaseActivity {
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            String buzzTitle = mEditTextBuzzTitle.getText().toString().trim();
-            if (buzzTitle.isEmpty()) {
-                mEditTextBuzzTitle.setError("Enter title");
-            } else if (jsonArrayInterst.length() == 0) {
-                mAutoCompleteTextViewInterest.setError("Select at least one interest");
-            } else {
-                requestCreatBuzz();
+            switch (v.getId()) {
+                case R.id.button_create:
+                    validateAndCreateBuzz();
+                    break;
+                case R.id.textview_start_time:
+                    showDateAndTimePicker();
+                    break;
             }
         }
     };
+
+    private void validateAndCreateBuzz() {
+        String buzzTitle = mEditTextBuzzTitle.getText().toString().trim();
+        if (buzzTitle.isEmpty()) {
+            mEditTextBuzzTitle.setError("Enter title");
+        } else if (jsonArrayInterst.length() == 0) {
+            mAutoCompleteTextViewInterest.setError("Select at least one interest");
+        } else {
+            requestCreatBuzz();
+        }
+    }
+
+    private void showDateAndTimePicker() {
+        final View dialogView = View.inflate(mActivity, R.layout.layout_date_time_picker, null);
+        final AlertDialog alertDialog = new AlertDialog.Builder(mActivity).create();
+
+        dialogView.findViewById(R.id.date_time_set).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                DatePicker datePicker = (DatePicker) dialogView.findViewById(R.id.date_picker);
+                TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.time_picker);
+
+                Calendar calendar = new GregorianCalendar(datePicker.getYear(),
+                        datePicker.getMonth(),
+                        datePicker.getDayOfMonth(),
+                        timePicker.getCurrentHour(),
+                        timePicker.getCurrentMinute());
+
+//                time = calendar.getTimeInMillis();
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.setView(dialogView);
+        alertDialog.show();
+    }
 }

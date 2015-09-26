@@ -109,6 +109,13 @@
                 android:layout_margin="5dp"
                 android:entries="@array/rsvp_options"
                 android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/textview_start_time"
+                android:text="Select start Date and Time"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </ScrollView>
 
