@@ -15,11 +15,10 @@ import in.buzzzz.utility.ApiDetails;
  * Created by Navkrishna on September 26, 2015
  */
 public class BuzzPreviewParser implements Parser<Model> {
-    BuzzPreview buzzPreview;
+    BuzzPreview buzzPreview = new BuzzPreview();
 
     @Override
     public Model parse(JSONObject json) throws JSONException {
-        buzzPreview = new BuzzPreview();
         buzzPreview.setStatus(json.getInt(ApiDetails.RESPONSE_KEY_STATUS));
         buzzPreview.setMessage(json.getString(ApiDetails.RESPONSE_KEY_MESSAGE));
         if (buzzPreview.getStatus() == ApiDetails.STATUS_SUCCESS) {
@@ -30,8 +29,6 @@ public class BuzzPreviewParser implements Parser<Model> {
     }
 
     public Model buzzParser(JSONObject buzzJsonObject) throws JSONException {
-        buzzPreview = new BuzzPreview();
-
         buzzPreview.setBuzzId(buzzJsonObject.getString(ApiDetails.RESPONSE_KEY_BUZZ_ID));
         buzzPreview.setName(buzzJsonObject.getString(ApiDetails.RESPONSE_KEY_NAME));
         buzzPreview.setImageName(buzzJsonObject.getString(ApiDetails.RESPONSE_KEY_IMAGE_NAME));
@@ -43,6 +40,8 @@ public class BuzzPreviewParser implements Parser<Model> {
             interests.add(interestJsonArray.getString(index));
         }
         buzzPreview.setInterests(interests);
+
+        buzzPreview.setRsvp(ApiDetails.RSVP.getRsvpName(buzzJsonObject.getString(ApiDetails.RESPONSE_KEY_RSVB_STATUS)));
 
         BuzzPreview.Location location = new BuzzPreview.Location();
         JSONObject locationJsonObject = buzzJsonObject.getJSONObject(ApiDetails.RESPONSE_KEY_LOCATION);

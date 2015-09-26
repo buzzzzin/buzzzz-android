@@ -6,7 +6,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_17;
@@ -17,6 +19,7 @@ import org.json.JSONObject;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import in.buzzzz.R;
@@ -28,6 +31,7 @@ import in.buzzzz.model.ChatInfo;
 import in.buzzzz.model.Model;
 import in.buzzzz.model.Request;
 import in.buzzzz.parser.BuzzPreviewParser;
+import in.buzzzz.parser.MessageParser;
 import in.buzzzz.utility.Api;
 import in.buzzzz.utility.ApiDetails;
 import in.buzzzz.utility.AppConstants;
@@ -35,9 +39,16 @@ import in.buzzzz.utility.Logger;
 import in.buzzzz.utility.SharedPreference;
 import in.buzzzz.utility.Utility;
 
-public class BuzzzzDetailActivity extends BaseActivity {
+public class BuzzDetailActivity extends BaseActivity {
+    private static final String TAG = "BuzzDetailActivity";
     private WebSocketClient mWebSocketClient;
     private EditText mEditText;
+    private TextView mTextViewRsvbMessage;
+    private TextView mTextViewVenue;
+    private TextView mTextViewStart;
+    private TextView mTextViewResponse;
+    private Button mButtonYes, mButtonNo, mButtonMayBe;
+    private CollapsingToolbarLayout mCollapsingToolbar;
 
     private RecyclerView mRecyclerViewChat;
     List<ChatInfo> chatInfoList = new ArrayList<>();
@@ -50,18 +61,36 @@ public class BuzzzzDetailActivity extends BaseActivity {
     private String mBuzzzzId;
     private String mBuzzzzName;
 
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.button_yes:
+                    sendRsvbResponse(ApiDetails.RSVP.YES);
+                    break;
+                case R.id.button_no:
+                    sendRsvbResponse(ApiDetails.RSVP.NO);
+                    break;
+                case R.id.button_maybe:
+                    sendRsvbResponse(ApiDetails.RSVP.MAY_BE);
+                    break;
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buzzzz_detail);
         mBuzzzzId = getIntent().getStringExtra(AppConstants.EXTRA_BUZZZZ_ID);
+        mChannelId = mBuzzzzId;
         mBuzzzzName = getIntent().getStringExtra(AppConstants.EXTRA_BUZZZZ_NAME);
         if (mBuzzzzId != null) {
             mSenderId = SharedPreference.getString(mActivity, AppConstants.PREF_KEY_USER_ID);
             mSenderName = SharedPreference.getString(mActivity, AppConstants.PREF_KEY_USER_NAME);
             getViewsId();
             connectWebSocket();
-            requestBuzzzzDetail();
+            requestBuzzDetail();
         } else {
             finish();
         }
@@ -72,18 +101,28 @@ public class BuzzzzDetailActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        CollapsingToolbarLayout collapsingToolbar =
-                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         if (mBuzzzzName != null) {
-            collapsingToolbar.setTitle(mBuzzzzName);
+            mCollapsingToolbar.setTitle(mBuzzzzName);
         } else {
-            collapsingToolbar.setTitle("Buzzzz name");
+            mCollapsingToolbar.setTitle("Buzzzz name");
         }
         mRecyclerViewChat = (RecyclerView) findViewById(R.id.recyclerview_following);
 
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mActivity);
         mRecyclerViewChat.setLayoutManager(mLinearLayoutManager);
         mEditText = (EditText) findViewById(R.id.message);
+        mTextViewRsvbMessage = (TextView) findViewById(R.id.textview_rsvb_message);
+        mTextViewVenue = (TextView) findViewById(R.id.textview_venue);
+        mTextViewStart = (TextView) findViewById(R.id.textview_start);
+        mTextViewResponse = (TextView) findViewById(R.id.textview_response);
+        mButtonYes = (Button) findViewById(R.id.button_yes);
+        mButtonNo = (Button) findViewById(R.id.button_no);
+        mButtonMayBe = (Button) findViewById(R.id.button_maybe);
+
+        mButtonYes.setOnClickListener(mOnClickListener);
+        mButtonNo.setOnClickListener(mOnClickListener);
+        mButtonMayBe.setOnClickListener(mOnClickListener);
     }
 
     private void setDataInChatAdapter() {
@@ -110,6 +149,13 @@ public class BuzzzzDetailActivity extends BaseActivity {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
                 Logger.i("Websocket", "Opened");
+                if (SharedPreference.getBoolean(mActivity, AppConstants.PREF_KEY_IS_LOGGED_IN)) {
+                    String welcomeText = "I am here...";
+                    joinExitMessage(welcomeText);
+                } else {
+                    String text = "Login to join Buzzzz...";
+                    joinExitMessage(text);
+                }
             }
 
             @Override
@@ -132,11 +178,28 @@ public class BuzzzzDetailActivity extends BaseActivity {
             @Override
             public void onError(Exception e) {
                 Logger.i("Websocket", "Error " + e.getMessage());
-                // Logger.i("webScoket", "In Error");
             }
         };
 
         mWebSocketClient.connect();
+    }
+
+    /**
+     * will be called if user joins or leaves chat
+     */
+    private void joinExitMessage(String message) {
+        ChatInfo chatInfo = new ChatInfo();
+        chatInfo.setMessage(message);
+        chatInfo.setSenderId(mSenderId);
+        chatInfo.setSenderName(mSenderName);
+        String imageName = Api.BASE_URL_CLOUDINARY_SOCIAL
+                + SharedPreference.getString(mActivity, AppConstants.PREF_KEY_MEDIUM_TYPE).toLowerCase()
+                + "/"
+                + SharedPreference.getString(mActivity, AppConstants.PREF_KEY_MEDIUM_ID);
+        chatInfo.setImageUrl(imageName);
+        JSONObject jsonObject = getChatJson(chatInfo, Api.CHAT_CHANNEL + mChannelId);
+        mWebSocketClient.send(String.valueOf(jsonObject));
+        Logger.i("send msg", jsonObject.toString());
     }
 
     public void sendMessage(View view) {
@@ -145,7 +208,11 @@ public class BuzzzzDetailActivity extends BaseActivity {
             chatInfo.setMessage(mEditText.getText().toString());
             chatInfo.setSenderId(mSenderId);
             chatInfo.setSenderName(mSenderName);
-            chatInfo.setImageUrl("https://www.google.co.in");
+            String imageName = Api.BASE_URL_CLOUDINARY_SOCIAL
+                    + SharedPreference.getString(mActivity, AppConstants.PREF_KEY_MEDIUM_TYPE).toLowerCase()
+                    + "/"
+                    + SharedPreference.getString(mActivity, AppConstants.PREF_KEY_MEDIUM_ID);
+            chatInfo.setImageUrl(imageName);
             JSONObject jsonObject = getChatJson(chatInfo, Api.CHAT_CHANNEL + mChannelId);
             mWebSocketClient.send(String.valueOf(jsonObject));
             Logger.i("send msg", jsonObject.toString());
@@ -187,6 +254,7 @@ public class BuzzzzDetailActivity extends BaseActivity {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put(ApiDetails.REQUEST_KEY_DESTINATION, destination);
+            jsonObject.put(ApiDetails.REQUES_KEY_TOKEN, SharedPreference.getString(mActivity, AppConstants.PREF_KEY_AUTH_TOKEN));
 
             JSONObject jsonObjectData = new JSONObject();
 
@@ -202,7 +270,7 @@ public class BuzzzzDetailActivity extends BaseActivity {
         return jsonObject;
     }
 
-    private void requestBuzzzzDetail() {
+    private void requestBuzzDetail() {
         Request request = new Request(ApiDetails.ACTION_NAME.PREVIEW);
         request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.PREVIEW.getActionName() + mBuzzzzId);
         request.setDialogMessage(getString(R.string.progress_dialog_msg));
@@ -214,9 +282,10 @@ public class BuzzzzDetailActivity extends BaseActivity {
 
             @Override
             public void onComplete(Model model) {
+                Logger.i(TAG, "model: " + model);
                 if (model.getStatus() == ApiDetails.STATUS_SUCCESS) {
                     if (model instanceof BuzzPreview) {
-                        displayBuzzzzPreview();
+                        displayBuzzPreview((BuzzPreview) model);
                     }
                 } else {
                     Utility.showToastMessage(mActivity, model.getMessage());
@@ -228,7 +297,72 @@ public class BuzzzzDetailActivity extends BaseActivity {
         }
     }
 
-    private void displayBuzzzzPreview() {
+    private void sendRsvbResponse(final ApiDetails.RSVP rsvp) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put(ApiDetails.REQUEST_KEY_STATUS, rsvp.name());
+        params.put(ApiDetails.REQUEST_KEY_BUZZ_ID, mBuzzzzId);
 
+        Request request = new Request(ApiDetails.ACTION_NAME.RSVP);
+        request.setParamMap(params);
+        request.setShowDialog(false);
+        request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.RSVP.getActionName());
+        request.setRequestType(Request.HttpRequestType.POST);
+        LoaderCallback loaderCallback = new LoaderCallback(mActivity, new MessageParser());
+        boolean hasNetwork = loaderCallback.requestToServer(request);
+        loaderCallback.setServerResponse(new APICaller() {
+
+            @Override
+            public void onComplete(Model model) {
+                Logger.i(TAG, "model: " + model);
+                if (model.getStatus() == ApiDetails.STATUS_SUCCESS) {
+                    updateRsvbButton(rsvp);
+                } else {
+                    Utility.showToastMessage(mActivity, model.getMessage());
+                }
+            }
+        });
+        if (!hasNetwork) {
+            Utility.showToastMessage(mActivity, getString(R.string.no_network));
+        }
+    }
+
+    private void updateRsvbButton(ApiDetails.RSVP rsvp) {
+        String rsvpMessage;
+        switch (rsvp) {
+            case YES:
+                rsvpMessage = "You are going!!";
+                mTextViewRsvbMessage.setText(rsvpMessage);
+                mButtonYes.setTextColor(getResources().getColor(R.color.primary));
+                mButtonNo.setTextColor(getResources().getColor(R.color.accent));
+                mButtonMayBe.setTextColor(getResources().getColor(R.color.accent));
+                break;
+            case NO:
+                rsvpMessage = "You will be missed!!";
+                mTextViewRsvbMessage.setText(rsvpMessage);
+                mButtonNo.setTextColor(getResources().getColor(R.color.primary));
+                mButtonYes.setTextColor(getResources().getColor(R.color.accent));
+                mButtonMayBe.setTextColor(getResources().getColor(R.color.accent));
+                break;
+            case MAY_BE:
+                rsvpMessage = "Let's wait!!";
+                mTextViewRsvbMessage.setText(rsvpMessage);
+                mButtonMayBe.setTextColor(getResources().getColor(R.color.primary));
+                mButtonYes.setTextColor(getResources().getColor(R.color.accent));
+                mButtonNo.setTextColor(getResources().getColor(R.color.accent));
+                break;
+        }
+    }
+
+    private void displayBuzzPreview(BuzzPreview buzzPreview) {
+        mCollapsingToolbar.setTitle(buzzPreview.getName());
+//        if (buzzPreview.isRSVP()) {
+//            mTextViewRsvbMessage.setText("You are going!!");
+//        }
+        mTextViewVenue.setText(buzzPreview.getLocation().getAddress());
+        mTextViewStart.setText(buzzPreview.getSchedule().getStartTime());
+        BuzzPreview.Stats stats = buzzPreview.getStats();
+        String response = String.format("%s Going | %s Not going | %s May be", stats.getGoingCount(), stats.getNotComingCount(), stats.getMayBeCount());
+        mTextViewResponse.setText(response);
+        updateRsvbButton(buzzPreview.getRsvp());
     }
 }

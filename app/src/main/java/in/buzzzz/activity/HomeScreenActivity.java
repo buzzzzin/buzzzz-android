@@ -163,7 +163,7 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                /* Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
 
-                Intent intent = new Intent(mActivity, BuzzzzDetailActivity.class);
+                Intent intent = new Intent(mActivity, BuzzDetailActivity.class);
                 startActivity(intent);
             }
         });

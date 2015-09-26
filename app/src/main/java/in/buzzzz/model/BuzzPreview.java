@@ -2,6 +2,8 @@ package in.buzzzz.model;
 
 import java.util.List;
 
+import in.buzzzz.utility.ApiDetails;
+
 /**
  * Created by Navkrishna on September 26, 2015
  */
@@ -11,6 +13,7 @@ public class BuzzPreview extends Model {
     private String imageName;
     private boolean isRSVP;
     private List<String> interests;
+    private ApiDetails.RSVP rsvp;
     private Location location;
     private Schedule schedule;
     private Stats stats;
@@ -53,6 +56,14 @@ public class BuzzPreview extends Model {
 
     public void setInterests(List<String> interests) {
         this.interests = interests;
+    }
+
+    public ApiDetails.RSVP getRsvp() {
+        return rsvp;
+    }
+
+    public void setRsvp(ApiDetails.RSVP rsvp) {
+        this.rsvp = rsvp;
     }
 
     public Location getLocation() {

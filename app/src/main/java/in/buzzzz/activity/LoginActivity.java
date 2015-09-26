@@ -2,8 +2,11 @@ package in.buzzzz.activity;
 
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -176,6 +179,14 @@ public class LoginActivity extends BaseActivity {
         mFacebookLoginButton.registerCallback(mFacebookCallbackManager, mFacebookCallback);
 
         mSignInButton.setOnClickListener(mOnClickListener);
+
+        ImageView imageView = (ImageView) findViewById(R.id.imageview_splash);
+
+        Point point = Utility.getDisplayPoint(mActivity);
+        ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+        layoutParams.width = (int) (point.x / 1.25);
+        layoutParams.height = (int) (point.x / 1.25);
+        imageView.setLayoutParams(layoutParams);
     }
 
     private void initFacebook() {

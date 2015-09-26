@@ -1,10 +1,17 @@
 package in.buzzzz.utility;
 
+import android.app.Activity;
 import android.content.Context;
 import android.location.LocationManager;
+import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.view.Display;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
 
@@ -89,6 +96,7 @@ public final class Utility {
             urlConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             urlConnection.setRequestProperty("User-Agent", System.getProperty("http.agent"));
             urlConnection.setRequestProperty("Accept-Language", getLocaleLanguageTag(context));
+            urlConnection.setRequestProperty(ApiDetails.HEADER_X_AUTH_TOKEN, SharedPreference.getString(context, AppConstants.PREF_KEY_AUTH_TOKEN));
 
             urlConnection.setRequestMethod("GET");
             urlConnection.setConnectTimeout(timeoutConnection);
@@ -208,6 +216,22 @@ public final class Utility {
             default:
                 return ApiDetails.GENDER.NOT_SET;
         }
+    }
+
+    public static void setImageFromUrl(String imageUrl, ImageView imageView, int placeholderResId) {
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .showImageForEmptyUri(placeholderResId)
+                .showImageOnFail(placeholderResId)
+                .showImageOnLoading(placeholderResId)
+                .resetViewBeforeLoading(true).cacheInMemory(true).build();
+        ImageLoader.getInstance().displayImage(imageUrl, imageView, options, null);
+    }
+
+    public static Point getDisplayPoint(Context context) {
+        Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size;
     }
 
     public static boolean isLocationProviderEnabled(Context context) {

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import in.buzzzz.R;
-import in.buzzzz.activity.BuzzzzDetailActivity;
+import in.buzzzz.activity.BuzzDetailActivity;
 import in.buzzzz.model.Interest;
 import in.buzzzz.utility.AppConstants;
 import in.buzzzz.utility.Logger;
@@ -69,8 +69,8 @@ public class InterestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private void showBuzzList(Interest interest) {
         Utility.showToastMessage(mActivity, interest.getId());
-        Intent intent = new Intent(mActivity, BuzzzzDetailActivity.class);
-        intent.putExtra(AppConstants.EXTRA_BUZZZZ_ID, "560637acc830ec03dc42baae");
+        Intent intent = new Intent(mActivity, BuzzDetailActivity.class);
+        intent.putExtra(AppConstants.EXTRA_BUZZZZ_ID, "560675b3c8304c9dcb1a526b");
         intent.putExtra(AppConstants.EXTRA_BUZZZZ_NAME, interest.getName());
         mActivity.startActivity(intent);
     }
