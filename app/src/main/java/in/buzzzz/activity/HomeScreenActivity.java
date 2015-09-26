@@ -13,14 +13,12 @@ import in.buzzzz.R;
 import in.buzzzz.loader.APICaller;
 import in.buzzzz.loader.LoaderCallback;
 import in.buzzzz.model.BuzzList;
-import in.buzzzz.model.Login;
 import in.buzzzz.model.Model;
 import in.buzzzz.model.Request;
 import in.buzzzz.parser.HomeBuzzParser;
-import in.buzzzz.parser.LoginParser;
 import in.buzzzz.utility.Api;
 import in.buzzzz.utility.ApiDetails;
-import in.buzzzz.utility.SharedPreference;
+import in.buzzzz.utility.Logger;
 import in.buzzzz.utility.Utility;
 
 public class HomeScreenActivity extends BaseActivity {
@@ -34,6 +32,7 @@ public class HomeScreenActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getViewsId();
+        requestHomeBuzz();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -55,12 +54,12 @@ public class HomeScreenActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 //vertical swipe on home
-                requestLogin();
+                requestHomeBuzz();
             }
         });
     }
 
-    private void requestLogin() {
+    private void requestHomeBuzz() {
 
         HashMap<String, String> params = new HashMap<>();
         params.put(ApiDetails.REQUEST_KEY_LATITUDE, "22.546548");
@@ -81,6 +80,8 @@ public class HomeScreenActivity extends BaseActivity {
                 if (model.getStatus() == ApiDetails.STATUS_SUCCESS) {
                     if (model instanceof BuzzList) {
                         BuzzList login = (BuzzList) model;
+                        Logger.i("interestList", login.getmInterestList().toString());
+
 
                     }
                 } else {
