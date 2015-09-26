@@ -5,15 +5,15 @@
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
-    </style>
-
-    <style name="AppTheme" parent="AppTheme.Base">
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@android:color/white</item>
 
         <!--to disable multitouch in whole app-->
         <item name="android:windowEnableSplitTouch">false</item>
         <item name="android:splitMotionEvents">false</item>
+    </style>
+
+    <style name="AppTheme" parent="AppTheme.Base">
     </style>
 
     <style name="ToolBarTheme" parent="Theme.AppCompat">

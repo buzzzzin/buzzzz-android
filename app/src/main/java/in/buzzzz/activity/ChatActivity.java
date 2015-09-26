@@ -1,17 +1,15 @@
 package in.buzzzz.activity;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_17;
@@ -29,7 +27,6 @@ import in.buzzzz.adapter.ChatAdapter;
 import in.buzzzz.model.ChatInfo;
 import in.buzzzz.utility.Api;
 import in.buzzzz.utility.ApiDetails;
-import in.buzzzz.utility.AppConstants;
 import in.buzzzz.utility.ChatJSONMessage;
 
 public class ChatActivity extends BaseActivity {
@@ -48,7 +45,6 @@ public class ChatActivity extends BaseActivity {
     private String mSenderId = "1234";
     private String mSenderName = "Rajendra";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,22 +53,27 @@ public class ChatActivity extends BaseActivity {
         chatJSONMessage = new ChatJSONMessage();
         getViewsId();
         connectWebSocket();
-
     }
 
     private void getViewsId() {
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        CollapsingToolbarLayout collapsingToolbar =
+                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle("Buzzzz name");
 //        linearLytChat = (LinearLayout) findViewById(R.id.linear_lyt_chat);
         mRecyclerViewChat = (RecyclerView) findViewById(R.id.recyclerview_following);
 
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(ChatActivity.this);
         mRecyclerViewChat.setLayoutManager(mLinearLayoutManager);
-        mRecyclerViewChat.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
-            }
-        });
+//        mRecyclerViewChat.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//
+//            }
+//        });
 
       /*  List<ChatInfo> chatInfoList = new ArrayList<ChatInfo>();
         for (int i = 0; i < 30; i++) {
@@ -85,7 +86,6 @@ public class ChatActivity extends BaseActivity {
 
         }*/
 
-
 //		txtviewTyping = (TextView) findViewById(R.id.typing);
         editText = (EditText) findViewById(R.id.message);
 
@@ -94,7 +94,6 @@ public class ChatActivity extends BaseActivity {
             public void afterTextChanged(Editable arg0) {
 
                 Log.i("afterTextChanged", "afterTextChanged");
-
             }
 
             @Override
@@ -109,7 +108,6 @@ public class ChatActivity extends BaseActivity {
 
                 if (s.length() > 0)
                     sendTypingEvent(s);
-
             }
 
             private void sendTypingEvent(CharSequence s) {
@@ -122,13 +120,11 @@ public class ChatActivity extends BaseActivity {
                 mWebSocketClient.send(mainJsonObject.toString());
                 Log.e("my msg", mainJsonObject.toString());*/
             }
-
         };
 
 //		editText.addTextChangedListener(watch);
 
     }
-
 
     private void setDataInChatAdapter() {
         if (chatAdapter == null) {
@@ -138,8 +134,6 @@ public class ChatActivity extends BaseActivity {
             mRecyclerViewChat.getAdapter().notifyDataSetChanged();
         }
         mRecyclerViewChat.getLayoutManager().smoothScrollToPosition(mRecyclerViewChat, null, chatAdapter.getItemCount() - 1);
-
-
     }
 
     private void connectWebSocket() {
@@ -150,8 +144,6 @@ public class ChatActivity extends BaseActivity {
 
             uri = new URI(Api.CHAT_HOST_URL + Api.CHAT_CHANNEL +
                     mChannelId);
-
-
         } catch (URISyntaxException e) {
             e.printStackTrace();
 
@@ -168,7 +160,6 @@ public class ChatActivity extends BaseActivity {
                 Log.e("Websocket", "Opened");
 //                mWebSocketClient.send("hello testing");
 
-
             }
 
             @Override
@@ -184,7 +175,6 @@ public class ChatActivity extends BaseActivity {
                         // textView.setText(textView.getText() + "\n" +
                         // message);
                     }
-
                 });
             }
 
@@ -198,11 +188,9 @@ public class ChatActivity extends BaseActivity {
                 Log.i("Websocket", "Error " + e.getMessage());
                 // Log.e("webScoket", "In Error");
             }
-
         };
 
         mWebSocketClient.connect();
-
     }
 
     public void sendMessage(View view) {
@@ -217,9 +205,7 @@ public class ChatActivity extends BaseActivity {
             mWebSocketClient.send(String.valueOf(jsonObject));
             Log.e("send msg", jsonObject.toString());
             editText.setText("");
-
         }
-
     }
 
     private void parseData(String message) {
@@ -236,7 +222,6 @@ public class ChatActivity extends BaseActivity {
             }
             chatInfoList.add(chatInfo);
             setDataInChatAdapter();
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -253,7 +238,6 @@ public class ChatActivity extends BaseActivity {
         close();
     }
 
-
     private JSONObject getChatJson(ChatInfo chatInfo, String destination) {
         JSONObject jsonObject = new JSONObject();
         try {
@@ -267,11 +251,9 @@ public class ChatActivity extends BaseActivity {
             jsonObjectData.put(ApiDetails.REQUEST_KEY_IMAGE_URL, chatInfo.getImageUrl());
 
             jsonObject.put("data", jsonObjectData);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return jsonObject;
     }
-
 }
