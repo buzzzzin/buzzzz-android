@@ -113,4 +113,5 @@ public final class ApiDetails {
     public static final String REQUEST_KEY_MESSAGE = "message";
     public static final String REQUEST_KEY_IMAGE_URL = "imageUrl";
     public static final String REQUEST_KEY_DATA = "data";
+    public static final String REQUES_KEY_TOKEN = "token";
 }

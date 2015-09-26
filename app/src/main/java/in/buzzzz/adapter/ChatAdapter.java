@@ -9,12 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import java.util.List;
 
 import in.buzzzz.R;
 import in.buzzzz.model.ChatInfo;
-
+import in.buzzzz.utility.Utility;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -32,7 +31,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
 
         Context context = parent.getContext();
         View view;
@@ -53,11 +51,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             final ChatInfo chatInfo = mFollowingList.get(position);
             viewHolder.textViewName.setText(chatInfo.getSenderName());
             viewHolder.textViewMessage.setText(chatInfo.getMessage());
-
-
+            Utility.setImageFromUrl(chatInfo.getImageUrl(), viewHolder.imageViewProfile, R.mipmap.ic_launcher);
         }
     }
-
 
     @Override
     public int getItemCount() {
@@ -74,10 +70,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             textViewMessage = (TextView) itemView.findViewById(R.id.txtview_chat);
             textViewName = (TextView) itemView.findViewById(R.id.txtview_name);
             imageViewProfile = (ImageView) itemView.findViewById(R.id.imageview_profile_pic);
-
         }
     }
-
 
     public int getItemViewType(int position) {
         //Some logic to know which type will come next;
@@ -86,7 +80,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return FIRST_TYPE;
         } else {
             return SECOND_TYPE;
-
         }
     }
 }

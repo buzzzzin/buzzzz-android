@@ -68,7 +68,7 @@ public class BuzzDetailActivity extends BaseActivity {
             mSenderName = SharedPreference.getString(mActivity, AppConstants.PREF_KEY_USER_NAME);
             getViewsId();
             connectWebSocket();
-            requestBuzzzzDetail();
+            requestBuzzDetail();
         } else {
             finish();
         }
@@ -163,7 +163,11 @@ public class BuzzDetailActivity extends BaseActivity {
             chatInfo.setMessage(mEditText.getText().toString());
             chatInfo.setSenderId(mSenderId);
             chatInfo.setSenderName(mSenderName);
-            chatInfo.setImageUrl("https://www.google.co.in");
+            String imageName = Api.BASE_URL_CLOUDINARY_SOCIAL
+                    + SharedPreference.getString(mActivity, AppConstants.PREF_KEY_MEDIUM_TYPE).toLowerCase()
+                    + "/"
+                    + SharedPreference.getString(mActivity, AppConstants.PREF_KEY_MEDIUM_ID);
+            chatInfo.setImageUrl(imageName);
             JSONObject jsonObject = getChatJson(chatInfo, Api.CHAT_CHANNEL + mChannelId);
             mWebSocketClient.send(String.valueOf(jsonObject));
             Logger.i("send msg", jsonObject.toString());
@@ -205,6 +209,7 @@ public class BuzzDetailActivity extends BaseActivity {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put(ApiDetails.REQUEST_KEY_DESTINATION, destination);
+            jsonObject.put(ApiDetails.REQUES_KEY_TOKEN, SharedPreference.getString(mActivity, AppConstants.PREF_KEY_AUTH_TOKEN));
 
             JSONObject jsonObjectData = new JSONObject();
 
@@ -220,7 +225,7 @@ public class BuzzDetailActivity extends BaseActivity {
         return jsonObject;
     }
 
-    private void requestBuzzzzDetail() {
+    private void requestBuzzDetail() {
         Request request = new Request(ApiDetails.ACTION_NAME.PREVIEW);
         request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.PREVIEW.getActionName() + mBuzzzzId);
         request.setDialogMessage(getString(R.string.progress_dialog_msg));

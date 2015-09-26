@@ -3,7 +3,11 @@ package in.buzzzz.utility;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
 
@@ -207,5 +211,14 @@ public final class Utility {
             default:
                 return ApiDetails.GENDER.NOT_SET;
         }
+    }
+
+    public static void setImageFromUrl(String imageUrl, ImageView imageView, int placeholderResId) {
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .showImageForEmptyUri(placeholderResId)
+                .showImageOnFail(placeholderResId)
+                .showImageOnLoading(placeholderResId)
+                .resetViewBeforeLoading(true).cacheInMemory(true).build();
+        ImageLoader.getInstance().displayImage(imageUrl, imageView, options, null);
     }
 }
