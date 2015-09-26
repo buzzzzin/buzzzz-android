@@ -8,7 +8,7 @@ import android.view.View;
 
 import in.buzzzz.R;
 
-public class MainActivity extends BaseActivity {
+public class HomeScreenActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
