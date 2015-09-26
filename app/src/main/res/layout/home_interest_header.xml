@@ -1,6 +1,7 @@
 <LinearLayout
     android:id="@+id/shapeLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
@@ -9,16 +10,20 @@
 
     <ImageView
         android:id="@+id/imageview_interest_pic"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@mipmap/ic_launcher"
+        android:layout_width="@dimen/home_interest_image_width"
+        android:layout_height="@dimen/home_interest_pic_height"
+        android:layout_gravity="center"
+        android:scaleType="fitXY"
         />
 
     <TextView
         android:id="@+id/textview_interest_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:textColor="@android:color/black"
+        tools:text="dfdfjdj"
         />
 
 </LinearLayout>

@@ -15,6 +15,7 @@ import java.util.List;
 import in.buzzzz.R;
 import in.buzzzz.activity.BuzzDetailActivity;
 import in.buzzzz.model.BuzzPreview;
+import in.buzzzz.utility.Api;
 import in.buzzzz.utility.AppConstants;
 import in.buzzzz.utility.Logger;
 import in.buzzzz.utility.Utility;
@@ -47,6 +48,15 @@ public class BuzzAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ViewHolder viewHolder = (ViewHolder) holder;
             final BuzzPreview buzzPreview = buzzPreviewList.get(position);
             viewHolder.textViewInterestName.setText(buzzPreview.getName());
+            if (buzzPreview.getStats() != null && !buzzPreview.getStats().getGoingCount().equalsIgnoreCase("0")) {
+                viewHolder.textViewSubscriberCount.setText("Going:" + buzzPreview.getStats().getGoingCount());
+
+            } else {
+                viewHolder.textViewSubscriberCount.setText("Awaiting response");
+
+            }
+
+            Utility.setImageFromUrl(Api.BASE_URL_CLOUDINARY_BUZZZZ + buzzPreview.getImageName(), viewHolder.imageViewProfilePic, R.mipmap.ic_launcher);
             Logger.i("name", buzzPreview.getName());
 
             viewHolder.relativeLayoutBuzz.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +93,7 @@ public class BuzzAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewProfilePic, imageViewSubscribe;
-        TextView textViewInterestName;
+        TextView textViewInterestName, textViewSubscriberCount;
         RelativeLayout relativeLayoutBuzz;
 
         public ViewHolder(View itemView) {
@@ -91,6 +101,7 @@ public class BuzzAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             imageViewProfilePic = (ImageView) itemView.findViewById(R.id.imageview_interest_pic);
             imageViewSubscribe = (ImageView) itemView.findViewById(R.id.imageview_subscribe);
             textViewInterestName = (TextView) itemView.findViewById(R.id.textview_interest_name);
+            textViewSubscriberCount = (TextView) itemView.findViewById(R.id.textview_subscriber_count);
             relativeLayoutBuzz = (RelativeLayout) itemView.findViewById(R.id.relativelayt_interest);
         }
     }
