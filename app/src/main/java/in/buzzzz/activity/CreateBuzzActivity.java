@@ -1,9 +1,14 @@
 package in.buzzzz.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -85,6 +90,7 @@ public class CreateBuzzActivity extends BaseActivity {
         mButtonCreateBuzz.setOnClickListener(mOnClickListener);
         mTextViewStartTime.setOnClickListener(mOnClickListener);
         mTextViewEndTime.setOnClickListener(mOnClickListener);
+        mImageViewBuzzPic.setOnClickListener(mOnClickListener);
     }
 
     private void requestInterest() {
@@ -180,9 +186,41 @@ public class CreateBuzzActivity extends BaseActivity {
                 case R.id.textview_end_time:
                     showDateAndTimePicker(false);
                     break;
+                case R.id.imageview_buzz_pic:
+                    if (imageSelected) {
+                        showImageChangeDialog();
+                    } else {
+                        openCameraToCaptureImage();
+                    }
+                    break;
             }
         }
     };
+
+    private void openCameraToCaptureImage() {
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+    }
+
+    private void showImageChangeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        builder.setTitle("Update Image");
+        builder.setMessage("Do you want to change image for Buzzzz?");
+        builder.setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                openCameraToCaptureImage();
+            }
+        });
+        builder.setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
 
     private void validateAndCreateBuzz() {
         String buzzTitle = mEditTextBuzzTitle.getText().toString().trim();
@@ -227,5 +265,26 @@ public class CreateBuzzActivity extends BaseActivity {
         });
         alertDialog.setView(dialogView);
         alertDialog.show();
+    }
+
+    private static final int CAMERA_REQUEST = 1888;
+    private boolean imageSelected = false;
+
+    private void updateViewDimension() {
+        Point point = Utility.getDisplayPoint(mActivity);
+        ViewGroup.LayoutParams layoutParams = mImageViewBuzzPic.getLayoutParams();
+        layoutParams.width = point.x;
+        layoutParams.height = point.y;
+        mImageViewBuzzPic.setLayoutParams(layoutParams);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            mImageViewBuzzPic.setImageBitmap(photo);
+            updateViewDimension();
+            imageSelected = true;
+        }
     }
 }
