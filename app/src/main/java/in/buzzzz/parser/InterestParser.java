@@ -9,7 +9,6 @@ import java.util.List;
 
 import in.buzzzz.model.Interest;
 import in.buzzzz.model.InterestInfo;
-import in.buzzzz.model.Login;
 import in.buzzzz.model.Model;
 import in.buzzzz.utility.ApiDetails;
 

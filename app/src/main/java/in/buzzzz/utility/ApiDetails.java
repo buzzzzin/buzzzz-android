@@ -64,7 +64,6 @@ public final class ApiDetails {
     public static final String REQUEST_KEY_LONGITUDE = "longitude";
     public static final String REQUEST_KEY_RADIUS = "radius";
 
-
     //    RESPONSE KEYS
     public static final String RESPONSE_KEY_MESSAGE = "message";
     public static final String RESPONSE_KEY_STATUS = "status";
@@ -83,7 +82,7 @@ public final class ApiDetails {
     public static final String RESPONSE_KEY_HAS_INTERESTS = "hasInterests";
     public static final String RESPONSE_KEY_IMAGE = "image";
     public static final String RESPONSE_KEY_IS_SUBSCRIBED = "isSubscribed";
-    public static final String RESPONSE_KEY_INTERESTS= "interests";
+    public static final String RESPONSE_KEY_INTERESTS = "interests";
 
     public static final String REQUEST_KEY_DESTINATION = "destination";
     public static final String REQUEST_KEY_SENDER_ID = "senderId";
