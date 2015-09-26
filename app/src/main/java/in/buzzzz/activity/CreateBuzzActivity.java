@@ -2,8 +2,8 @@ package in.buzzzz.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -21,8 +21,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.ig.crop.Crop;
+
 import org.json.JSONArray;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,20 +39,25 @@ import java.util.List;
 import in.buzzzz.R;
 import in.buzzzz.loader.APICaller;
 import in.buzzzz.loader.LoaderCallback;
+import in.buzzzz.model.CloudinaryDetail;
 import in.buzzzz.model.Interest;
 import in.buzzzz.model.InterestInfo;
 import in.buzzzz.model.Model;
 import in.buzzzz.model.Request;
+import in.buzzzz.parser.CloudinaryParser;
 import in.buzzzz.parser.InterestParser;
 import in.buzzzz.utility.Api;
 import in.buzzzz.utility.ApiDetails;
+import in.buzzzz.utility.AppConstants;
+import in.buzzzz.utility.Logger;
+import in.buzzzz.utility.SharedPreference;
 import in.buzzzz.utility.Utility;
 
 /**
  * Created by Navkrishna on September 26, 2015
  */
 public class CreateBuzzActivity extends BaseActivity {
-
+    private static final int CHOOSE_PHOTO = 1;
     private ImageView mImageViewBuzzPic;
     private EditText mEditTextBuzzTitle;
     private EditText mEditTextBuzzDesc;
@@ -63,6 +72,7 @@ public class CreateBuzzActivity extends BaseActivity {
     private AutoCompleteTextView mAutoCompleteTextViewInterest;
     private JSONArray jsonArrayInterst = new JSONArray();
     private String mStartDateTime, mEndDateTime;
+    private String mImagePath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,17 +200,12 @@ public class CreateBuzzActivity extends BaseActivity {
                     if (imageSelected) {
                         showImageChangeDialog();
                     } else {
-                        openCameraToCaptureImage();
+                        choosePhoto();
                     }
                     break;
             }
         }
     };
-
-    private void openCameraToCaptureImage() {
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, CAMERA_REQUEST);
-    }
 
     private void showImageChangeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
@@ -210,7 +215,7 @@ public class CreateBuzzActivity extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                openCameraToCaptureImage();
+                choosePhoto();
             }
         });
         builder.setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
@@ -229,7 +234,11 @@ public class CreateBuzzActivity extends BaseActivity {
         } else if (jsonArrayInterst.length() == 0) {
             mAutoCompleteTextViewInterest.setError("Select at least one interest");
         } else {
-            requestCreatBuzz();
+            if (mImagePath == null || mImagePath.isEmpty()) {
+                requestCreatBuzz();
+            } else {
+                uploadImageOnCloudinary(SharedPreference.getString(mActivity, AppConstants.PREF_KEY_USER_ID), mImagePath);
+            }
         }
     }
 
@@ -252,7 +261,7 @@ public class CreateBuzzActivity extends BaseActivity {
 
                 long startTime = calendar.getTimeInMillis();
                 Date date = new Date(startTime);
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
                 if (isStartDateTime) {
                     mStartDateTime = formatter.format(date);
                     mTextViewStartTime.setText("Start Time: " + mStartDateTime);
@@ -278,13 +287,112 @@ public class CreateBuzzActivity extends BaseActivity {
         mImageViewBuzzPic.setLayoutParams(layoutParams);
     }
 
+    private void choosePhoto() {
+        Intent intent = new Intent(mActivity, CameraGalleryActivity.class);
+        if (mImagePath != null) {
+            intent.putExtra(AppConstants.EXTRA_IS_REMOVE_IMAGE, true);
+        }
+        startActivityForResult(intent, CHOOSE_PHOTO);
+        overridePendingTransition(R.animator.slide_in, R.animator.slide_out);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            mImageViewBuzzPic.setImageBitmap(photo);
-            updateViewDimension();
-            imageSelected = true;
+
+        switch (requestCode) {
+            case CHOOSE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    mImagePath = data.getStringExtra("imagePath");
+                    if (mImagePath != null) {
+                        beginCrop(Uri.fromFile(new File(mImagePath)));
+                    } else {
+                        Utility.showToastMessage(mActivity, getString(R.string.msg_choose_different));
+                    }
+                } else if (resultCode == CameraGalleryActivity.RESULT_REMOVED) {
+                    mImagePath = null;
+                    mImageViewBuzzPic.setImageBitmap(null);
+                }
+                break;
+            case CAMERA_REQUEST:
+                if (resultCode == RESULT_OK) {
+                    mImagePath = data.getStringExtra("imagePath");
+                    if (mImagePath != null) {
+                        beginCrop(Uri.fromFile(new File(mImagePath)));
+                    } else {
+                        Utility.showToastMessage(mActivity, getString(R.string.msg_choose_different));
+                    }
+                }
+                break;
+            case Crop.REQUEST_CROP:
+                handleCrop(resultCode, data);
+                break;
         }
+    }
+
+    private void beginCrop(Uri source) {
+        Uri outputUri = null;
+        try {
+            outputUri = Uri.fromFile(Utility.createImageFile(mActivity));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Point point = Utility.getDisplayPoint(mActivity);
+        int width = point.x;
+        int height = point.y;
+        Logger.i("point", "width:" + width + "height:" + height + "");
+        new Crop(source).output(outputUri).withAspect(width, height).start(this);
+    }
+
+    private void handleCrop(int resultCode, Intent result) {
+        if (resultCode == RESULT_OK) {
+            Uri croppedUri = Crop.getOutput(result);
+            File outPutFile = new File(croppedUri.getPath());
+            mImagePath = outPutFile.getAbsolutePath();
+            updateViewDimension();
+            setPic(mImagePath);
+        } else if (resultCode == Crop.RESULT_ERROR) {
+            //Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
+            Utility.showToastMessage(mActivity, Crop.getError(result).getMessage());
+        } else if (resultCode == RESULT_CANCELED) {
+            mImagePath = null;
+        }
+    }
+
+    private void setPic(String path) {
+        mImageViewBuzzPic.setImageBitmap(Utility.getBitmap(path));
+    }
+
+    private void uploadImageOnCloudinary(String folderName, String imagePath) {
+        HashMap<String, String> paramMap = new HashMap<String, String>();
+        paramMap.put(ApiDetails.REQUEST_KEY_CLOUDINARY_API_KEY, Api.CLOUDINARY_API_KEY);
+        paramMap.put(ApiDetails.REQUEST_KEY_CLOUDINARY_API_SECRET, Api.CLOUDINARY_API_SECRET);
+        paramMap.put(ApiDetails.REQUEST_KEY_CLOUDINARY_FOLDER, Api.CLOUDINARY_FOLDER + "/" + folderName);
+        paramMap.put(ApiDetails.REQUEST_KEY_CLOUDINARY_CLOUD_NAME, Api.CLOUDINARY_CLOUD);
+        paramMap.put(ApiDetails.REQUEST_KEY_CLOUDINARY_FORMAT, "JPG");
+        paramMap.put(ApiDetails.REQUEST_KEY_CLOUDINARY_ACTION, ApiDetails.ACTION_NAME.UPLOAD.name());
+        paramMap.put(ApiDetails.REQUEST_KEY_CLOUDINARY_IMAGE_PATH, imagePath);
+        Request request = new Request(ApiDetails.ACTION_NAME.UPLOAD);
+        request.setDialogMessage(getResources().getString(R.string.dialog_msg_upload_image));
+        request.setParamMap(paramMap);
+        request.setShowDialog(true);
+        request.setUrl(Api.BASE_URL_API);
+        request.setRequestType(Request.HttpRequestType.CLOUDINARY);
+        CloudinaryParser cloudinaryParser = new CloudinaryParser();
+        final LoaderCallback loaderCallback = new LoaderCallback(mActivity, cloudinaryParser);
+        loaderCallback.requestToServer(request);
+        loaderCallback.setServerResponse(new APICaller() {
+            @Override
+            public void onComplete(Model model) {
+                if (model instanceof CloudinaryDetail) {
+                    CloudinaryDetail cloudinaryDetail = (CloudinaryDetail) model;
+                    if (cloudinaryDetail.getPublicId() != null && !cloudinaryDetail.getPublicId().isEmpty()) {
+                        String cloudinaryImagePath = cloudinaryDetail.getPublicId();
+                        Logger.i("cloudinaryImagePath", cloudinaryImagePath);
+                    }
+                } else {
+                    Utility.showToastMessage(mActivity, model.getMessage());
+                }
+            }
+        });
     }
 }

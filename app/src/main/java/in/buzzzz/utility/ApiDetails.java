@@ -12,6 +12,7 @@ public final class ApiDetails {
         PREVIEW("/buzz/preview/"),
         RSVP("/buzz/rsvp"),
         CREATE_BUZZ("/buzz/save"),
+        UPLOAD("UPLOAD"),
         NONE("");
 
         private final String value;
@@ -164,4 +165,17 @@ public final class ApiDetails {
     public static final String REQUEST_KEY_DATA = "data";
     public static final String REQUEST_KEY_TOKEN = "token";
     public static final String REQUEST_KEY_TYPE = "type";
+
+    //    Cloudinary keys
+    public static final String REQUEST_KEY_CLOUDINARY_API_KEY = "api_key";
+    public static final String REQUEST_KEY_CLOUDINARY_API_SECRET = "api_secret";
+    public static final String REQUEST_KEY_CLOUDINARY_FOLDER = "folder";
+    public static final String REQUEST_KEY_CLOUDINARY_CLOUD_NAME = "cloud_name";
+    public static final String REQUEST_KEY_CLOUDINARY_FORMAT = "format";
+    public static final String REQUEST_KEY_CLOUDINARY_ACTION = "action";
+    public static final String REQUEST_KEY_CLOUDINARY_IMAGE_PATH = "imagePath";
+    // Cloudinary response keypublic static final
+    public static final String RESPONSE_KEY_CLOUDINARY_URL = "url";
+    public static final String RESPONSE_KEY_CLOUDINARY_PUBLIC_ID = "public_id";
+    public static final String RESPONSE_KEY_CLOUDINARY_FORMAT = "format";
 }

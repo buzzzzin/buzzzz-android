@@ -59,6 +59,13 @@
             android:name=".activity.CreateBuzzActivity"
             android:label="@string/title_activity_create_buzz"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.ig.crop.CropImageActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.CameraGalleryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Translucent"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
