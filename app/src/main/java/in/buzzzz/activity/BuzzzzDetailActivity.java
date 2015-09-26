@@ -21,12 +21,19 @@ import java.util.List;
 
 import in.buzzzz.R;
 import in.buzzzz.adapter.ChatAdapter;
+import in.buzzzz.loader.APICaller;
+import in.buzzzz.loader.LoaderCallback;
+import in.buzzzz.model.BuzzzzPreview;
 import in.buzzzz.model.ChatInfo;
+import in.buzzzz.model.Model;
+import in.buzzzz.model.Request;
+import in.buzzzz.parser.BuzzzzPreviewParser;
 import in.buzzzz.utility.Api;
 import in.buzzzz.utility.ApiDetails;
 import in.buzzzz.utility.AppConstants;
 import in.buzzzz.utility.Logger;
 import in.buzzzz.utility.SharedPreference;
+import in.buzzzz.utility.Utility;
 
 public class BuzzzzDetailActivity extends BaseActivity {
     private WebSocketClient mWebSocketClient;
@@ -196,6 +203,32 @@ public class BuzzzzDetailActivity extends BaseActivity {
     }
 
     private void requestBuzzzzDetail() {
+        Request request = new Request(ApiDetails.ACTION_NAME.PREVIEW);
+        request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.PREVIEW.getActionName() + mBuzzzzId);
+        request.setDialogMessage(getString(R.string.progress_dialog_msg));
+        request.setShowDialog(true);
+        request.setRequestType(Request.HttpRequestType.GET);
+        LoaderCallback loaderCallback = new LoaderCallback(mActivity, new BuzzzzPreviewParser());
+        boolean hasNetwork = loaderCallback.requestToServer(request);
+        loaderCallback.setServerResponse(new APICaller() {
+
+            @Override
+            public void onComplete(Model model) {
+                if (model.getStatus() == ApiDetails.STATUS_SUCCESS) {
+                    if (model instanceof BuzzzzPreview) {
+                        displayBuzzzzPreview();
+                    }
+                } else {
+                    Utility.showToastMessage(mActivity, model.getMessage());
+                }
+            }
+        });
+        if (!hasNetwork) {
+            Utility.showToastMessage(mActivity, getString(R.string.no_network));
+        }
+    }
+
+    private void displayBuzzzzPreview() {
 
     }
 }
