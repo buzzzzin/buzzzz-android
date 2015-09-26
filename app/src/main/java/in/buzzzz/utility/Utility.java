@@ -72,6 +72,37 @@ public final class Utility {
         return response;
     }
 
+    public static Response doGet(Context context, String url) {
+        Logger.i("url", url);
+        Response response = new Response();
+        if (!isNetworkAvailable(context)) {
+            String error = context.getResources().getString(R.string.no_network);
+            response.setError(true);
+            response.setErrorMsg(error);
+            return response;
+        }
+        try {
+            String encodeUrl = encodeURL(url);
+            HttpURLConnection urlConnection = (HttpURLConnection) new URL(encodeUrl).openConnection();
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            urlConnection.setRequestProperty("User-Agent", System.getProperty("http.agent"));
+            urlConnection.setRequestProperty("Accept-Language", getLocaleLanguageTag(context));
+            urlConnection.setRequestProperty("Accept-Encoding", "gzip");
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setConnectTimeout(timeoutConnection);
+            OutputStream os = urlConnection.getOutputStream();
+            os.flush();
+            generateResponse(context, response, urlConnection);
+            urlConnection.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+            getDefaultResponse(response, context.getString(R.string.msg_5xx));
+        }
+        Logger.i("print response", response.getResponse());
+        return response;
+    }
+
     public static String getLocaleLanguageTag(Context context) {
         String languageTag = "en";
         Locale locale = context.getResources().getConfiguration().locale;

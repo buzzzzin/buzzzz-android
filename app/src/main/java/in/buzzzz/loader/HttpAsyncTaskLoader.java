@@ -56,6 +56,7 @@ public class HttpAsyncTaskLoader extends AsyncTaskLoader<Model> {
                 // PARKED FEATURE FOR EDIT PROFILE
                 break;
             case GET:
+                serverResponse = Utility.doGet(context, request.getUrl());
                 break;
         }
         Model model = null;
@@ -166,6 +167,8 @@ public class HttpAsyncTaskLoader extends AsyncTaskLoader<Model> {
         }
         return jsonObject;
     }
+
+
 
     private JSONObject getKeysJson() {
         JSONObject jsonObject = new JSONObject();

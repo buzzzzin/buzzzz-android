@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="in.buzzzz"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest package="in.buzzzz"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
@@ -33,20 +32,26 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
             android:name=".activity.ChatActivity"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize"
-            android:windowSoftInputMode="stateAlwaysHidden"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
+
+        <activity
+            android:name=".activity.InterestActivity"
+            android:label="@string/title_activity_interest"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
+
 </manifest>

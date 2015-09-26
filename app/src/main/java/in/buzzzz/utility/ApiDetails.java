@@ -9,6 +9,7 @@ public final class ApiDetails {
 
     public enum ACTION_NAME {
         LOGIN("/auth/login"),
+        INTEREST("/interest/list"),
         NONE("");
 
         private final String value;
@@ -76,8 +77,8 @@ public final class ApiDetails {
     public static final String RESPONSE_KEY_MEDIUM_TYPE = "mediumType";
     public static final String RESPONSE_KEY_AUTH_TOKEN = "authToken";
     public static final String RESPONSE_KEY_HAS_INTERESTS = "hasInterests";
-    //    REQUEST KEYS
-
+    public static final String RESPONSE_KEY_IMAGE = "image";
+    public static final String RESPONSE_KEY_IS_SUBSCRIBED = "isSubscribed";
 
     public static final String REQUEST_KEY_DESTINATION = "destination";
     public static final String REQUEST_KEY_SENDER_ID = "senderId";
