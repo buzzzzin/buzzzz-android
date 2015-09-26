@@ -15,16 +15,18 @@
 
     <ImageView
         android:id="@+id/imageview_interest_pic"
-        android:layout_width="@dimen/chat_profile_image"
-        android:layout_height="@dimen/chat_profile_image"
+        android:layout_width="@dimen/home_buzz_pic_width"
+        android:layout_height="@dimen/home_buzz_pic_height"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:background="@mipmap/ic_launcher"
+        android:scaleType="fitXY"
         />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/imageview_subscribe"
         android:layout_toRightOf="@+id/imageview_interest_pic"
         android:orientation="vertical"
@@ -44,7 +46,7 @@
             />
 
         <TextView
-            android:id="@+id/subscriber_count"
+            android:id="@+id/textview_subscriber_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
@@ -61,8 +63,9 @@
     </LinearLayout>
 
     <ImageView
+        android:layout_centerVertical="true"
         android:id="@+id/imageview_subscribe"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:background="@drawable/subscribe"

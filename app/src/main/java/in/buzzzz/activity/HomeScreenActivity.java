@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -186,6 +187,7 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
             }
         });*/
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
         recyclerViewBuzz = (RecyclerView) findViewById(R.id.recyclerview_buzz);
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mActivity);
         recyclerViewBuzz.setLayoutManager(mLinearLayoutManager);
@@ -291,6 +293,8 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
             linearHorizontalView.addView(child);
             TextView textviewName = (TextView) child.findViewById(R.id.textview_interest_name);
             textviewName.setText(interest.getName());
+            ImageView imageViewInterestPics = (ImageView) child.findViewById(R.id.imageview_interest_pic);
+            Utility.setImageFromUrl(Api.BASE_URL_CLOUDINARY_BUZZZZ + mInterestList.get(i).getImageName(), imageViewInterestPics, R.mipmap.ic_launcher);
 
 
         }
