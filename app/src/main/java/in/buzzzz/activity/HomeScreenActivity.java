@@ -237,11 +237,10 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
 
         HashMap<String, String> params = new HashMap<>();
 
-        if (!latitude.isEmpty()) {
+        if (!latitude.isEmpty() && !longitude.isEmpty()) {
             params.put(ApiDetails.REQUEST_KEY_LATITUDE, String.valueOf(latitude));
             params.put(ApiDetails.REQUEST_KEY_LONGITUDE, String.valueOf(longitude));
         }
-
 
         params.put(ApiDetails.REQUEST_KEY_RADIUS, "100");
         Request request = new Request(ApiDetails.ACTION_NAME.HOME_BUZZ);
