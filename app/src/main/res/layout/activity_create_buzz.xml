@@ -116,6 +116,13 @@
                 android:padding="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/textview_end_time"
+                android:text="Select end Date and Time"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </ScrollView>
 

@@ -18,8 +18,11 @@ import android.widget.TimePicker;
 
 import org.json.JSONArray;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -47,12 +50,14 @@ public class CreateBuzzActivity extends BaseActivity {
     private TextView mTextViewBuzzVenue;
     private TextView mTextViewSelectedInterests;
     private TextView mTextViewStartTime;
+    private TextView mTextViewEndTime;
     private Button mButtonCreateBuzz;
     private CheckBox mCheckboxIsRsvp;
     private Spinner mSpinnerPeriod;
     private List<Interest> mInterestList;
     private AutoCompleteTextView mAutoCompleteTextViewInterest;
     private JSONArray jsonArrayInterst = new JSONArray();
+    private String mStartDateTime, mEndDateTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +81,10 @@ public class CreateBuzzActivity extends BaseActivity {
         mAutoCompleteTextViewInterest = (AutoCompleteTextView) findViewById(R.id.autocompletetextview_interest);
         mTextViewSelectedInterests = (TextView) findViewById(R.id.textview_selected_interests);
         mTextViewStartTime = (TextView) findViewById(R.id.textview_start_time);
+        mTextViewEndTime = (TextView) findViewById(R.id.textview_end_time);
         mButtonCreateBuzz.setOnClickListener(mOnClickListener);
         mTextViewStartTime.setOnClickListener(mOnClickListener);
+        mTextViewEndTime.setOnClickListener(mOnClickListener);
     }
 
     private void requestInterest() {
@@ -168,7 +175,10 @@ public class CreateBuzzActivity extends BaseActivity {
                     validateAndCreateBuzz();
                     break;
                 case R.id.textview_start_time:
-                    showDateAndTimePicker();
+                    showDateAndTimePicker(true);
+                    break;
+                case R.id.textview_end_time:
+                    showDateAndTimePicker(false);
                     break;
             }
         }
@@ -185,7 +195,7 @@ public class CreateBuzzActivity extends BaseActivity {
         }
     }
 
-    private void showDateAndTimePicker() {
+    private void showDateAndTimePicker(final boolean isStartDateTime) {
         final View dialogView = View.inflate(mActivity, R.layout.layout_date_time_picker, null);
         final AlertDialog alertDialog = new AlertDialog.Builder(mActivity).create();
 
@@ -200,9 +210,18 @@ public class CreateBuzzActivity extends BaseActivity {
                         datePicker.getMonth(),
                         datePicker.getDayOfMonth(),
                         timePicker.getCurrentHour(),
-                        timePicker.getCurrentMinute());
+                        timePicker.getCurrentMinute(), 0);
 
-//                time = calendar.getTimeInMillis();
+                long startTime = calendar.getTimeInMillis();
+                Date date = new Date(startTime);
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                if (isStartDateTime) {
+                    mStartDateTime = formatter.format(date);
+                    mTextViewStartTime.setText(mStartDateTime);
+                } else {
+                    mEndDateTime = formatter.format(date);
+                    mTextViewEndTime.setText(mEndDateTime);
+                }
                 alertDialog.dismiss();
             }
         });
