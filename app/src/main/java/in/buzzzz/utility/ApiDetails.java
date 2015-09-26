@@ -84,6 +84,7 @@ public final class ApiDetails {
     public static final String RESPONSE_KEY_IS_SUBSCRIBED = "isSubscribed";
 
     //    Buzzzz Preview
+    public static final String RESPONSE_KEY_BUZZS = "buzzs";
     public static final String RESPONSE_KEY_BUZZ_ID = "buzzId";
     public static final String RESPONSE_KEY_IMAGE_NAME = "imageName";
     public static final String RESPONSE_KEY_IS_RSVB = "isRSVP";

@@ -23,11 +23,11 @@ import in.buzzzz.R;
 import in.buzzzz.adapter.ChatAdapter;
 import in.buzzzz.loader.APICaller;
 import in.buzzzz.loader.LoaderCallback;
-import in.buzzzz.model.BuzzzzPreview;
+import in.buzzzz.model.BuzzPreview;
 import in.buzzzz.model.ChatInfo;
 import in.buzzzz.model.Model;
 import in.buzzzz.model.Request;
-import in.buzzzz.parser.BuzzzzPreviewParser;
+import in.buzzzz.parser.BuzzPreviewParser;
 import in.buzzzz.utility.Api;
 import in.buzzzz.utility.ApiDetails;
 import in.buzzzz.utility.AppConstants;
@@ -208,14 +208,14 @@ public class BuzzzzDetailActivity extends BaseActivity {
         request.setDialogMessage(getString(R.string.progress_dialog_msg));
         request.setShowDialog(true);
         request.setRequestType(Request.HttpRequestType.GET);
-        LoaderCallback loaderCallback = new LoaderCallback(mActivity, new BuzzzzPreviewParser());
+        LoaderCallback loaderCallback = new LoaderCallback(mActivity, new BuzzPreviewParser());
         boolean hasNetwork = loaderCallback.requestToServer(request);
         loaderCallback.setServerResponse(new APICaller() {
 
             @Override
             public void onComplete(Model model) {
                 if (model.getStatus() == ApiDetails.STATUS_SUCCESS) {
-                    if (model instanceof BuzzzzPreview) {
+                    if (model instanceof BuzzPreview) {
                         displayBuzzzzPreview();
                     }
                 } else {

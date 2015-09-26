@@ -5,8 +5,7 @@ import java.util.List;
 /**
  * Created by Navkrishna on September 26, 2015
  */
-public class BuzzzzPreview extends Model {
-
+public class BuzzPreview extends Model {
     private String buzzId;
     private String name;
     private String imageName;
