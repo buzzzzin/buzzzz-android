@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/primary"
+        app:theme="@style/ToolBarTheme"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/button_create"
+        android:layout_below="@+id/toolbar"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/linearlayout_buzz_pic_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#c0c0c0"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imageview_buzz_pic"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_below="@+id/toolbar"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/edittext_buzz_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageview_buzz_pic"
+                android:layout_margin="5dp"
+                android:hint="Buzz title"
+                android:maxLength="@integer/buzz_title_max_length"
+                android:singleLine="true"/>
+
+            <EditText
+                android:id="@+id/edittext_buzz_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edittext_buzz_title"
+                android:layout_margin="5dp"
+                android:hint="Buzz description"
+                android:maxLength="@integer/buzz_desc_max_length"
+                android:singleLine="true"/>
+
+            <TextView
+                android:id="@+id/textview_selected_interests"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"/>
+
+            <AutoCompleteTextView
+                android:id="@+id/autocompletetextview_interest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:hint="Enter space separated interest"
+                android:imeOptions="actionDone|flagNoFullscreen"
+                android:singleLine="true"/>
+
+            <EditText
+                android:id="@+id/edittext_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:hint="Enter space separated tags"
+                android:inputType="textMultiLine"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/textview_choose_venue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edittext_buzz_desc"
+                android:layout_margin="5dp"
+                android:drawableLeft="@android:drawable/ic_input_get"
+                android:gravity="center_vertical"
+                android:text="Choose venue"/>
+
+            <CheckBox
+                android:id="@+id/checkbox_is_rsvp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:checked="true"
+                android:text="Allow RSVP"/>
+
+            <Spinner
+                android:id="@+id/spinner_rsvp_options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:entries="@array/rsvp_options"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/textview_start_time"
+                android:text="Select start Date and Time"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/button_create"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Create Buzzzz"/>
+</RelativeLayout>

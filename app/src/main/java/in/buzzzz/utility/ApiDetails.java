@@ -11,6 +11,7 @@ public final class ApiDetails {
         HOME_BUZZ("/v1/home/buzz"),
         PREVIEW("/buzz/preview/"),
         RSVP("/buzz/rsvp"),
+        CREATE_BUZZ("/buzz/save"),
         NONE("");
 
         private final String value;
@@ -63,6 +64,18 @@ public final class ApiDetails {
         }
     }
 
+    public enum PERIOD {
+        ONCE,
+        DAILY,
+        MONTHLY,
+        WEEKLY,
+        CUSTOM
+    }
+
+    public enum MESSAGE_TYPE {
+        CHAT, NOTIFICATION
+    }
+
     public static final int STATUS_SUCCESS = 1;
     public static final int STATUS_FAILURE = 0;
 
@@ -89,6 +102,15 @@ public final class ApiDetails {
     //    RSVP keys
     public static final String REQUEST_KEY_STATUS = "status";
     public static final String REQUEST_KEY_BUZZ_ID = "buzzId";
+    //    Create Buzz
+    public static final String REQUEST_KEY_IMAGE_NAME = "imageName";
+    public static final String REQUEST_KEY_IS_RSVP = "isRSVP";
+    public static final String REQUEST_KEY_ADDRESS = "address";
+    public static final String REQUEST_KEY_START_TIME = "startTime";
+    public static final String REQUEST_KEY_END_TIME = "endTime";
+    public static final String REQUEST_KEY_PERIOD = "period";
+    public static final String REQUEST_KEY_TAGS = "tags";
+    public static final String REQUEST_KEY_INTERESTS = "interests";
 
     //    RESPONSE KEYS
     public static final String RESPONSE_KEY_MESSAGE = "message";
@@ -140,5 +162,6 @@ public final class ApiDetails {
     public static final String REQUEST_KEY_MESSAGE = "message";
     public static final String REQUEST_KEY_IMAGE_URL = "imageUrl";
     public static final String REQUEST_KEY_DATA = "data";
-    public static final String REQUES_KEY_TOKEN = "token";
+    public static final String REQUEST_KEY_TOKEN = "token";
+    public static final String REQUEST_KEY_TYPE = "type";
 }

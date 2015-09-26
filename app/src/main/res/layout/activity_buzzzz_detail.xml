@@ -36,6 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#88c0c0c0"
+                android:id="@+id/relativelayout_is_rsvp"
                 app:layout_collapseMode="parallax">
 
                 <TextView
