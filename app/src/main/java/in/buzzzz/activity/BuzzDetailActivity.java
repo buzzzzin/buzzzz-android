@@ -154,10 +154,10 @@ public class BuzzDetailActivity extends BaseActivity {
                 Logger.i("Websocket", "Opened");
                 if (SharedPreference.getBoolean(mActivity, AppConstants.PREF_KEY_IS_LOGGED_IN)) {
                     String welcomeText = "I am here...";
-                    joinExitMessage(welcomeText);
+//                    joinExitMessage(welcomeText);
                 } else {
                     String text = "Login to join Buzzzz...";
-                    joinExitMessage(text);
+//                    joinExitMessage(text);
                 }
             }
 
@@ -256,8 +256,9 @@ public class BuzzDetailActivity extends BaseActivity {
     private JSONObject getChatJson(ChatInfo chatInfo, String destination) {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put(ApiDetails.REQUEST_KEY_DESTINATION, destination);
-            jsonObject.put(ApiDetails.REQUES_KEY_TOKEN, SharedPreference.getString(mActivity, AppConstants.PREF_KEY_AUTH_TOKEN));
+//            jsonObject.put(ApiDetails.REQUEST_KEY_DESTINATION, destination);
+            jsonObject.put(ApiDetails.REQUEST_KEY_TYPE, ApiDetails.MESSAGE_TYPE.CHAT);
+            jsonObject.put(ApiDetails.REQUEST_KEY_TOKEN, SharedPreference.getString(mActivity, AppConstants.PREF_KEY_AUTH_TOKEN));
 
             JSONObject jsonObjectData = new JSONObject();
 

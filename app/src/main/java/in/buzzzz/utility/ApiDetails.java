@@ -72,6 +72,10 @@ public final class ApiDetails {
         CUSTOM
     }
 
+    public enum MESSAGE_TYPE {
+        CHAT, NOTIFICATION
+    }
+
     public static final int STATUS_SUCCESS = 1;
     public static final int STATUS_FAILURE = 0;
 
@@ -158,5 +162,6 @@ public final class ApiDetails {
     public static final String REQUEST_KEY_MESSAGE = "message";
     public static final String REQUEST_KEY_IMAGE_URL = "imageUrl";
     public static final String REQUEST_KEY_DATA = "data";
-    public static final String REQUES_KEY_TOKEN = "token";
+    public static final String REQUEST_KEY_TOKEN = "token";
+    public static final String REQUEST_KEY_TYPE = "type";
 }
