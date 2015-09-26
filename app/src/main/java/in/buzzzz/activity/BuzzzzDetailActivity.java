@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_17;
@@ -39,6 +40,10 @@ public class BuzzzzDetailActivity extends BaseActivity {
     private static final String TAG = "BuzzzzDetailActivity";
     private WebSocketClient mWebSocketClient;
     private EditText mEditText;
+    private TextView mTextViewRsvbMessage;
+    private TextView mTextViewVenue;
+    private TextView mTextViewStart;
+    private TextView mTextViewResponse;
     private CollapsingToolbarLayout mCollapsingToolbar;
 
     private RecyclerView mRecyclerViewChat;
@@ -85,6 +90,10 @@ public class BuzzzzDetailActivity extends BaseActivity {
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mActivity);
         mRecyclerViewChat.setLayoutManager(mLinearLayoutManager);
         mEditText = (EditText) findViewById(R.id.message);
+        mTextViewRsvbMessage = (TextView) findViewById(R.id.textview_rsvb_message);
+        mTextViewVenue = (TextView) findViewById(R.id.textview_venue);
+        mTextViewStart = (TextView) findViewById(R.id.textview_start);
+        mTextViewResponse = (TextView) findViewById(R.id.textview_response);
     }
 
     private void setDataInChatAdapter() {
@@ -240,5 +249,13 @@ public class BuzzzzDetailActivity extends BaseActivity {
 
     private void displayBuzzPreview(BuzzPreview buzzPreview) {
         mCollapsingToolbar.setTitle(buzzPreview.getName());
+//        if (buzzPreview.isRSVP()) {
+//            mTextViewRsvbMessage.setText("You are going!!");
+//        }
+        mTextViewVenue.setText(buzzPreview.getLocation().getAddress());
+        mTextViewStart.setText(buzzPreview.getSchedule().getStartTime());
+        BuzzPreview.Stats stats = buzzPreview.getStats();
+        String response = String.format("%s Going | %s Not going | %s May be", stats.getGoingCount(), stats.getNotComingCount(), stats.getMayBeCount());
+        mTextViewResponse.setText(response);
     }
 }
