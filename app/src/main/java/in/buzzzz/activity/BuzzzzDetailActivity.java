@@ -111,6 +111,14 @@ public class BuzzzzDetailActivity extends BaseActivity {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
                 Logger.i("Websocket", "Opened");
+                if (SharedPreference.getBoolean(mActivity, AppConstants.PREF_KEY_IS_LOGGED_IN)) {
+                    String welcomeText = SharedPreference.getString(mActivity, AppConstants.PREF_KEY_USER_NAME) + " is here...";
+                    mEditText.setText(welcomeText);
+                } else {
+                    String text = "Login to join Buzzzz...";
+                    mEditText.setText(text);
+                }
+                sendMessage(null);
             }
 
             @Override
