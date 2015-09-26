@@ -62,6 +62,7 @@ public class BuzzDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buzzzz_detail);
         mBuzzzzId = getIntent().getStringExtra(AppConstants.EXTRA_BUZZZZ_ID);
+        mChannelId = mBuzzzzId;
         mBuzzzzName = getIntent().getStringExtra(AppConstants.EXTRA_BUZZZZ_NAME);
         if (mBuzzzzId != null) {
             mSenderId = SharedPreference.getString(mActivity, AppConstants.PREF_KEY_USER_ID);
@@ -155,6 +156,13 @@ public class BuzzDetailActivity extends BaseActivity {
         };
 
         mWebSocketClient.connect();
+    }
+
+    /**
+     * will be called if user joins or leaves chat
+     */
+    private void joinedMessage(String message) {
+
     }
 
     public void sendMessage(View view) {
