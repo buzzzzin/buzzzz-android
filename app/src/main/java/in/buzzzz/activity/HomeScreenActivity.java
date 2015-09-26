@@ -34,13 +34,11 @@ import java.util.List;
 
 import in.buzzzz.R;
 import in.buzzzz.adapter.BuzzAdapter;
-import in.buzzzz.adapter.InterestAdapter;
 import in.buzzzz.loader.APICaller;
 import in.buzzzz.loader.LoaderCallback;
 import in.buzzzz.model.BuzzList;
 import in.buzzzz.model.BuzzPreview;
 import in.buzzzz.model.Interest;
-import in.buzzzz.model.InterestInfo;
 import in.buzzzz.model.Model;
 import in.buzzzz.model.Request;
 import in.buzzzz.parser.HomeBuzzParser;

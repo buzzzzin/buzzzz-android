@@ -2,8 +2,8 @@ package in.buzzzz.utility;
 
 import android.app.Activity;
 import android.content.Context;
-import android.location.LocationManager;
 import android.graphics.Point;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.Display;
