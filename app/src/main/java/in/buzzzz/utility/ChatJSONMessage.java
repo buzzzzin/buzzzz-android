@@ -5,15 +5,7 @@ import org.json.JSONObject;
 
 public class ChatJSONMessage {
 
-	// {"type":"START","data":{
 
-	// "sender":{"chatconfigid":"","name":"Mukesh","sendertype":"enduser"},
-	// "receiver":{"chatconfigid":"","name":""},"message":"","SupportRoomName":""}
-	// }
-
-	// {"data":{"message":"Mukesh is typing...",
-//	"sender":{"chatconfigid":"243","sendertype":"enduser","name":"Mukesh"},
-//	"receiver":{"chatconfigid":"268","name":"cardekho268"},"SupportRoomName":""},"type":"TYPING"}
 
 	public JSONObject getChatJSONMessage(String senderChatConfigId,
 			String senderName, String SenderType, String recieverChatConfigId,
