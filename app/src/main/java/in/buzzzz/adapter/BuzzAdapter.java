@@ -22,13 +22,13 @@ import in.buzzzz.utility.Utility;
 /**
  * Created by Rajendra Singh on 26/9/15.
  */
-public class InterestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class BuzzAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Activity mActivity;
     private List<Interest> interestList;
     private LayoutInflater mLayoutInflater;
 
-    public InterestAdapter(Activity context, List<Interest> FollowingList) {
+    public BuzzAdapter(Activity context, List<Interest> FollowingList) {
         this.mActivity = context;
         this.interestList = FollowingList;
         this.mLayoutInflater = LayoutInflater.from(context);

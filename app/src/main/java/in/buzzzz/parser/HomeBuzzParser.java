@@ -1,14 +1,9 @@
 package in.buzzzz.parser;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import in.buzzzz.model.BuzzList;
-import in.buzzzz.model.Interest;
 import in.buzzzz.model.InterestInfo;
 import in.buzzzz.model.Model;
 import in.buzzzz.utility.ApiDetails;

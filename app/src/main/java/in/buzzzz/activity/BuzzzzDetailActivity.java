@@ -21,12 +21,19 @@ import java.util.List;
 
 import in.buzzzz.R;
 import in.buzzzz.adapter.ChatAdapter;
+import in.buzzzz.loader.APICaller;
+import in.buzzzz.loader.LoaderCallback;
+import in.buzzzz.model.BuzzPreview;
 import in.buzzzz.model.ChatInfo;
+import in.buzzzz.model.Model;
+import in.buzzzz.model.Request;
+import in.buzzzz.parser.BuzzPreviewParser;
 import in.buzzzz.utility.Api;
 import in.buzzzz.utility.ApiDetails;
 import in.buzzzz.utility.AppConstants;
 import in.buzzzz.utility.Logger;
 import in.buzzzz.utility.SharedPreference;
+import in.buzzzz.utility.Utility;
 
 public class BuzzzzDetailActivity extends BaseActivity {
     private WebSocketClient mWebSocketClient;
@@ -40,14 +47,24 @@ public class BuzzzzDetailActivity extends BaseActivity {
     private String mSenderId = "-1";
     private String mSenderName = "Buzzzzer";
 
+    private String mBuzzzzId;
+    private String mBuzzzzName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buzzzz_detail);
-        mSenderId = SharedPreference.getString(mActivity, AppConstants.PREF_KEY_USER_ID);
-        mSenderName = SharedPreference.getString(mActivity, AppConstants.PREF_KEY_USER_NAME);
-        getViewsId();
-        connectWebSocket();
+        mBuzzzzId = getIntent().getStringExtra(AppConstants.EXTRA_BUZZZZ_ID);
+        mBuzzzzName = getIntent().getStringExtra(AppConstants.EXTRA_BUZZZZ_NAME);
+        if (mBuzzzzId != null) {
+            mSenderId = SharedPreference.getString(mActivity, AppConstants.PREF_KEY_USER_ID);
+            mSenderName = SharedPreference.getString(mActivity, AppConstants.PREF_KEY_USER_NAME);
+            getViewsId();
+            connectWebSocket();
+            requestBuzzzzDetail();
+        } else {
+            finish();
+        }
     }
 
     private void getViewsId() {
@@ -57,7 +74,11 @@ public class BuzzzzDetailActivity extends BaseActivity {
 
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle("Buzzzz name");
+        if (mBuzzzzName != null) {
+            collapsingToolbar.setTitle(mBuzzzzName);
+        } else {
+            collapsingToolbar.setTitle("Buzzzz name");
+        }
         mRecyclerViewChat = (RecyclerView) findViewById(R.id.recyclerview_following);
 
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mActivity);
@@ -179,5 +200,35 @@ public class BuzzzzDetailActivity extends BaseActivity {
             e.printStackTrace();
         }
         return jsonObject;
+    }
+
+    private void requestBuzzzzDetail() {
+        Request request = new Request(ApiDetails.ACTION_NAME.PREVIEW);
+        request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.PREVIEW.getActionName() + mBuzzzzId);
+        request.setDialogMessage(getString(R.string.progress_dialog_msg));
+        request.setShowDialog(true);
+        request.setRequestType(Request.HttpRequestType.GET);
+        LoaderCallback loaderCallback = new LoaderCallback(mActivity, new BuzzPreviewParser());
+        boolean hasNetwork = loaderCallback.requestToServer(request);
+        loaderCallback.setServerResponse(new APICaller() {
+
+            @Override
+            public void onComplete(Model model) {
+                if (model.getStatus() == ApiDetails.STATUS_SUCCESS) {
+                    if (model instanceof BuzzPreview) {
+                        displayBuzzzzPreview();
+                    }
+                } else {
+                    Utility.showToastMessage(mActivity, model.getMessage());
+                }
+            }
+        });
+        if (!hasNetwork) {
+            Utility.showToastMessage(mActivity, getString(R.string.no_network));
+        }
+    }
+
+    private void displayBuzzzzPreview() {
+
     }
 }

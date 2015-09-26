@@ -91,8 +91,6 @@ public final class Utility {
 
             urlConnection.setRequestMethod("GET");
             urlConnection.setConnectTimeout(timeoutConnection);
-            OutputStream os = urlConnection.getOutputStream();
-            os.flush();
             generateResponse(context, response, urlConnection);
             urlConnection.disconnect();
         } catch (Exception e) {

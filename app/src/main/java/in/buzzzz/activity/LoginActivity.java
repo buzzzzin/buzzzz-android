@@ -3,7 +3,6 @@ package in.buzzzz.activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.facebook.AccessToken;

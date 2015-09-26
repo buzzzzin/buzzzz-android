@@ -1,7 +1,5 @@
 package in.buzzzz.utility;
 
-import org.json.JSONObject;
-
 /**
  * Created by Navkrishna on September 25, 2015
  */
@@ -11,6 +9,7 @@ public final class ApiDetails {
         LOGIN("/auth/login"),
         INTEREST("/interest/list"),
         HOME_BUZZ("/v1/home/buzz"),
+        PREVIEW("/buzz/preview/"),
         NONE("");
 
         private final String value;
@@ -65,7 +64,6 @@ public final class ApiDetails {
     public static final String REQUEST_KEY_LONGITUDE = "longitude";
     public static final String REQUEST_KEY_RADIUS = "radius";
 
-
     //    RESPONSE KEYS
     public static final String RESPONSE_KEY_MESSAGE = "message";
     public static final String RESPONSE_KEY_STATUS = "status";
@@ -84,13 +82,35 @@ public final class ApiDetails {
     public static final String RESPONSE_KEY_HAS_INTERESTS = "hasInterests";
     public static final String RESPONSE_KEY_IMAGE = "image";
     public static final String RESPONSE_KEY_IS_SUBSCRIBED = "isSubscribed";
-    public static final String RESPONSE_KEY_INTERESTS= "interests";
 
+    //    Buzzzz Preview
+    public static final String RESPONSE_KEY_BUZZS = "buzzs";
+    public static final String RESPONSE_KEY_BUZZ_ID = "buzzId";
+    public static final String RESPONSE_KEY_IMAGE_NAME = "imageName";
+    public static final String RESPONSE_KEY_IS_RSVB = "isRSVP";
+    public static final String RESPONSE_KEY_INTERESTS = "interests";
+    public static final String RESPONSE_KEY_LOCATION = "location";
+    public static final String RESPONSE_KEY_CITY = "city";
+    public static final String RESPONSE_KEY_LATITUDE = "latitude";
+    public static final String RESPONSE_KEY_LONGITUDE = "longitude";
+    public static final String RESPONSE_KEY_ADDRESS = "address";
+    public static final String RESPONSE_KEY_PINCODE = "pincode";
+    public static final String RESPONSE_KEY_SCHEDULE = "schedule";
+    public static final String RESPONSE_KEY_START_DATE = "startDate";
+    public static final String RESPONSE_KEY_END_DATE = "endDate";
+    public static final String RESPONSE_KEY_START_TIME = "startTime";
+    public static final String RESPONSE_KEY_END_TIME = "endTime";
+    public static final String RESPONSE_KEY_PERIOD = "period";
+    public static final String RESPONSE_KEY_STATS = "stats";
+    public static final String RESPONSE_KEY_GOING_COUNT = "goingCount";
+    public static final String RESPONSE_KEY_NOT_COMING_COUNT = "notComingCount";
+    public static final String RESPONSE_KEY_MAY_BE_COUNT = "mayBeCount";
+
+    //    REQUEST KEYS
     public static final String REQUEST_KEY_DESTINATION = "destination";
     public static final String REQUEST_KEY_SENDER_ID = "senderId";
     public static final String REQUEST_KEY_SENDER_NAME = "senderName";
     public static final String REQUEST_KEY_MESSAGE = "message";
     public static final String REQUEST_KEY_IMAGE_URL = "imageUrl";
     public static final String REQUEST_KEY_DATA = "data";
-
 }
