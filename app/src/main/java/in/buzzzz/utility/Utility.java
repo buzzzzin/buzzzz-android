@@ -1,8 +1,11 @@
 package in.buzzzz.utility;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.view.Display;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -220,5 +223,12 @@ public final class Utility {
                 .showImageOnLoading(placeholderResId)
                 .resetViewBeforeLoading(true).cacheInMemory(true).build();
         ImageLoader.getInstance().displayImage(imageUrl, imageView, options, null);
+    }
+
+    public static Point getDisplayPoint(Context context) {
+        Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size;
     }
 }
