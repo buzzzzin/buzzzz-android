@@ -40,14 +40,24 @@ public class BuzzzzDetailActivity extends BaseActivity {
     private String mSenderId = "-1";
     private String mSenderName = "Buzzzzer";
 
+    private String mBuzzzzId;
+    private String mBuzzzzName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buzzzz_detail);
-        mSenderId = SharedPreference.getString(mActivity, AppConstants.PREF_KEY_USER_ID);
-        mSenderName = SharedPreference.getString(mActivity, AppConstants.PREF_KEY_USER_NAME);
-        getViewsId();
-        connectWebSocket();
+        mBuzzzzId = getIntent().getStringExtra(AppConstants.EXTRA_BUZZZZ_ID);
+        mBuzzzzName = getIntent().getStringExtra(AppConstants.EXTRA_BUZZZZ_NAME);
+        if (mBuzzzzId != null) {
+            mSenderId = SharedPreference.getString(mActivity, AppConstants.PREF_KEY_USER_ID);
+            mSenderName = SharedPreference.getString(mActivity, AppConstants.PREF_KEY_USER_NAME);
+            getViewsId();
+            connectWebSocket();
+            requestBuzzzzDetail();
+        } else {
+            finish();
+        }
     }
 
     private void getViewsId() {
@@ -57,7 +67,11 @@ public class BuzzzzDetailActivity extends BaseActivity {
 
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle("Buzzzz name");
+        if (mBuzzzzName != null) {
+            collapsingToolbar.setTitle(mBuzzzzName);
+        } else {
+            collapsingToolbar.setTitle("Buzzzz name");
+        }
         mRecyclerViewChat = (RecyclerView) findViewById(R.id.recyclerview_following);
 
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mActivity);
@@ -179,5 +193,9 @@ public class BuzzzzDetailActivity extends BaseActivity {
             e.printStackTrace();
         }
         return jsonObject;
+    }
+
+    private void requestBuzzzzDetail() {
+
     }
 }

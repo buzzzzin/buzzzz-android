@@ -16,4 +16,7 @@ public final class AppConstants {
     public static final String PREF_KEY_EMAIL = "email";
     public static final String PREF_KEY_MEDIUM_TYPE = "medium_type";
     public static final String PREF_KEY_MEDIUM_ID = "medium_id";
+
+    public static final String EXTRA_BUZZZZ_ID = "extra_buzzzz_id";
+    public static final String EXTRA_BUZZZZ_NAME = "extra_buzzzz_name";
 }

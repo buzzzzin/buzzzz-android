@@ -1,7 +1,5 @@
 package in.buzzzz.utility;
 
-import org.json.JSONObject;
-
 /**
  * Created by Navkrishna on September 25, 2015
  */
@@ -10,6 +8,7 @@ public final class ApiDetails {
     public enum ACTION_NAME {
         LOGIN("/auth/login"),
         INTEREST("/interest/list"),
+        PREVIEW("/buzz/preview/"),
         NONE("");
 
         private final String value;
@@ -84,7 +83,6 @@ public final class ApiDetails {
     public static final String REQUEST_KEY_SENDER_ID = "senderId";
     public static final String REQUEST_KEY_SENDER_NAME = "senderName";
     public static final String REQUEST_KEY_MESSAGE = "message";
-    public static final String REQUEST_KEY_IMAGE_URL= "imageUrl";
+    public static final String REQUEST_KEY_IMAGE_URL = "imageUrl";
     public static final String REQUEST_KEY_DATA = "data";
-
 }

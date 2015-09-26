@@ -1,6 +1,7 @@
 package in.buzzzz.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,9 @@ import android.widget.TextView;
 import java.util.List;
 
 import in.buzzzz.R;
+import in.buzzzz.activity.BuzzzzDetailActivity;
 import in.buzzzz.model.Interest;
+import in.buzzzz.utility.AppConstants;
 import in.buzzzz.utility.Logger;
 import in.buzzzz.utility.Utility;
 
@@ -49,7 +52,6 @@ public class InterestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View v) {
                     showBuzzList(interest);
-
                 }
             });
             viewHolder.imageViewSubscribe.setOnClickListener(new View.OnClickListener() {
@@ -67,9 +69,11 @@ public class InterestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private void showBuzzList(Interest interest) {
         Utility.showToastMessage(mActivity, interest.getId());
-
+        Intent intent = new Intent(mActivity, BuzzzzDetailActivity.class);
+        intent.putExtra(AppConstants.EXTRA_BUZZZZ_ID, "560637acc830ec03dc42baae");
+        intent.putExtra(AppConstants.EXTRA_BUZZZZ_NAME, interest.getName());
+        mActivity.startActivity(intent);
     }
-
 
     @Override
     public int getItemCount() {
