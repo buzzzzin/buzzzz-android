@@ -10,6 +10,7 @@ public final class ApiDetails {
         INTEREST("/interest/list"),
         HOME_BUZZ("/v1/home/buzz"),
         PREVIEW("/buzz/preview/"),
+        RSVP("/buzz/rsvp"),
         NONE("");
 
         private final String value;
@@ -40,6 +41,10 @@ public final class ApiDetails {
         MALE, FEMALE, NOT_SET
     }
 
+    public enum RSVP {
+        YES, NO, MAY_BE
+    }
+
     public static final int STATUS_SUCCESS = 1;
     public static final int STATUS_FAILURE = 0;
 
@@ -63,6 +68,9 @@ public final class ApiDetails {
     public static final String REQUEST_KEY_LATITUDE = "latitude";
     public static final String REQUEST_KEY_LONGITUDE = "longitude";
     public static final String REQUEST_KEY_RADIUS = "radius";
+    //    RSVP keys
+    public static final String REQUEST_KEY_STATUS = "status";
+    public static final String REQUEST_KEY_BUZZ_ID = "buzzId";
 
     //    RESPONSE KEYS
     public static final String RESPONSE_KEY_MESSAGE = "message";

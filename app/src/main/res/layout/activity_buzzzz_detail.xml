@@ -40,7 +40,7 @@
 
                 <TextView
                     android:id="@+id/textview_rsvb_message"
-                    style="@style/TextAppearance.AppCompat.Large"
+                    style="@style/TextAppearance.AppCompat.Medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -56,25 +56,31 @@
                     android:orientation="horizontal">
 
                     <Button
+                        android:id="@+id/button_yes"
                         style="?android:attr/buttonBarButtonStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Yes"/>
+                        android:text="Yes"
+                        android:textColor="@color/accent"/>
 
                     <Button
+                        android:id="@+id/button_no"
                         style="?android:attr/buttonBarButtonStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="May be"/>
+                        android:text="No"
+                        android:textColor="@color/accent"/>
 
                     <Button
+                        android:id="@+id/button_maybe"
                         style="?android:attr/buttonBarButtonStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="No"/>
+                        android:text="May be"
+                        android:textColor="@color/accent"/>
 
                 </LinearLayout>
             </RelativeLayout>
@@ -93,9 +99,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#eeeeee"
         android:orientation="vertical"
         android:padding="5dp"
-        android:background="#eeeeee"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView

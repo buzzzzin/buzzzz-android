@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import org.json.JSONObject;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import in.buzzzz.R;
@@ -29,6 +31,7 @@ import in.buzzzz.model.ChatInfo;
 import in.buzzzz.model.Model;
 import in.buzzzz.model.Request;
 import in.buzzzz.parser.BuzzPreviewParser;
+import in.buzzzz.parser.MessageParser;
 import in.buzzzz.utility.Api;
 import in.buzzzz.utility.ApiDetails;
 import in.buzzzz.utility.AppConstants;
@@ -44,6 +47,7 @@ public class BuzzDetailActivity extends BaseActivity {
     private TextView mTextViewVenue;
     private TextView mTextViewStart;
     private TextView mTextViewResponse;
+    private Button mButtonYes, mButtonNo, mButtonMayBe;
     private CollapsingToolbarLayout mCollapsingToolbar;
 
     private RecyclerView mRecyclerViewChat;
@@ -56,6 +60,23 @@ public class BuzzDetailActivity extends BaseActivity {
 
     private String mBuzzzzId;
     private String mBuzzzzName;
+
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.button_yes:
+                    sendRsvbResponse(ApiDetails.RSVP.YES);
+                    break;
+                case R.id.button_no:
+                    sendRsvbResponse(ApiDetails.RSVP.NO);
+                    break;
+                case R.id.button_maybe:
+                    sendRsvbResponse(ApiDetails.RSVP.MAY_BE);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +116,13 @@ public class BuzzDetailActivity extends BaseActivity {
         mTextViewVenue = (TextView) findViewById(R.id.textview_venue);
         mTextViewStart = (TextView) findViewById(R.id.textview_start);
         mTextViewResponse = (TextView) findViewById(R.id.textview_response);
+        mButtonYes = (Button) findViewById(R.id.button_yes);
+        mButtonNo = (Button) findViewById(R.id.button_no);
+        mButtonMayBe = (Button) findViewById(R.id.button_maybe);
+
+        mButtonYes.setOnClickListener(mOnClickListener);
+        mButtonNo.setOnClickListener(mOnClickListener);
+        mButtonMayBe.setOnClickListener(mOnClickListener);
     }
 
     private void setDataInChatAdapter() {
@@ -150,7 +178,6 @@ public class BuzzDetailActivity extends BaseActivity {
             @Override
             public void onError(Exception e) {
                 Logger.i("Websocket", "Error " + e.getMessage());
-                // Logger.i("webScoket", "In Error");
             }
         };
 
@@ -267,6 +294,62 @@ public class BuzzDetailActivity extends BaseActivity {
         });
         if (!hasNetwork) {
             Utility.showToastMessage(mActivity, getString(R.string.no_network));
+        }
+    }
+
+    private void sendRsvbResponse(final ApiDetails.RSVP rsvp) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put(ApiDetails.REQUEST_KEY_STATUS, rsvp.name());
+        params.put(ApiDetails.REQUEST_KEY_BUZZ_ID, mBuzzzzId);
+
+        Request request = new Request(ApiDetails.ACTION_NAME.RSVP);
+        request.setParamMap(params);
+        request.setShowDialog(false);
+        request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.RSVP.getActionName());
+        request.setRequestType(Request.HttpRequestType.POST);
+        LoaderCallback loaderCallback = new LoaderCallback(mActivity, new MessageParser());
+        boolean hasNetwork = loaderCallback.requestToServer(request);
+        loaderCallback.setServerResponse(new APICaller() {
+
+            @Override
+            public void onComplete(Model model) {
+                Logger.i(TAG, "model: " + model);
+                if (model.getStatus() == ApiDetails.STATUS_SUCCESS) {
+                    updateRsvbButton(rsvp);
+                } else {
+                    Utility.showToastMessage(mActivity, model.getMessage());
+                }
+            }
+        });
+        if (!hasNetwork) {
+            Utility.showToastMessage(mActivity, getString(R.string.no_network));
+        }
+    }
+
+    private void updateRsvbButton(ApiDetails.RSVP rsvp) {
+        String rsvpMessage;
+        switch (rsvp) {
+            case YES:
+                rsvpMessage = "You are going!!";
+                mTextViewRsvbMessage.setText(rsvpMessage);
+                mButtonYes.setTextColor(getResources().getColor(R.color.primary));
+                mButtonNo.setTextColor(getResources().getColor(R.color.accent));
+                mButtonMayBe.setTextColor(getResources().getColor(R.color.accent));
+                break;
+            case NO:
+                rsvpMessage = "You will be missed!!";
+                mTextViewRsvbMessage.setText(rsvpMessage);
+                mButtonNo.setTextColor(getResources().getColor(R.color.primary));
+                mButtonYes.setTextColor(getResources().getColor(R.color.accent));
+                mButtonMayBe.setTextColor(getResources().getColor(R.color.accent));
+                break;
+            case MAY_BE:
+                rsvpMessage = "Let's wait!!";
+                mTextViewRsvbMessage.setText(rsvpMessage);
+                mButtonMayBe.setTextColor(getResources().getColor(R.color.primary));
+                mButtonYes.setTextColor(getResources().getColor(R.color.accent));
+                mButtonNo.setTextColor(getResources().getColor(R.color.accent));
+                break;
         }
     }
 
