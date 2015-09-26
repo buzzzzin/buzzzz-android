@@ -363,5 +363,6 @@ public class BuzzDetailActivity extends BaseActivity {
         BuzzPreview.Stats stats = buzzPreview.getStats();
         String response = String.format("%s Going | %s Not going | %s May be", stats.getGoingCount(), stats.getNotComingCount(), stats.getMayBeCount());
         mTextViewResponse.setText(response);
+        updateRsvbButton(buzzPreview.getRsvp());
     }
 }

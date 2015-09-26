@@ -23,9 +23,9 @@ public final class ApiDetails {
             return this.value;
         }
 
-        public static ACTION_NAME getActionName(String period) {
+        public static ACTION_NAME getActionName(String value) {
             for (ACTION_NAME actionName : values()) {
-                if (actionName.getActionName().equals(period)) {
+                if (actionName.getActionName().equals(value)) {
                     return actionName;
                 }
             }
@@ -42,7 +42,25 @@ public final class ApiDetails {
     }
 
     public enum RSVP {
-        YES, NO, MAY_BE
+        YES("YES"), NO("NO"), MAY_BE("MAY_BE"), NONE("");
+        private final String value;
+
+        RSVP(String value) {
+            this.value = value;
+        }
+
+        public String getRsvp() {
+            return this.value;
+        }
+
+        public static RSVP getRsvpName(String value) {
+            for (RSVP rsvp : values()) {
+                if (rsvp.getRsvp().equals(value)) {
+                    return rsvp;
+                }
+            }
+            return NONE;
+        }
     }
 
     public static final int STATUS_SUCCESS = 1;
@@ -96,6 +114,7 @@ public final class ApiDetails {
     public static final String RESPONSE_KEY_BUZZ_ID = "buzzId";
     public static final String RESPONSE_KEY_IMAGE_NAME = "imageName";
     public static final String RESPONSE_KEY_IS_RSVB = "isRSVP";
+    public static final String RESPONSE_KEY_RSVB_STATUS = "rsvpStatus";
     public static final String RESPONSE_KEY_INTERESTS = "interests";
     public static final String RESPONSE_KEY_LOCATION = "location";
     public static final String RESPONSE_KEY_CITY = "city";

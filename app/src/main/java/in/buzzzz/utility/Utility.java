@@ -95,6 +95,7 @@ public final class Utility {
             urlConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             urlConnection.setRequestProperty("User-Agent", System.getProperty("http.agent"));
             urlConnection.setRequestProperty("Accept-Language", getLocaleLanguageTag(context));
+            urlConnection.setRequestProperty(ApiDetails.HEADER_X_AUTH_TOKEN, SharedPreference.getString(context, AppConstants.PREF_KEY_AUTH_TOKEN));
 
             urlConnection.setRequestMethod("GET");
             urlConnection.setConnectTimeout(timeoutConnection);

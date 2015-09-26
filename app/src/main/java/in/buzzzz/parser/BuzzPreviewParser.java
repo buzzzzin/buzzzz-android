@@ -41,6 +41,8 @@ public class BuzzPreviewParser implements Parser<Model> {
         }
         buzzPreview.setInterests(interests);
 
+        buzzPreview.setRsvp(ApiDetails.RSVP.getRsvpName(buzzJsonObject.getString(ApiDetails.RESPONSE_KEY_RSVB_STATUS)));
+
         BuzzPreview.Location location = new BuzzPreview.Location();
         JSONObject locationJsonObject = buzzJsonObject.getJSONObject(ApiDetails.RESPONSE_KEY_LOCATION);
         location.setCity(locationJsonObject.getString(ApiDetails.RESPONSE_KEY_CITY));
