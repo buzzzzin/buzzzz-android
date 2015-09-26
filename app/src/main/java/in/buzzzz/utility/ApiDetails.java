@@ -64,7 +64,7 @@ public final class ApiDetails {
         }
     }
 
-    public enum Period {
+    public enum PERIOD {
         ONCE,
         DAILY,
         MONTHLY,

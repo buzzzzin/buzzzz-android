@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -23,6 +25,8 @@ public class CreateBuzzActivity extends BaseActivity {
     private EditText mEditTextBuzzDesc;
     private TextView mTextViewBuzzVenue;
     private Button mButtonCreateBuzz;
+    private CheckBox mCheckboxIsRsvp;
+    private Spinner mSpinnerPeriod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,9 @@ public class CreateBuzzActivity extends BaseActivity {
         mEditTextBuzzDesc = (EditText) findViewById(R.id.edittext_buzz_desc);
         mTextViewBuzzVenue = (TextView) findViewById(R.id.textview_choose_venue);
         mButtonCreateBuzz = (Button) findViewById(R.id.button_create);
+        mCheckboxIsRsvp = (CheckBox) findViewById(R.id.checkbox_is_rsvp);
+        mSpinnerPeriod = (Spinner) findViewById(R.id.spinner_rsvp_options);
+
         mButtonCreateBuzz.setOnClickListener(mOnClickListener);
     }
 
@@ -47,13 +54,13 @@ public class CreateBuzzActivity extends BaseActivity {
         HashMap<String, String> params = new HashMap<>();
         params.put(ApiDetails.REQUEST_KEY_NAME, mEditTextBuzzTitle.getText().toString().trim());
         params.put(ApiDetails.REQUEST_KEY_IMAGE_NAME, "");
-        params.put(ApiDetails.REQUEST_KEY_IS_RSVP, "");
+        params.put(ApiDetails.REQUEST_KEY_IS_RSVP, String.valueOf(mCheckboxIsRsvp.isChecked()));
         params.put(ApiDetails.REQUEST_KEY_LATITUDE, "");
         params.put(ApiDetails.REQUEST_KEY_LONGITUDE, "");
         params.put(ApiDetails.REQUEST_KEY_ADDRESS, "");
         params.put(ApiDetails.REQUEST_KEY_START_TIME, "");
         params.put(ApiDetails.REQUEST_KEY_END_TIME, "");
-        params.put(ApiDetails.REQUEST_KEY_PERIOD, "");
+        params.put(ApiDetails.REQUEST_KEY_PERIOD, ApiDetails.PERIOD.ONCE.name());
         params.put(ApiDetails.REQUEST_KEY_TAGS, ""); // json array
         params.put(ApiDetails.REQUEST_KEY_INTERESTS, ""); // json array
     }

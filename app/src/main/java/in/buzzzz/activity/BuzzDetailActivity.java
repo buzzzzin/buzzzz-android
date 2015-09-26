@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.java_websocket.client.WebSocketClient;
@@ -49,6 +50,7 @@ public class BuzzDetailActivity extends BaseActivity {
     private TextView mTextViewResponse;
     private Button mButtonYes, mButtonNo, mButtonMayBe;
     private CollapsingToolbarLayout mCollapsingToolbar;
+    private RelativeLayout mRelativeLayoutIsRsvp;
 
     private RecyclerView mRecyclerViewChat;
     List<ChatInfo> chatInfoList = new ArrayList<>();
@@ -116,6 +118,7 @@ public class BuzzDetailActivity extends BaseActivity {
         mTextViewVenue = (TextView) findViewById(R.id.textview_venue);
         mTextViewStart = (TextView) findViewById(R.id.textview_start);
         mTextViewResponse = (TextView) findViewById(R.id.textview_response);
+        mRelativeLayoutIsRsvp = (RelativeLayout) findViewById(R.id.relativelayout_is_rsvp);
         mButtonYes = (Button) findViewById(R.id.button_yes);
         mButtonNo = (Button) findViewById(R.id.button_no);
         mButtonMayBe = (Button) findViewById(R.id.button_maybe);
@@ -355,9 +358,11 @@ public class BuzzDetailActivity extends BaseActivity {
 
     private void displayBuzzPreview(BuzzPreview buzzPreview) {
         mCollapsingToolbar.setTitle(buzzPreview.getName());
-//        if (buzzPreview.isRSVP()) {
+        if (buzzPreview.isRSVP()) {
 //            mTextViewRsvbMessage.setText("You are going!!");
-//        }
+        } else {
+            mRelativeLayoutIsRsvp.setVisibility(View.GONE);
+        }
         mTextViewVenue.setText(buzzPreview.getLocation().getAddress());
         mTextViewStart.setText(buzzPreview.getSchedule().getStartTime());
         BuzzPreview.Stats stats = buzzPreview.getStats();
