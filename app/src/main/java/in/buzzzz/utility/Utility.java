@@ -2,26 +2,37 @@ package in.buzzzz.utility;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.location.LocationManager;
+import android.media.ExifInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.view.Display;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.cloudinary.Cloudinary;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import in.buzzzz.R;
@@ -102,6 +113,55 @@ public final class Utility {
             getDefaultResponse(response, context.getString(R.string.msg_5xx));
         }
         Logger.i("print response", response.getResponse());
+        return response;
+    }
+
+    public static Response uploadOnCloudinary(Context context, HashMap<String, String> config, String imagePath) {
+        Response response = new Response();
+        Cloudinary cloudinary = new Cloudinary(config);
+        try {
+            String serverResponse = "";
+            // Upload image from url e.g facebook, google+
+            if (imagePath.startsWith("http")) {
+                serverResponse = String.valueOf(cloudinary.uploader().upload(imagePath, config));
+            }
+            // upload image from SD Card
+            else {
+                Logger.i("imagePath", imagePath + "");
+                Logger.i("config", config.toString());
+                File file = new File(imagePath);
+                InputStream inputStream = new FileInputStream(file);
+                serverResponse = String.valueOf(cloudinary.uploader().upload(inputStream, config));
+            }
+            Logger.i("serverResponse", serverResponse + "");
+            response.setError(false);
+            response.setResponse(serverResponse);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            response.setError(true);
+            response.setErrorMsg(context.getString(R.string.msg_image_not_uploaded));
+        }
+        return response;
+    }
+
+    public static Response destroyImage(Context context, HashMap<String, String> config) {
+        Response response = new Response();
+        Cloudinary cloudinary = new Cloudinary(config);
+        try {
+            String serverResponse = "";
+            String publicID = config.get("public_id");
+            Logger.i("publicID", publicID + "");
+            config.remove("public_id");
+            config.put("timestamp", Long.valueOf(System.currentTimeMillis() / 1000L).toString());
+            Logger.i("config", config.toString());
+            serverResponse = String.valueOf(cloudinary.uploader().destroy(publicID, config));
+            response.setError(false);
+            response.setResponse(serverResponse);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            response.setError(true);
+            response.setErrorMsg(context.getString(R.string.msg_image_not_deleted));
+        }
         return response;
     }
 
@@ -222,6 +282,12 @@ public final class Utility {
         ImageLoader.getInstance().displayImage(imageUrl, imageView, options, null);
     }
 
+    public static void setImageFromUrl(String imageUrl, ImageView imageView) {
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .resetViewBeforeLoading(true).cacheInMemory(true).build();
+        ImageLoader.getInstance().displayImage(imageUrl, imageView, options, null);
+    }
+
     public static Point getDisplayPoint(Context context) {
         Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -248,4 +314,57 @@ public final class Utility {
         return gps_enabled || network_enabled;
     }
 
+    public static File createImageFile(Context context) throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "IMG_" + timeStamp + "_";
+        File albumF = getAlbumDir(context);
+        File imageF = File.createTempFile(imageFileName, "JPG", albumF);
+        return imageF;
+    }
+
+    private static File getAlbumDir(Context context) {
+        File storageDir = null;
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            storageDir = new BaseAlbumDirFactory().getAlbumStorageDir(getAlbumName(context));
+            if (storageDir != null) {
+                if (!storageDir.mkdirs()) {
+                    if (!storageDir.exists()) {
+                        Logger.i("not mounted", "failed to create directory");
+                        return null;
+                    }
+                }
+            }
+        } else {
+            Logger.i("not mounted", "External storage is not mounted READ/WRITE.");
+        }
+        return storageDir;
+    }
+
+    private static String getAlbumName(Context context) {
+        return context.getString(R.string.app_name);
+    }
+
+    public static Bitmap getBitmap(String path) {
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
+        try {
+            ExifInterface exif = new ExifInterface(path);
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+            Logger.i("EXIF", "Exif: " + orientation);
+            Matrix matrix = new Matrix();
+            if (orientation == 6) {
+                matrix.postRotate(90);
+            } else if (orientation == 3) {
+                matrix.postRotate(180);
+            } else if (orientation == 8) {
+                matrix.postRotate(270);
+            }
+            // rotating bitmap
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
 }

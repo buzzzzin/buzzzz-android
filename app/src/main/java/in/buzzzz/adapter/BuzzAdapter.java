@@ -77,7 +77,6 @@ public class BuzzAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private void showBuzzList(BuzzPreview interest) {
-        Utility.showToastMessage(mActivity, interest.getBuzzId());
         Intent intent = new Intent(mActivity, BuzzDetailActivity.class);
         intent.putExtra(AppConstants.EXTRA_BUZZZZ_ID, interest.getBuzzId());
         intent.putExtra(AppConstants.EXTRA_BUZZZZ_NAME, interest.getName());

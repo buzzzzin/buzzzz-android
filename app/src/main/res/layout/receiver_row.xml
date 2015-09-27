@@ -5,9 +5,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingBottom="5dp"
-                android:paddingRight="@dimen/chat_margin"
-    >
-
+                android:paddingRight="@dimen/chat_margin">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -22,16 +20,14 @@
             android:layout_height="@dimen/chat_profile_image"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:background="@mipmap/ic_launcher"
-            />
+            android:background="@mipmap/ic_launcher"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/imageview_profile_pic"
             android:gravity="center_vertical"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/txtview_name"
@@ -41,6 +37,7 @@
                 android:layout_toLeftOf="@+id/imageview_profile_pic"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
+                android:textStyle="bold"
                 tool:text="fdjfdjlkfj"/>
 
             <TextView

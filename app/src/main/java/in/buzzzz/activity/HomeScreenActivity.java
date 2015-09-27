@@ -6,15 +6,21 @@ import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -30,6 +36,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -51,21 +58,35 @@ import in.buzzzz.utility.SharedPreference;
 import in.buzzzz.utility.Utility;
 
 public class HomeScreenActivity extends BaseActivity implements ResultCallback<LocationSettingsResult> {
+    public static final String TAG = "HomeScreenActivity";
+
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
+    private int spinnerBugFistTimeLoad = 0;
+
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView recyclerViewBuzz;
     private LinearLayout linearHorizontalView;
     List<Interest> mInterestList;
     List<BuzzPreview> mBuzzPreviewList;
-    private static final String TAG = "HomeScreenActivity";
+    private String mRadius = "5000";
+    List<String> mRadiusArrayList = new ArrayList<String>();
+    List<String> mRadiusArrayToSend = new ArrayList<String>();
+
 
     private GoogleApiClient mGoogleApiClient;
     private FusedLocationProviderApi mFusedLocationProviderApi = LocationServices.FusedLocationApi;
+    private Location mLocation;
+    private LocationSettingsRequest mLocationSettingsRequest;
+    private ProgressBar progressBar;
+    private ArrayAdapter<String> dataAdapter;
+    private AdapterView.OnItemSelectedListener onItemSelectedListener;
+
     LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
             Logger.i(TAG, "Location: " + location);
             if (location != null) {
+                mLocation = location;
 
                 requestHomeBuzz(true, String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
                 mFusedLocationProviderApi.removeLocationUpdates(mGoogleApiClient, mLocationListener);
@@ -82,6 +103,7 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
             } else {
 //                checkLocationSettings();*/
 
+
             LocationRequest mLocationRequest = new LocationRequest();
             mLocationRequest.setInterval(10000);
             mLocationRequest.setFastestInterval(5000);
@@ -95,6 +117,8 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
             builder.setAlwaysShow(true); //this is the key ingredient
             mLocationSettingsRequest = builder.build();
             checkLocationSettings();
+
+
         }
 
         @Override
@@ -105,8 +129,7 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
             }
         }
     };
-    private LocationSettingsRequest mLocationSettingsRequest;
-    private ProgressBar progressBar;
+
 
     protected void createLocationRequest() {
         LocationRequest mLocationRequest = new LocationRequest();
@@ -149,6 +172,8 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
         mGoogleApiClient = buildGoogleApiClient();
         mGoogleApiClient.connect();
         getViewsId();
+        addItemOnSpinner();
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -198,12 +223,15 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
         buttonProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (SharedPreference.getBoolean(mActivity, AppConstants.PREF_KEY_IS_LOGGED_IN)) {
-                    startActivity(new Intent(mActivity, MyProfileActivity.class));
+                    //:TODO show profile screen
                 } else {
                     Intent intent = new Intent(mActivity, LoginActivity.class);
                     startActivity(intent);
                 }
+
+
             }
         });
 
@@ -213,11 +241,14 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
             public void onClick(View v) {
 
                 //:TODO show trending screen
-               /* Intent intent = new Intent(mActivity,. class);
-                startActivity(intent);*/
+                Intent intent = new Intent(mActivity, BuzzListActivity.class);
+                intent.putExtra(AppConstants.EXTRA_FROM, HomeScreenActivity.TAG);
+                startActivity(intent);
 
             }
         });
+
+
     }
 
     private void requestHomeBuzz(boolean showProgressDialog, String latitude, String longitude) {
@@ -233,7 +264,7 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
             params.put(ApiDetails.REQUEST_KEY_LONGITUDE, String.valueOf(longitude));
         }
 
-        params.put(ApiDetails.REQUEST_KEY_RADIUS, "100");
+        params.put(ApiDetails.REQUEST_KEY_RADIUS, mRadius);
         Request request = new Request(ApiDetails.ACTION_NAME.HOME_BUZZ);
         request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.HOME_BUZZ.getActionName());
         request.setShowDialog(showProgressDialog);
@@ -279,16 +310,39 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
             Interest interest = mInterestList.get(i);
             View child = getLayoutInflater().inflate(R.layout.home_interest_header, null);
             linearHorizontalView.addView(child);
+
+            LinearLayout linearLayoutInterest = (LinearLayout) child.findViewById(R.id.shapeLayout);
+            linearLayoutInterest.setTag(i);
             TextView textviewName = (TextView) child.findViewById(R.id.textview_interest_name);
             textviewName.setText(interest.getName());
             ImageView imageViewInterestPics = (ImageView) child.findViewById(R.id.imageview_interest_pic);
             Utility.setImageFromUrl(Api.BASE_URL_CLOUDINARY_BUZZZZ + mInterestList.get(i).getImageName(), imageViewInterestPics, R.mipmap.ic_launcher);
+            linearLayoutInterest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    int position = (Integer) v.getTag();
+
+                    Interest pickedInterest = mInterestList.get(position);
+                    Intent intent = new Intent(mActivity, BuzzListActivity.class);
+
+                    //sending Interest tag because both Interest activity and Home has same interest list
+                    intent.putExtra(AppConstants.EXTRA_FROM, InterestActivity.TAG);
+                    intent.putExtra(AppConstants.EXTRA_INTEREST_NAME, pickedInterest.getName());
+                    intent.putExtra(AppConstants.EXTRA_INTEREST_ID, pickedInterest.getId());
+                    mActivity.startActivity(intent);
+                }
+            });
+
+
         }
+
     }
 
     private void hideProgressBar() {
 //        mSwipeRefreshLayout.setRefreshing(false);
     }
+
 
     protected void checkLocationSettings() {
         PendingResult<LocationSettingsResult> result =
@@ -299,6 +353,7 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
 
         result.setResultCallback(HomeScreenActivity.this);
     }
+
 
     @Override
     public void onResult(LocationSettingsResult locationSettingsResult) {
@@ -318,6 +373,7 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                     // in onActivityResult().
 
                     status.startResolutionForResult(mActivity, REQUEST_CHECK_SETTINGS);
+
                 } catch (IntentSender.SendIntentException e) {
 
                     //unable to execute request
@@ -346,5 +402,73 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                 }
                 break;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+       /* if (id == R.id.action_skip) {
+
+            Intent intent = new Intent(mActivity, HomeScreenActivity.class);
+            startActivity(intent);
+            finish();
+            return true;
+
+        }*/
+        return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_home_screen, menu);
+        MenuItem item = menu.findItem(R.id.spinner);
+        Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+        spinner.setAdapter(dataAdapter); // set the adapter to provide layout of rows and content
+        spinner.setOnItemSelectedListener(onItemSelectedListener); // set the listener, to perform actions based on item selection
+        return true;
+    }
+
+    // add items into spinner dynamically
+    public void addItemOnSpinner() {
+        mRadiusArrayList.add("Radius:1000 m");
+        mRadiusArrayList.add("Radius:2000 m");
+        mRadiusArrayList.add("Radius:3000 m");
+        mRadiusArrayList.add("Radius:4000 m");
+        mRadiusArrayList.add("Radius:5000 m");
+
+        mRadiusArrayToSend.add("1000");
+        mRadiusArrayToSend.add("2000");
+        mRadiusArrayToSend.add("3000");
+        mRadiusArrayToSend.add("4000");
+        mRadiusArrayToSend.add("5000");
+
+        dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, mRadiusArrayList);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                spinnerBugFistTimeLoad = spinnerBugFistTimeLoad + 1;
+                if (spinnerBugFistTimeLoad > 1) {
+                    mRadius = mRadiusArrayToSend.get(position);
+                    String lat = "", lon = "";
+                    if (mLocation != null) {
+                        lat = String.valueOf(mLocation.getLatitude());
+                        lon = String.valueOf(mLocation.getLongitude());
+
+                    }
+                    requestHomeBuzz(true, lat, lon);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
     }
 }

@@ -4,7 +4,6 @@ package in.buzzzz.utility;
  * Created by Navkrishna on September 25, 2015
  */
 public final class AppConstants {
-
     public static final String PREF_KEY_IS_ACCOUNT_VERIFIED = "is_account_verified";
     public static final String PREF_KEY_IS_LOGGED_IN = "is_logged_in";
 
@@ -18,5 +17,13 @@ public final class AppConstants {
     public static final String PREF_KEY_MEDIUM_ID = "medium_id";
 
     public static final String EXTRA_BUZZZZ_ID = "extra_buzzzz_id";
+    public static final String EXTRA_INTEREST_NAME = "extra_interest_name";
+    public static final String EXTRA_INTEREST_ID = "extra_interest_id";
+    public static final String EXTRA_FROM= "extra_from";
     public static final String EXTRA_BUZZZZ_NAME = "extra_buzzzz_name";
+
+    public static final String FILE_PATH = "filePath";
+    public static final String EXTRA_IS_REMOVE_IMAGE = "isRemoveEvent";
+    public static final String EXTRA_IMAGE_PATH = "imagePath";
+    public static final String EXTRA_CAMERAPIC_STATUS = "cameraPic";
 }

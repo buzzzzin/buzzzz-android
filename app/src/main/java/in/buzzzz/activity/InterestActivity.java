@@ -26,6 +26,8 @@ import in.buzzzz.utility.Utility;
 
 public class InterestActivity extends BaseActivity {
 
+    public static final String TAG = "InterestActivity";
+
     List<Interest> mInterestList;
     RecyclerView mRecyclerView;
 
@@ -35,7 +37,6 @@ public class InterestActivity extends BaseActivity {
         setContentView(R.layout.activity_interest);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getViewsId();
         requestInterest();
     }
@@ -109,5 +110,10 @@ public class InterestActivity extends BaseActivity {
         return true;
     }
 
-
+    @Override
+    public void onBackPressed() {
+        Intent startOverIntent = new Intent(mActivity, HomeScreenActivity.class);
+        startOverIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startOverIntent);
+    }
 }

@@ -53,7 +53,18 @@ public class HttpAsyncTaskLoader extends AsyncTaskLoader<Model> {
                 serverResponse = Utility.doPost(context, request.getUrl(), getJsonParam(request.getParamMap(), true));
                 break;
             case CLOUDINARY:
-                // PARKED FEATURE FOR EDIT PROFILE
+                String action = request.getParamMap().get("action");
+                request.getParamMap().remove("action");
+                if (ApiDetails.ACTION_NAME.UPLOAD.name().equals(action)) {
+                    String imagePath = request.getParamMap().get("imagePath");
+                    request.getParamMap().remove("imagePath");
+                    try {
+                        serverResponse = Utility.uploadOnCloudinary(context, request.getParamMap(), imagePath);
+                    } catch (Exception ex) {
+                    }
+                } else {
+                    serverResponse = Utility.destroyImage(context, request.getParamMap());
+                }
                 break;
             case GET:
                 serverResponse = Utility.doGet(context, request.getUrl());
