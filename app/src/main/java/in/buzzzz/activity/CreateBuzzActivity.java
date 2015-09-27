@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,7 +21,18 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.ig.crop.Crop;
 
 import org.json.JSONArray;
@@ -48,6 +60,7 @@ import in.buzzzz.model.Request;
 import in.buzzzz.parser.BuzzPreviewParser;
 import in.buzzzz.parser.CloudinaryParser;
 import in.buzzzz.parser.InterestParser;
+import in.buzzzz.place.PlaceAutocompleteAdapter;
 import in.buzzzz.utility.Api;
 import in.buzzzz.utility.ApiDetails;
 import in.buzzzz.utility.AppConstants;
@@ -58,12 +71,11 @@ import in.buzzzz.utility.Utility;
 /**
  * Created by Navkrishna on September 26, 2015
  */
-public class CreateBuzzActivity extends BaseActivity {
+public class CreateBuzzActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener {
     private static final int CHOOSE_PHOTO = 1;
     private ImageView mImageViewBuzzPic;
     private EditText mEditTextBuzzTitle;
     private EditText mEditTextBuzzDesc;
-    private TextView mTextViewBuzzVenue;
     private TextView mTextViewSelectedInterests;
     private TextView mTextViewStartTime;
     private TextView mTextViewEndTime;
@@ -77,9 +89,25 @@ public class CreateBuzzActivity extends BaseActivity {
     private String mStartDateTime = "", mEndDateTime = "";
     private String mImagePath = "";
 
+    CharSequence mAddress = "";
+    double mLatitude = 0.0;
+    double mLongitude = 0.0;
+
+    private static final String TAG = "CreateBuzzActivity";
+    protected GoogleApiClient mGoogleApiClient;
+    private PlaceAutocompleteAdapter mAdapter;
+    private AutoCompleteTextView mAutocompleteView;
+    private TextView mTextViewVenue;
+    private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
+            new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362));
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, 0 /* clientId */, this)
+                .addApi(Places.GEO_DATA_API)
+                .build();
         setContentView(R.layout.activity_create_buzz);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -87,13 +115,28 @@ public class CreateBuzzActivity extends BaseActivity {
         getSupportActionBar().setTitle(R.string.title_activity_create_buzz);
         linkViewsId();
         requestInterest();
+        initViews();
+    }
+
+    private void initViews() {
+        mAutocompleteView = (AutoCompleteTextView) findViewById(R.id.autocompletetextview_search);
+        // Register a listener that receives callbacks when a suggestion has been selected
+        mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
+
+        // Retrieve the TextViews that will display details and attributions of the selected place.
+        mTextViewVenue = (TextView) findViewById(R.id.textview_venue);
+        mTextViewVenue.setOnClickListener(mOnClickListener);
+
+        // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
+        // the entire world.
+        mAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient, BOUNDS_GREATER_SYDNEY, null);
+        mAutocompleteView.setAdapter(mAdapter);
     }
 
     private void linkViewsId() {
         mImageViewBuzzPic = (ImageView) findViewById(R.id.imageview_buzz_pic);
         mEditTextBuzzTitle = (EditText) findViewById(R.id.edittext_buzz_title);
         mEditTextBuzzDesc = (EditText) findViewById(R.id.edittext_buzz_desc);
-        mTextViewBuzzVenue = (TextView) findViewById(R.id.textview_choose_venue);
         mButtonCreateBuzz = (Button) findViewById(R.id.button_create);
         mCheckboxIsRsvp = (CheckBox) findViewById(R.id.checkbox_is_rsvp);
         mSpinnerPeriod = (Spinner) findViewById(R.id.spinner_rsvp_options);
@@ -141,9 +184,9 @@ public class CreateBuzzActivity extends BaseActivity {
     private static final String KEY_INTEREST_NAME = "key_interest_name";
 
     private void setDataAutoListAdapter() {
-        List<HashMap<String, String>> countryList = new ArrayList<HashMap<String, String>>();
+        List<HashMap<String, String>> countryList = new ArrayList<>();
         for (int i = 0; i < mInterestList.size(); i++) {
-            HashMap<String, String> interestMap = new HashMap<String, String>();
+            HashMap<String, String> interestMap = new HashMap<>();
             Interest interest = mInterestList.get(i);
             interestMap.put(KEY_INTEREST_ID, interest.getId());
             interestMap.put(KEY_INTEREST_NAME, interest.getName());
@@ -177,9 +220,9 @@ public class CreateBuzzActivity extends BaseActivity {
         params.put(ApiDetails.REQUEST_KEY_NAME, mEditTextBuzzTitle.getText().toString().trim());
         params.put(ApiDetails.REQUEST_KEY_IMAGE_NAME, imageName);
         params.put(ApiDetails.REQUEST_KEY_IS_RSVP, String.valueOf(mCheckboxIsRsvp.isChecked()));
-        params.put(ApiDetails.REQUEST_KEY_LATITUDE, "");
-        params.put(ApiDetails.REQUEST_KEY_LONGITUDE, "");
-        params.put(ApiDetails.REQUEST_KEY_ADDRESS, "");
+        params.put(ApiDetails.REQUEST_KEY_LATITUDE, String.valueOf(mLatitude));
+        params.put(ApiDetails.REQUEST_KEY_LONGITUDE, String.valueOf(mLongitude));
+        params.put(ApiDetails.REQUEST_KEY_ADDRESS, String.valueOf(mAddress));
         params.put(ApiDetails.REQUEST_KEY_START_TIME, mStartDateTime);
         params.put(ApiDetails.REQUEST_KEY_END_TIME, mEndDateTime);
         params.put(ApiDetails.REQUEST_KEY_PERIOD, ApiDetails.PERIOD.ONCE.name());
@@ -228,6 +271,13 @@ public class CreateBuzzActivity extends BaseActivity {
                 case R.id.textview_end_time:
                     showDateAndTimePicker(false);
                     break;
+                case R.id.textview_venue:
+                    mAddress = "";
+                    mLatitude = 0.0;
+                    mLongitude = 0.0;
+                    mTextViewVenue.setVisibility(View.GONE);
+                    mAutocompleteView.setVisibility(View.VISIBLE);
+                    break;
                 case R.id.imageview_buzz_pic:
                     if (imageSelected) {
                         showImageChangeDialog();
@@ -267,6 +317,10 @@ public class CreateBuzzActivity extends BaseActivity {
             mAutoCompleteTextViewInterest.setError("Select at least one interest");
         } else if (mStartDateTime.isEmpty()) {
             Utility.showToastMessage(mActivity, "Select a start time");
+        } else if (mAddress.length() == 0 || mLatitude == 0.0 || mLongitude == 0.0) {
+            mTextViewVenue.setVisibility(View.GONE);
+            mAutocompleteView.setVisibility(View.VISIBLE);
+            mAutocompleteView.setError("Select a venue");
         } else {
             if (mImagePath == null || mImagePath.isEmpty()) {
                 requestCreatBuzz("");
@@ -397,7 +451,7 @@ public class CreateBuzzActivity extends BaseActivity {
     }
 
     private void uploadImageOnCloudinary(String folderName, String imagePath) {
-        HashMap<String, String> paramMap = new HashMap<String, String>();
+        HashMap<String, String> paramMap = new HashMap<>();
         paramMap.put(ApiDetails.REQUEST_KEY_CLOUDINARY_API_KEY, Api.CLOUDINARY_API_KEY);
         paramMap.put(ApiDetails.REQUEST_KEY_CLOUDINARY_API_SECRET, Api.CLOUDINARY_API_SECRET);
         paramMap.put(ApiDetails.REQUEST_KEY_CLOUDINARY_FOLDER, Api.CLOUDINARY_FOLDER + "/" + folderName);
@@ -429,5 +483,82 @@ public class CreateBuzzActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private AdapterView.OnItemClickListener mAutocompleteClickListener
+            = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            /*
+             Retrieve the place ID of the selected item from the Adapter.
+             The adapter stores each Place suggestion in a AutocompletePrediction from which we
+             read the place ID and title.
+              */
+            final AutocompletePrediction item = mAdapter.getItem(position);
+            final String placeId = item.getPlaceId();
+            final CharSequence primaryText = item.getPrimaryText(null);
+
+            Log.i(TAG, "Autocomplete item selected: " + primaryText);
+
+            /*
+             Issue a request to the Places Geo Data API to retrieve a Place object with additional
+             details about the place.
+              */
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(mGoogleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+
+            Log.i(TAG, "Called getPlaceById to get Place details for " + placeId);
+        }
+    };
+
+    /**
+     * Callback for results from a Places Geo Data API query that shows the first place result in
+     * the details view on screen.
+     */
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                // Request did not complete successfully
+                Log.e(TAG, "Place query did not complete. Error: " + places.getStatus().toString());
+                places.release();
+                return;
+            }
+            // Get the Place object from the buffer.
+            final Place place = places.get(0);
+
+            mAddress = place.getAddress();
+            mLatitude = place.getLatLng().latitude;
+            mLongitude = place.getLatLng().longitude;
+
+            // Format details of the place for display and show it in a TextView.
+            mTextViewVenue.setText(place.getName() + "\n" + place.getAddress());
+            mAutocompleteView.setVisibility(View.GONE);
+            mAutocompleteView.setText("");
+            mTextViewVenue.setVisibility(View.VISIBLE);
+            Log.i(TAG, "Place details received: " + place.getName());
+
+            places.release();
+        }
+    };
+
+    /**
+     * Called when the Activity could not connect to Google Play services and the auto manager
+     * could resolve the error automatically.
+     * In this case the API is not available and notify the user.
+     *
+     * @param connectionResult can be inspected to determine the cause of the failure
+     */
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+        Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
+                + connectionResult.getErrorCode());
+
+        // TODO(Developer): Check error code and notify the user of error state and resolution.
+        Toast.makeText(this,
+                "DEV: Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),
+                Toast.LENGTH_SHORT).show();
     }
 }
