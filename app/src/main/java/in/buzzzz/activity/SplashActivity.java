@@ -33,10 +33,16 @@ public class SplashActivity extends BaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (SharedPreference.getBoolean(mActivity, AppConstants.PREF_KEY_IS_LOGGED_IN)) {
-                    startActivity(new Intent(mActivity, InterestActivity.class));
-                } else {
+                if (!SharedPreference.getBoolean(mActivity, AppConstants.PREF_KEY_IS_LOGGED_IN)) {
+
                     startActivity(new Intent(mActivity, LoginActivity.class));
+
+                } else if (!SharedPreference.getBoolean(mActivity, AppConstants.PREF_KEY_HAS_INTERESTS)) {
+                    startActivity(new Intent(mActivity, InterestActivity.class));
+
+                } else {
+                    startActivity(new Intent(mActivity, HomeScreenActivity.class));
+
                 }
                 finish();
             }

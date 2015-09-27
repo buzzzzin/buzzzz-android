@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -16,12 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -44,51 +38,53 @@ import in.buzzzz.R;
 import in.buzzzz.adapter.BuzzAdapter;
 import in.buzzzz.loader.APICaller;
 import in.buzzzz.loader.LoaderCallback;
-import in.buzzzz.model.BuzzList;
 import in.buzzzz.model.BuzzPreview;
-import in.buzzzz.model.Interest;
+import in.buzzzz.model.BuzzPreviewList;
 import in.buzzzz.model.Model;
 import in.buzzzz.model.Request;
-import in.buzzzz.parser.HomeBuzzParser;
+import in.buzzzz.parser.BuzzListParser;
 import in.buzzzz.utility.Api;
 import in.buzzzz.utility.ApiDetails;
 import in.buzzzz.utility.AppConstants;
 import in.buzzzz.utility.Logger;
-import in.buzzzz.utility.SharedPreference;
 import in.buzzzz.utility.Utility;
 
-public class HomeScreenActivity extends BaseActivity implements ResultCallback<LocationSettingsResult> {
-    public static final String TAG = "HomeScreenActivity";
-
+public class BuzzListActivity extends BaseActivity implements ResultCallback<LocationSettingsResult> {
+    public static final String TAG = "BuzzListActivity";
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
     private int spinnerBugFistTimeLoad = 0;
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView recyclerViewBuzz;
-    private LinearLayout linearHorizontalView;
-    List<Interest> mInterestList;
-    List<BuzzPreview> mBuzzPreviewList;
+
+    private String mFromScreen;
+    private String latitude = "22.546548", longitude = "77.334874";
     private String mRadius = "5000";
-    List<String> mRadiusArrayList = new ArrayList<String>();
-    List<String> mRadiusArrayToSend = new ArrayList<String>();
-
-
+    private String mInterestName = "Music";
+    private String mInterestId;
+    List<BuzzPreview> mBuzzPreviewList;
+    private RecyclerView recyclerViewBuzz;
     private GoogleApiClient mGoogleApiClient;
-    private FusedLocationProviderApi mFusedLocationProviderApi = LocationServices.FusedLocationApi;
-    private Location mLocation;
     private LocationSettingsRequest mLocationSettingsRequest;
     private ProgressBar progressBar;
+
+    List<String> mRadiusArrayList = new ArrayList<String>();
+    List<String> mRadiusArrayToSend = new ArrayList<String>();
     private ArrayAdapter<String> dataAdapter;
     private AdapterView.OnItemSelectedListener onItemSelectedListener;
 
+
+    private FusedLocationProviderApi mFusedLocationProviderApi = LocationServices.FusedLocationApi;
+    private Location mLocation;
     LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
             Logger.i(TAG, "Location: " + location);
             if (location != null) {
                 mLocation = location;
+                latitude = String.valueOf(location.getLatitude());
+                longitude = String.valueOf(location.getLongitude());
+                requestBuzzByInterest();
+                Logger.i("onLocationChanged", "onLocationChanged");
 
-                requestHomeBuzz(true, String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
                 mFusedLocationProviderApi.removeLocationUpdates(mGoogleApiClient, mLocationListener);
             }
         }
@@ -98,12 +94,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
         @Override
         public void onConnected(Bundle bundle) {
             Logger.i(TAG, "onConnected" + bundle);
-           /* if (Utility.isLocationProviderEnabled(mActivity)) {
-                createLocationRequest();
-            } else {
-//                checkLocationSettings();*/
-
-
             LocationRequest mLocationRequest = new LocationRequest();
             mLocationRequest.setInterval(10000);
             mLocationRequest.setFastestInterval(5000);
@@ -130,23 +120,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
         }
     };
 
-
-    protected void createLocationRequest() {
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mFusedLocationProviderApi.requestLocationUpdates(
-                mGoogleApiClient, mLocationRequest, mLocationListener);
-
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(mLocationRequest);
-        //**************************
-        builder.setAlwaysShow(true); //this is the key ingredient
-        mLocationSettingsRequest = builder.build();
-        checkLocationSettings();
-    }
-
     private GoogleApiClient.OnConnectionFailedListener mOnConnectionFailedListener = new GoogleApiClient.OnConnectionFailedListener() {
         @Override
         public void onConnectionFailed(ConnectionResult connectionResult) {
@@ -163,29 +136,35 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
 
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_buzzlist);
         mGoogleApiClient = buildGoogleApiClient();
         mGoogleApiClient.connect();
+        mFromScreen = getIntent().getStringExtra(AppConstants.EXTRA_FROM);
         getViewsId();
         addItemOnSpinner();
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+    private void getViewsId() {
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
+        recyclerViewBuzz = (RecyclerView) findViewById(R.id.recyclerview_buzzlist);
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mActivity);
+        recyclerViewBuzz.setLayoutManager(mLinearLayoutManager);
+        recyclerViewBuzz.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onClick(View view) {
-               /* Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
-                Intent intent = new Intent(mActivity, CreateBuzzActivity.class);
-                startActivity(intent);
             }
         });
+
+
     }
 
     private GoogleApiClient buildGoogleApiClient() {
@@ -196,99 +175,48 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                 .build();
     }
 
-    private void getViewsId() {
-
-      /*  mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                //vertical swipe on home
-                requestHomeBuzz(false);
-            }
-        });*/
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        progressBar.setVisibility(View.VISIBLE);
-        recyclerViewBuzz = (RecyclerView) findViewById(R.id.recyclerview_buzz);
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mActivity);
-        recyclerViewBuzz.setLayoutManager(mLinearLayoutManager);
-        recyclerViewBuzz.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
-            }
-        });
-        linearHorizontalView = (LinearLayout) findViewById(R.id.horizontal_linear);
-
-        Button buttonProfile = (Button) findViewById(R.id.btn_profile);
-        buttonProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (SharedPreference.getBoolean(mActivity, AppConstants.PREF_KEY_IS_LOGGED_IN)) {
-                    //:TODO show profile screen
-                } else {
-                    Intent intent = new Intent(mActivity, LoginActivity.class);
-                    startActivity(intent);
-                }
-
-
-            }
-        });
-
-        Button buttonTrending = (Button) findViewById(R.id.btn_trending);
-        buttonTrending.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //:TODO show trending screen
-                Intent intent = new Intent(mActivity, BuzzListActivity.class);
-                intent.putExtra(AppConstants.EXTRA_FROM, HomeScreenActivity.TAG);
-                startActivity(intent);
-
-
-            }
-        });
-
-
-    }
-
-    private void requestHomeBuzz(boolean showProgressDialog, String latitude, String longitude) {
-
+    private void requestBuzzByInterest() {
         progressBar.setVisibility(View.GONE);
-
-        Logger.i("lat lat", latitude + "  " + longitude);
-
         HashMap<String, String> params = new HashMap<>();
+
+        ApiDetails.ACTION_NAME buzzBuzzByInterest = null;
+        if (mFromScreen != null) {
+            if (mFromScreen.equalsIgnoreCase(HomeScreenActivity.TAG)) {
+                buzzBuzzByInterest = ApiDetails.ACTION_NAME.BUZZ_TRENDING;
+            } else if (mFromScreen.equalsIgnoreCase(InterestActivity.TAG)) {
+                buzzBuzzByInterest = ApiDetails.ACTION_NAME.BUZZ_BUZZ_BY_INTEREST;
+                mInterestName = getIntent().getStringExtra(AppConstants.EXTRA_INTEREST_NAME);
+                mInterestId = getIntent().getStringExtra(AppConstants.EXTRA_INTEREST_ID);
+
+                params.put(ApiDetails.REQUEST_KEY_INTEREST, mInterestName);
+
+            }
+
+        }
 
         if (!latitude.isEmpty() && !longitude.isEmpty()) {
             params.put(ApiDetails.REQUEST_KEY_LATITUDE, String.valueOf(latitude));
             params.put(ApiDetails.REQUEST_KEY_LONGITUDE, String.valueOf(longitude));
         }
-
         params.put(ApiDetails.REQUEST_KEY_RADIUS, mRadius);
-        Request request = new Request(ApiDetails.ACTION_NAME.HOME_BUZZ);
-        request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.HOME_BUZZ.getActionName());
-        request.setShowDialog(showProgressDialog);
+        Request request = new Request(buzzBuzzByInterest);
+        request.setUrl(Api.BASE_URL_API + buzzBuzzByInterest.getActionName());
+        request.setShowDialog(true);
         request.setDialogMessage(getString(R.string.progress_dialog_msg));
         request.setParamMap(params);
         request.setRequestType(Request.HttpRequestType.POST);
-        LoaderCallback loaderCallback = new LoaderCallback(mActivity, new HomeBuzzParser());
+        LoaderCallback loaderCallback = new LoaderCallback(mActivity, new BuzzListParser());
         boolean hasNetwork = loaderCallback.requestToServer(request);
         loaderCallback.setServerResponse(new APICaller() {
 
             @Override
             public void onComplete(Model model) {
-                hideProgressBar();
-                if (model.getStatus() == ApiDetails.STATUS_SUCCESS) {
-                    if (model instanceof BuzzList) {
-                        BuzzList buzzList = (BuzzList) model;
-                        Logger.i("interestList", buzzList.getInterestList().toString());
-                        Logger.i("buzzlist", buzzList.getBuzzPreviewList().toString());
-                        mInterestList = buzzList.getInterestList();
-                        mBuzzPreviewList = buzzList.getBuzzPreviewList();
-                        setData();
-                        setInterestData();
+                if (model.getStatus() == 1) {
+                    if (model instanceof BuzzPreviewList) {
+                        BuzzPreviewList buzzPreviewList = (BuzzPreviewList) model;
+                        mBuzzPreviewList = buzzPreviewList.getBuzzPreviews();
 
+                        setData();
                     }
                 } else {
                     Utility.showToastMessage(mActivity, model.getMessage());
@@ -297,52 +225,12 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
         });
         if (!hasNetwork) {
             Utility.showToastMessage(mActivity, getString(R.string.no_network));
-            hideProgressBar();
         }
     }
 
     private void setData() {
         BuzzAdapter interestAdapter = new BuzzAdapter(mActivity, mBuzzPreviewList);
         recyclerViewBuzz.setAdapter(interestAdapter);
-    }
-
-    private void setInterestData() {
-
-        for (int i = 0; i < mInterestList.size(); i++) {
-            Interest interest = mInterestList.get(i);
-            View child = getLayoutInflater().inflate(R.layout.home_interest_header, null);
-            linearHorizontalView.addView(child);
-
-            LinearLayout linearLayoutInterest = (LinearLayout) child.findViewById(R.id.shapeLayout);
-            linearLayoutInterest.setTag(i);
-            TextView textviewName = (TextView) child.findViewById(R.id.textview_interest_name);
-            textviewName.setText(interest.getName());
-            ImageView imageViewInterestPics = (ImageView) child.findViewById(R.id.imageview_interest_pic);
-            Utility.setImageFromUrl(Api.BASE_URL_CLOUDINARY_BUZZZZ + mInterestList.get(i).getImageName(), imageViewInterestPics, R.mipmap.ic_launcher);
-            linearLayoutInterest.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    int position = (Integer) v.getTag();
-
-                    Interest pickedInterest = mInterestList.get(position);
-                    Intent intent = new Intent(mActivity, BuzzListActivity.class);
-
-                    //sending Interest tag because both Interest activity and Home has same interest list
-                    intent.putExtra(AppConstants.EXTRA_FROM, InterestActivity.TAG);
-                    intent.putExtra(AppConstants.EXTRA_INTEREST_NAME, pickedInterest.getName());
-                    intent.putExtra(AppConstants.EXTRA_INTEREST_ID, pickedInterest.getId());
-                    mActivity.startActivity(intent);
-                }
-            });
-
-
-        }
-
-    }
-
-    private void hideProgressBar() {
-//        mSwipeRefreshLayout.setRefreshing(false);
     }
 
 
@@ -352,8 +240,7 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                         mGoogleApiClient,
                         mLocationSettingsRequest
                 );
-
-        result.setResultCallback(HomeScreenActivity.this);
+        result.setResultCallback(BuzzListActivity.this);
     }
 
 
@@ -371,7 +258,7 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                 //  Location settings are not satisfied. Show the user a dialog
 
                 try {
-                    // Show the dialog by calling startResolutionForResult(), and check the result
+                    // Show the dialog by calling startResolutionForResult(), and spinnerBugFistTimeLoad the result
                     // in onActivityResult().
 
                     status.startResolutionForResult(mActivity, REQUEST_CHECK_SETTINGS);
@@ -399,7 +286,7 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
 
                         break;
                     case Activity.RESULT_CANCELED:
-                        requestHomeBuzz(true, "", "");
+
                         break;
                 }
                 break;
@@ -408,31 +295,29 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-       /* if (id == R.id.action_skip) {
-
-            Intent intent = new Intent(mActivity, HomeScreenActivity.class);
-            startActivity(intent);
-            finish();
-            return true;
-
-        }*/
-        return false;
-
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_home_screen, menu);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_buzzlist, menu);
         MenuItem item = menu.findItem(R.id.spinner);
         Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
         spinner.setAdapter(dataAdapter); // set the adapter to provide layout of rows and content
         spinner.setOnItemSelectedListener(onItemSelectedListener); // set the listener, to perform actions based on item selection
         return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     // add items into spinner dynamically
@@ -459,15 +344,14 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                 spinnerBugFistTimeLoad = spinnerBugFistTimeLoad + 1;
                 if (spinnerBugFistTimeLoad > 1) {
                     mRadius = mRadiusArrayToSend.get(position);
-                    String lat = "", lon = "";
                     if (mLocation != null) {
-                        lat = String.valueOf(mLocation.getLatitude());
-                        lon = String.valueOf(mLocation.getLongitude());
+                        latitude = String.valueOf(mLocation.getLatitude());
+                        longitude = String.valueOf(mLocation.getLongitude());
 
                     }
-                    requestHomeBuzz(true, lat, lon);
+                    Logger.i("spinner", "spinner");
+                    requestBuzzByInterest();
                 }
-
             }
 
             @Override
