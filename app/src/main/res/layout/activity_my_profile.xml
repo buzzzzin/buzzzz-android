@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/relativelayout_profile_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:ignore="ContentDescription">
+    >
 
 
     <android.support.v7.widget.Toolbar
@@ -21,34 +19,27 @@
     <RelativeLayout
         android:id="@+id/relativelayout_profile_detail_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
+
         >
 
         <ImageView
             android:id="@+id/imageview_profile"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:layout_alignParentTop="true"
             android:scaleType="centerCrop"/>
 
-    </RelativeLayout>
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/relativelayout_profile_detail_container"
-        android:layout_centerVertical="true"
-        android:orientation="vertical"
-        android:padding="10dp"
-        >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="bottom"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_below="@+id/imageview_profile"
+
+            android:orientation="vertical"
+
+            android:padding="10dp">
 
 
             <TextView
@@ -108,22 +99,20 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/button_logout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/bg_splash"
-            android:padding="5dp"
-            android:text="@string/logout"
-            android:textColor="@color/black_dark"
-            android:textSize="@dimen/text_size_normal"
-            />
+
     </RelativeLayout>
 
-
+    <Button
+        android:id="@+id/button_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/primary"
+        android:text="@string/logout"
+        android:textColor="@color/black_dark"
+        android:textSize="@dimen/text_size_normal"
+        />
 </RelativeLayout>

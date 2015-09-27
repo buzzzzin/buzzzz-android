@@ -51,7 +51,7 @@ public class MyProfileActivity extends BaseActivity {
     private static final String TAG = "MyProfileActivity";
 
 
-    private RelativeLayout mRelativeLayoutProfileContainer;
+//    private RelativeLayout mRelativeLayoutProfileContainer;
     private CoordinatorLayout mCoordinatorLayout;
     private ImageView mImageViewProfile;
     private TextView mTexViewGender, mTextViewEmail, mTextViewPhone, mTextViewCountry, mTextViewMyInterest, mTextViewBuzz;
@@ -69,11 +69,10 @@ public class MyProfileActivity extends BaseActivity {
 
         linkViews();
         requestProfileData();
-        updateDimension();
+//        updateDimension();
     }
 
     private void linkViews() {
-        mRelativeLayoutProfileContainer = (RelativeLayout) findViewById(R.id.relativelayout_profile_container);
         mImageViewProfile = (ImageView) findViewById(R.id.imageview_profile);
         mTexViewGender = (TextView) findViewById(R.id.textview_gender);
         mTextViewEmail = (TextView) findViewById(R.id.textview_email);
@@ -143,14 +142,7 @@ public class MyProfileActivity extends BaseActivity {
     }
 
 
-    private void updateDimension() {
-        Point point = Utility.getDisplayPoint(mActivity);
-        int width = point.x;
-        int height = (int) (point.y / 1.25);
-        ViewGroup.LayoutParams layoutParams = mRelativeLayoutProfileContainer.getLayoutParams();
-        layoutParams.width = width;
-        layoutParams.height = height;
-    }
+
 
     private void requestProfileData() {
 
@@ -249,7 +241,7 @@ public class MyProfileActivity extends BaseActivity {
 
             }
 
-            if (buzzCreated.endsWith(",")) {
+            if (buzzCreated.endsWith(" , ")) {
                 buzzCreated = buzzCreated.substring(0, buzzCreated.length() - 3);
             }
             mTextViewBuzz.setText("My Buzzzz: " + buzzCreated);
