@@ -37,6 +37,7 @@
                     android:id="@+id/imageview_buzz_pic"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
+                    android:scaleType="fitXY"
                     android:layout_below="@+id/toolbar"/>
             </LinearLayout>
 
@@ -71,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:hint="Enter space separated interest"
+                android:hint="Enter interest"
                 android:imeOptions="actionDone|flagNoFullscreen"
                 android:singleLine="true"/>
 
@@ -113,6 +114,13 @@
             <TextView
                 android:id="@+id/textview_start_time"
                 android:text="Select start Date and Time"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/textview_end_time"
+                android:text="Select end Date and Time"
                 android:padding="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

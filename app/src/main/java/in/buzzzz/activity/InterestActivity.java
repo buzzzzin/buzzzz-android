@@ -37,7 +37,6 @@ public class InterestActivity extends BaseActivity {
         setContentView(R.layout.activity_interest);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getViewsId();
         requestInterest();
     }

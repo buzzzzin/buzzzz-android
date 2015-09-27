@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -51,6 +52,7 @@ public class BuzzDetailActivity extends BaseActivity {
     private Button mButtonYes, mButtonNo, mButtonMayBe;
     private CollapsingToolbarLayout mCollapsingToolbar;
     private RelativeLayout mRelativeLayoutIsRsvp;
+    private ImageView mImageViewBuzzPic;
 
     private RecyclerView mRecyclerViewChat;
     List<ChatInfo> chatInfoList = new ArrayList<>();
@@ -110,6 +112,7 @@ public class BuzzDetailActivity extends BaseActivity {
             mCollapsingToolbar.setTitle("Buzzzz name");
         }
         mRecyclerViewChat = (RecyclerView) findViewById(R.id.recyclerview_following);
+        mImageViewBuzzPic = (ImageView) findViewById(R.id.imageview_buzz_pic);
 
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mActivity);
         mRecyclerViewChat.setLayoutManager(mLinearLayoutManager);
@@ -370,5 +373,6 @@ public class BuzzDetailActivity extends BaseActivity {
         String response = String.format("%s Going | %s Not going | %s May be", stats.getGoingCount(), stats.getNotComingCount(), stats.getMayBeCount());
         mTextViewResponse.setText(response);
         updateRsvbButton(buzzPreview.getRsvp());
+        Utility.setImageFromUrl(Api.BASE_URL_CLOUDINARY_BUZZZZ + buzzPreview.getImageName(), mImageViewBuzzPic);
     }
 }

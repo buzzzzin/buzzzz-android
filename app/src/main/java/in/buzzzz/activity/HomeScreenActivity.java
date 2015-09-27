@@ -245,7 +245,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                 intent.putExtra(AppConstants.EXTRA_FROM, HomeScreenActivity.TAG);
                 startActivity(intent);
 
-
             }
         });
 
@@ -288,7 +287,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                         mBuzzPreviewList = buzzList.getBuzzPreviewList();
                         setData();
                         setInterestData();
-
                     }
                 } else {
                     Utility.showToastMessage(mActivity, model.getMessage());
@@ -404,7 +402,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                 }
                 break;
         }
-
     }
 
     @Override
@@ -421,7 +418,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
 
         }*/
         return false;
-
     }
 
     @Override
@@ -432,7 +428,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
         spinner.setAdapter(dataAdapter); // set the adapter to provide layout of rows and content
         spinner.setOnItemSelectedListener(onItemSelectedListener); // set the listener, to perform actions based on item selection
         return true;
-
     }
 
     // add items into spinner dynamically
