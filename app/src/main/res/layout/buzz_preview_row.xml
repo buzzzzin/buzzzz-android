@@ -9,8 +9,8 @@
     android:clickable="true"
     android:gravity="center_vertical"
     android:orientation="vertical"
-    android:paddingBottom="10dp"
-    android:paddingTop="10dp">
+    android:paddingBottom="2dp"
+    android:paddingTop="2dp">
 
     <ImageView
         android:id="@+id/imageview_interest_pic"
@@ -19,8 +19,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:background="@mipmap/ic_launcher"
-        android:scaleType="fitXY"
-        />
+        android:scaleType="fitXY"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,8 +29,7 @@
         android:layout_toRightOf="@+id/imageview_interest_pic"
         android:orientation="vertical"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        >
+        android:paddingRight="5dp">
 
         <TextView
             android:id="@+id/textview_interest_name"
@@ -40,9 +38,8 @@
             android:layout_centerVertical="true"
             android:layout_gravity="left"
             android:textColor="@android:color/black"
-            tool:text="Buzz Name"
-
-            />
+            android:textStyle="bold"
+            tool:text="Buzz Name"/>
 
         <TextView
             android:id="@+id/textview_date_time"
@@ -51,43 +48,37 @@
             android:layout_centerVertical="true"
             android:layout_gravity="left"
             android:textColor="@android:color/black"
-            tool:text="Date time"
-
-            />
+            tool:text="Date time"/>
 
         <TextView
             android:id="@+id/textview_subscriber_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
-            tool:text="subcriber count"
-            />
-
+            tool:text="subcriber count"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            >
-        <TextView
-            android:id="@+id/textview_distance"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/imageview_navigation"
-            tool:text="distance"
-            />
+            android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/imageview_navigation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@mipmap/ic_navigation"/>
+            <TextView
+                android:id="@+id/textview_distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/imageview_navigation"
+                android:textColor="@android:color/black"
+                tool:text="distance"/>
+
+            <ImageButton
+                android:id="@+id/imageview_navigation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@mipmap/ic_navigation"/>
         </RelativeLayout>
     </LinearLayout>
 

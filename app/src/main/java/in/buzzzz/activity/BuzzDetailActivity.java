@@ -360,6 +360,12 @@ public class BuzzDetailActivity extends BaseActivity {
                 mButtonYes.setTextColor(getResources().getColor(R.color.accent));
                 mButtonNo.setTextColor(getResources().getColor(R.color.accent));
                 break;
+            case NONE:
+                rsvpMessage = "Are you going?";
+                mTextViewRsvbMessage.setText(rsvpMessage);
+                mButtonMayBe.setTextColor(getResources().getColor(R.color.accent));
+                mButtonYes.setTextColor(getResources().getColor(R.color.accent));
+                mButtonNo.setTextColor(getResources().getColor(R.color.accent));
         }
     }
 
