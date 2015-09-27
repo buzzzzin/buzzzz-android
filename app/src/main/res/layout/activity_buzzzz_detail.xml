@@ -55,18 +55,18 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textview_rsvb_message"
                     android:gravity="right"
-                    android:paddingRight="5dp"
+                    android:orientation="horizontal"
                     android:paddingLeft="5dp"
-                    android:orientation="horizontal">
+                    android:paddingRight="5dp">
 
 
                     <TextView
                         android:id="@+id/button_yes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/rsvp_margin_right"
                         android:background="@color/transparent_white"
                         android:padding="5dp"
-                        android:layout_marginRight="@dimen/rsvp_margin_right"
                         android:text="Yes"
                         android:textColor="@android:color/holo_green_dark"/>
 
@@ -75,9 +75,9 @@
                         android:id="@+id/button_no"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/rsvp_margin_right"
                         android:background="@color/transparent_white"
                         android:padding="5dp"
-                        android:layout_marginRight="@dimen/rsvp_margin_right"
 
 
                         android:text="No"
@@ -88,78 +88,94 @@
                         android:id="@+id/button_maybe"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/rsvp_margin_right"
                         android:background="@color/transparent_white"
                         android:padding="5dp"
-                        android:layout_marginRight="@dimen/rsvp_margin_right"
                         android:text="May be"
                         android:textColor="@color/accent"/>
                 </LinearLayout>
 
+            </RelativeLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="parallax"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#eeeeee"
+        android:orientation="vertical"
+        android:padding="5dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <TextView
+                android:id="@+id/textview_venue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@+id/imageview_navigation"/>
+
+            <ImageButton
+                android:id="@+id/imageview_navigation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@mipmap/ic_navigation"/>
         </RelativeLayout>
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <TextView
+            android:id="@+id/textview_start"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_collapseMode="parallax"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+            android:layout_height="wrap_content"/>
 
-    </android.support.design.widget.CollapsingToolbarLayout>
+        <TextView
+            android:id="@+id/textview_response"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-</android.support.design.widget.AppBarLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview_following"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
-<LinearLayout
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="#eeeeee"
-android:orientation="vertical"
-android:padding="5dp"
-app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <LinearLayout
+            android:id="@+id/linearlyt_send_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-<TextView
-    android:id="@+id/textview_venue"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Message"
+                android:inputType="textShortMessage|textMultiLine|textCapSentences"
+                android:maxLines="2"/>
 
-<TextView
-    android:id="@+id/textview_start"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
-
-<TextView
-    android:id="@+id/textview_response"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
-
-<android.support.v7.widget.RecyclerView
-    android:id="@+id/recyclerview_following"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"/>
-
-<LinearLayout
-    android:id="@+id/linearlyt_send_msg"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal">
-
-    <EditText
-        android:id="@+id/message"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Message"
-        android:inputType="textShortMessage|textMultiLine|textCapSentences"
-        android:maxLines="2"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@mipmap/ic_vod_send"
-        android:onClick="sendMessage"/>
-</LinearLayout>
-</LinearLayout>
-    </android.support.design.widget.CoordinatorLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@mipmap/ic_vod_send"
+                android:onClick="sendMessage"/>
+        </LinearLayout>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

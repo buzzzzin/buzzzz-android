@@ -78,7 +78,7 @@
     <LinearLayout
         android:id="@+id/linear_bottombar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         >

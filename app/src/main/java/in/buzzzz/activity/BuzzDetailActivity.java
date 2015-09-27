@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -78,9 +79,21 @@ public class BuzzDetailActivity extends BaseActivity {
                 case R.id.button_maybe:
                     sendRsvbResponse(ApiDetails.RSVP.MAY_BE);
                     break;
+
+                case R.id.imageview_navigation:
+                    if (mBuzzPreview != null && mBuzzPreview.getLocation() != null && !mBuzzPreview.getLocation().getLatitude().isEmpty()) {
+                        Utility.navigateTo(mActivity, mBuzzPreview.getLocation().getLatitude(), mBuzzPreview.getLocation().getLongitude());
+
+                    } else {
+                        Utility.showToastMessage(mActivity, "No Location infromation available.");
+                    }
+                    break;
+
             }
         }
     };
+    private ImageButton imageViewNavigation;
+    private BuzzPreview mBuzzPreview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,10 +138,13 @@ public class BuzzDetailActivity extends BaseActivity {
         mButtonYes = (TextView) findViewById(R.id.button_yes);
         mButtonNo = (TextView) findViewById(R.id.button_no);
         mButtonMayBe = (TextView) findViewById(R.id.button_maybe);
+        imageViewNavigation = (ImageButton) findViewById(R.id.imageview_navigation);
+
 
         mButtonYes.setOnClickListener(mOnClickListener);
         mButtonNo.setOnClickListener(mOnClickListener);
         mButtonMayBe.setOnClickListener(mOnClickListener);
+        imageViewNavigation.setOnClickListener(mOnClickListener);
     }
 
     private void setDataInChatAdapter() {
@@ -294,6 +310,8 @@ public class BuzzDetailActivity extends BaseActivity {
                 Logger.i(TAG, "model: " + model);
                 if (model.getStatus() == ApiDetails.STATUS_SUCCESS) {
                     if (model instanceof BuzzPreview) {
+
+                        mBuzzPreview = (BuzzPreview) model;
                         displayBuzzPreview((BuzzPreview) model);
                     }
                 } else {
