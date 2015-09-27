@@ -30,10 +30,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/grey"
-            android:padding="5dp"
+            android:padding="3dp"
             android:text="Trending Interests"
             android:textColor="@android:color/black"
-            android:textSize="@dimen/text_size_medium"/>
+            android:textSize="@dimen/text_size_normal"/>
 
         <HorizontalScrollView
 
@@ -47,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="10dp"
+                android:padding="2dp"
                 android:scrollbars="none"
                 >
 
@@ -60,10 +60,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/grey"
-            android:padding="5dp"
+            android:padding="3dp"
             android:text="Buzz Arround"
             android:textColor="@android:color/black"
-            android:textSize="@dimen/text_size_medium"/>
+            android:textSize="@dimen/text_size_normal"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview_buzz"
