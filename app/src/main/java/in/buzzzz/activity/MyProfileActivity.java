@@ -45,9 +45,7 @@ import in.buzzzz.utility.Utility;
 /**
  * Created by Navkrishna on September 26, 2015
  */
-public class MyProfileActivity extends BaseActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        ResultCallback<People.LoadPeopleResult> {
+public class MyProfileActivity extends BaseActivity {
 
 
     private static final String TAG = "MyProfileActivity";
@@ -63,8 +61,6 @@ public class MyProfileActivity extends BaseActivity implements
     private CollapsingToolbarLayout mCollapsingToolbar;
     private Button mButtonLogout;
 
-    GoogleApiClient mGoogleApiClient;
-    boolean mSignInClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +70,7 @@ public class MyProfileActivity extends BaseActivity implements
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(MyProfileActivity.this)
-                .addOnConnectionFailedListener(this).addApi(Plus.API)
-                .addScope(Plus.SCOPE_PLUS_LOGIN).build();
+
         linkViews();
         requestProfileData();
         updateDimension();
@@ -148,13 +141,6 @@ public class MyProfileActivity extends BaseActivity implements
             LoginManager loginManager = LoginManager.getInstance();
             loginManager.logOut();
 
-            if (mGoogleApiClient.isConnected()) {
-                Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                mGoogleApiClient.disconnect();
-                mGoogleApiClient.connect();
-                // updateUI(false);
-                System.err.println("LOG OUT ^^^^^^^^^^^^^^^^^^^^ SUCESS");
-            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -287,44 +273,4 @@ public class MyProfileActivity extends BaseActivity implements
     }
 
 
-    @Override
-    public void onConnected(Bundle arg0) {
-        // TODO Auto-generated method stub
-        mSignInClicked = false;
-
-        // updateUI(true);
-        Plus.PeopleApi.loadVisible(mGoogleApiClient, null).setResultCallback(
-                MyProfileActivity.this);
-    }
-
-    @Override
-    public void onConnectionSuspended(int arg0) {
-        // TODO Auto-generated method stub
-        mGoogleApiClient.connect();
-        // updateUI(false);
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult arg0) {
-        // TODO Auto-generated method stub
-
-    }
-
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-
-    protected void onStop() {
-        super.onStop();
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-    }
-
-    @Override
-    public void onResult(People.LoadPeopleResult arg0) {
-        // TODO Auto-generated method stub
-
-    }
 }
