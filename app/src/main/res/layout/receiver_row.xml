@@ -11,8 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:background="@android:color/holo_blue_light"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
 
         <ImageView
             android:id="@+id/imageview_profile_pic"
@@ -20,12 +21,14 @@
             android:layout_height="@dimen/chat_profile_image"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:background="@mipmap/ic_launcher"/>
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/imageview_profile_pic"
+            android:background="@drawable/shape_receiver"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
@@ -35,8 +38,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_toLeftOf="@+id/imageview_profile_pic"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:textStyle="bold"
                 tool:text="fdjfdjlkfj"/>
 
@@ -47,8 +50,8 @@
                 android:layout_below="@+id/txtview_name"
                 android:layout_gravity="left"
                 android:layout_toLeftOf="@+id/imageview_profile_pic"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 tool:text="fdjfdjlkfj"/>
 
         </LinearLayout>

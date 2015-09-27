@@ -216,8 +216,9 @@ public class BuzzDetailActivity extends BaseActivity {
             chatInfo.setSenderName(mSenderName);
             String imageName = Api.BASE_URL_CLOUDINARY_SOCIAL
                     + SharedPreference.getString(mActivity, AppConstants.PREF_KEY_MEDIUM_TYPE).toLowerCase()
-                    + "/"
-                    + SharedPreference.getString(mActivity, AppConstants.PREF_KEY_MEDIUM_ID);
+                    + "/q_50,r_100,h_50,w_50/"
+                    + SharedPreference.getString(mActivity, AppConstants.PREF_KEY_MEDIUM_ID)
+                    + ".png";
             chatInfo.setImageUrl(imageName);
             JSONObject jsonObject = getChatJson(chatInfo, Api.CHAT_CHANNEL_BUZZ + mChannelId);
             mWebSocketClient.send(String.valueOf(jsonObject));
