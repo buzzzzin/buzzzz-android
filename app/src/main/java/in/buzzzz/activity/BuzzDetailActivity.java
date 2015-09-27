@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -375,7 +374,11 @@ public class BuzzDetailActivity extends BaseActivity {
 //            mTextViewRsvbMessage.setText("You are going!!");
             BuzzPreview.Stats stats = buzzPreview.getStats();
             String response = String.format("%s Going | %s Not going | %s May be", stats.getGoingCount(), stats.getNotComingCount(), stats.getMayBeCount());
+            mButtonMayBe.append(String.format(" (%s)", stats.getMayBeCount()));
+            mButtonNo.append(String.format(" (%s)", stats.getNotComingCount()));
+            mButtonYes.append(String.format(" (%s)", stats.getGoingCount()));
             mTextViewResponse.setText(response);
+            mTextViewResponse.setVisibility(View.GONE);
         } else {
             mRelativeLayoutIsRsvp.setVisibility(View.GONE);
             mTextViewResponse.setVisibility(View.GONE);
