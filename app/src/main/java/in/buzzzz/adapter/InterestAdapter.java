@@ -96,10 +96,7 @@ public class InterestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     private void subscribeInterest(Interest interest) {
-        Utility.showToastMessage(mActivity, interest.getName());
         requestSubscribeInerest(interest);
-
-
     }
 
 

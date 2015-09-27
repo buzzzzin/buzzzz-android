@@ -286,6 +286,7 @@ public class BuzzListActivity extends BaseActivity implements ResultCallback<Loc
 
                         break;
                     case Activity.RESULT_CANCELED:
+                        requestBuzzByInterest();
 
                         break;
                 }
