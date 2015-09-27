@@ -282,6 +282,12 @@ public final class Utility {
         ImageLoader.getInstance().displayImage(imageUrl, imageView, options, null);
     }
 
+    public static void setImageFromUrl(String imageUrl, ImageView imageView) {
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .resetViewBeforeLoading(true).cacheInMemory(true).build();
+        ImageLoader.getInstance().displayImage(imageUrl, imageView, options, null);
+    }
+
     public static Point getDisplayPoint(Context context) {
         Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
         Point size = new Point();
