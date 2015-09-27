@@ -39,11 +39,13 @@ import java.util.List;
 import in.buzzzz.R;
 import in.buzzzz.loader.APICaller;
 import in.buzzzz.loader.LoaderCallback;
+import in.buzzzz.model.BuzzPreview;
 import in.buzzzz.model.CloudinaryDetail;
 import in.buzzzz.model.Interest;
 import in.buzzzz.model.InterestInfo;
 import in.buzzzz.model.Model;
 import in.buzzzz.model.Request;
+import in.buzzzz.parser.BuzzPreviewParser;
 import in.buzzzz.parser.CloudinaryParser;
 import in.buzzzz.parser.InterestParser;
 import in.buzzzz.utility.Api;
@@ -71,7 +73,7 @@ public class CreateBuzzActivity extends BaseActivity {
     private List<Interest> mInterestList;
     private AutoCompleteTextView mAutoCompleteTextViewInterest;
     private JSONArray jsonArrayInterst = new JSONArray();
-    private String mStartDateTime, mEndDateTime;
+    private String mStartDateTime = "", mEndDateTime = "";
     private String mImagePath = "";
 
     @Override
@@ -80,6 +82,7 @@ public class CreateBuzzActivity extends BaseActivity {
         setContentView(R.layout.activity_create_buzz);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.title_activity_create_buzz);
         linkViewsId();
         requestInterest();
@@ -168,19 +171,47 @@ public class CreateBuzzActivity extends BaseActivity {
         });
     }
 
-    private void requestCreatBuzz() {
+    private void requestCreatBuzz(String imageName) {
         HashMap<String, String> params = new HashMap<>();
         params.put(ApiDetails.REQUEST_KEY_NAME, mEditTextBuzzTitle.getText().toString().trim());
-        params.put(ApiDetails.REQUEST_KEY_IMAGE_NAME, "");
+        params.put(ApiDetails.REQUEST_KEY_IMAGE_NAME, imageName);
         params.put(ApiDetails.REQUEST_KEY_IS_RSVP, String.valueOf(mCheckboxIsRsvp.isChecked()));
         params.put(ApiDetails.REQUEST_KEY_LATITUDE, "");
         params.put(ApiDetails.REQUEST_KEY_LONGITUDE, "");
         params.put(ApiDetails.REQUEST_KEY_ADDRESS, "");
-        params.put(ApiDetails.REQUEST_KEY_START_TIME, "");
-        params.put(ApiDetails.REQUEST_KEY_END_TIME, "");
+        params.put(ApiDetails.REQUEST_KEY_START_TIME, mStartDateTime);
+        params.put(ApiDetails.REQUEST_KEY_END_TIME, mEndDateTime);
         params.put(ApiDetails.REQUEST_KEY_PERIOD, ApiDetails.PERIOD.ONCE.name());
         params.put(ApiDetails.REQUEST_KEY_TAGS, ""); // json array
         params.put(ApiDetails.REQUEST_KEY_INTERESTS, jsonArrayInterst.toString()); // json array
+        Request request = new Request(ApiDetails.ACTION_NAME.CREATE_BUZZ);
+        request.setParamMap(params);
+        request.setShowDialog(true);
+        request.setDialogMessage(getString(R.string.progress_dialog_msg));
+        request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.CREATE_BUZZ.getActionName());
+        request.setRequestType(Request.HttpRequestType.POST);
+        LoaderCallback loaderCallback = new LoaderCallback(mActivity, new BuzzPreviewParser());
+        boolean hasNetwork = loaderCallback.requestToServer(request);
+        loaderCallback.setServerResponse(new APICaller() {
+
+            @Override
+            public void onComplete(Model model) {
+
+                if (model.getStatus() == 1) {
+                    if (model instanceof BuzzPreview) {
+                        BuzzPreview buzzPreview = (BuzzPreview) model;
+                        Intent intent = new Intent(mActivity, BuzzDetailActivity.class);
+                        intent.putExtra(AppConstants.EXTRA_BUZZZZ_ID, buzzPreview.getBuzzId());
+                        intent.putExtra(AppConstants.EXTRA_BUZZZZ_NAME, buzzPreview.getName());
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+            }
+        });
+        if (!hasNetwork) {
+            Utility.showToastMessage(mActivity, getString(R.string.no_network));
+        }
     }
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -233,9 +264,11 @@ public class CreateBuzzActivity extends BaseActivity {
             mEditTextBuzzTitle.setError("Enter title");
         } else if (jsonArrayInterst.length() == 0) {
             mAutoCompleteTextViewInterest.setError("Select at least one interest");
+        } else if (mStartDateTime.isEmpty()) {
+            Utility.showToastMessage(mActivity, "Select a start time");
         } else {
             if (mImagePath == null || mImagePath.isEmpty()) {
-                requestCreatBuzz();
+                requestCreatBuzz("");
             } else {
                 uploadImageOnCloudinary(SharedPreference.getString(mActivity, AppConstants.PREF_KEY_USER_ID), mImagePath);
             }
@@ -388,6 +421,7 @@ public class CreateBuzzActivity extends BaseActivity {
                     if (cloudinaryDetail.getPublicId() != null && !cloudinaryDetail.getPublicId().isEmpty()) {
                         String cloudinaryImagePath = cloudinaryDetail.getPublicId();
                         Logger.i("cloudinaryImagePath", cloudinaryImagePath);
+                        requestCreatBuzz(cloudinaryImagePath);
                     }
                 } else {
                     Utility.showToastMessage(mActivity, model.getMessage());
