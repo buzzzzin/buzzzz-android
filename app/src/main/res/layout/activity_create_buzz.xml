@@ -37,8 +37,8 @@
                     android:id="@+id/imageview_buzz_pic"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
-                    android:scaleType="fitXY"
-                    android:layout_below="@+id/toolbar"/>
+                    android:layout_below="@+id/toolbar"
+                    android:scaleType="fitXY"/>
             </LinearLayout>
 
             <EditText
@@ -73,7 +73,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:hint="Enter interest"
-                android:imeOptions="actionDone|flagNoFullscreen"
                 android:singleLine="true"/>
 
             <EditText
@@ -86,14 +85,21 @@
                 android:visibility="gone"/>
 
             <TextView
-                android:id="@+id/textview_choose_venue"
+                android:id="@+id/textview_venue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text=""
+                android:visibility="gone"/>
+
+            <AutoCompleteTextView
+                android:id="@+id/autocompletetextview_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edittext_buzz_desc"
                 android:layout_margin="5dp"
-                android:drawableLeft="@android:drawable/ic_input_get"
-                android:gravity="center_vertical"
-                android:text="Choose venue"/>
+                android:hint="Select venue"
+                android:imeOptions="actionDone|flagNoFullscreen"
+                android:singleLine="true"/>
 
             <CheckBox
                 android:id="@+id/checkbox_is_rsvp"
@@ -113,17 +119,17 @@
 
             <TextView
                 android:id="@+id/textview_start_time"
-                android:text="Select start Date and Time"
-                android:padding="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Select start Date and Time"/>
 
             <TextView
                 android:id="@+id/textview_end_time"
-                android:text="Select end Date and Time"
-                android:padding="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Select end Date and Time"/>
         </LinearLayout>
     </ScrollView>
 

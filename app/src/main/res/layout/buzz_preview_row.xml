@@ -70,6 +70,12 @@
             android:textColor="@android:color/black"
             tool:text="distance"
             />
+
+        <ImageButton
+            android:id="@+id/imageview_navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/ic_navigation"/>
     </LinearLayout>
 
     <ImageView
