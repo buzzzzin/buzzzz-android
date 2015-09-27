@@ -33,7 +33,7 @@ public class MyProfileParser implements Parser<Model> {
             medium.setMediumType(mediumJsonObject.getString(ApiDetails.RESPONSE_KEY_MEDIUM_TYPE));
             myProfile.setMedium(medium);
 
-            JSONObject statsJsonObject = userJsonObject.getJSONObject(ApiDetails.RESPONSE_KEY_STATS);
+            JSONObject statsJsonObject = dataJsonObject.getJSONObject(ApiDetails.RESPONSE_KEY_STATS);
             MyProfile.Stats stats = new MyProfile.Stats();
             stats.setBuzzCount(statsJsonObject.getString(ApiDetails.RESPONSE_KEY_BUZZ_COUNT));
             stats.setInterestCount(statsJsonObject.getString(ApiDetails.RESPONSE_KEY_INTEREST_COUNT));

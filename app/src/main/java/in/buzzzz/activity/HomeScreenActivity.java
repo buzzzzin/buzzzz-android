@@ -225,7 +225,9 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
             public void onClick(View v) {
 
                 if (SharedPreference.getBoolean(mActivity, AppConstants.PREF_KEY_IS_LOGGED_IN)) {
-                    //:TODO show profile screen
+                    Intent intent = new Intent(mActivity, MyProfileActivity.class);
+                    startActivity(intent);
+
                 } else {
                     Intent intent = new Intent(mActivity, LoginActivity.class);
                     startActivity(intent);

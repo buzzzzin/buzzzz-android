@@ -16,8 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_above="@+id/linear_layout_login_container"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:background="@android:color/white"/>
 
     <LinearLayout
@@ -27,7 +27,11 @@
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="20dp"
+        >
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/login_button_facebook"
@@ -38,7 +42,7 @@
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button_google_plus"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="35dp"
             android:layout_weight=".5"/>
     </LinearLayout>
 

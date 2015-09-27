@@ -16,6 +16,7 @@ public final class ApiDetails {
         INTEREST_SUBSCRIBE("/interest/subscribe"),
         BUZZ_BUZZ_BY_INTEREST("/buzz/buzzByInterest"),
         BUZZ_TRENDING("/buzz/trending"),
+        AUTH_LOGOUT("/auth/logout"),
         UPLOAD("UPLOAD"),
         NONE("");
 
@@ -165,8 +166,8 @@ public final class ApiDetails {
     //    My Profile
     public static final String RESPONSE_KEY_MOBILE = "mobile";
     public static final String RESPONSE_KEY_COUNTRY = "country";
-    public static final String RESPONSE_KEY_BUZZ_COUNT = "buzz_count";
-    public static final String RESPONSE_KEY_INTEREST_COUNT = "interest_count";
+    public static final String RESPONSE_KEY_BUZZ_COUNT = "buzzCount";
+    public static final String RESPONSE_KEY_INTEREST_COUNT = "interestCount";
 
     //    REQUEST KEYS
     public static final String REQUEST_KEY_DESTINATION = "destination";

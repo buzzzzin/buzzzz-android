@@ -175,6 +175,9 @@ public class LoginActivity extends BaseActivity {
         mFacebookLoginButton = (LoginButton) findViewById(R.id.login_button_facebook);
         mSignInButton = (SignInButton) findViewById(R.id.sign_in_button_google_plus);
 
+        /*ViewGroup.LayoutParams layoutParamsGPlus = mFacebookLoginButton.getLayoutParams();
+        mSignInButton.setLayoutParams(layoutParamsGPlus);*/
+
         mFacebookLoginButton.setReadPermissions(READ_PERMISSIONS);
         mFacebookLoginButton.registerCallback(mFacebookCallbackManager, mFacebookCallback);
 
@@ -312,6 +315,7 @@ public class LoginActivity extends BaseActivity {
 
     private void showHomeScreen() {
         Intent intent = new Intent(mActivity, HomeScreenActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
