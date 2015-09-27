@@ -229,8 +229,16 @@ public class BuzzListActivity extends BaseActivity implements ResultCallback<Loc
     }
 
     private void setData() {
+
+
+        if (mBuzzPreviewList != null && mBuzzPreviewList.size() > 0) {
         BuzzAdapter interestAdapter = new BuzzAdapter(mActivity, mBuzzPreviewList,mLocation);
         recyclerViewBuzz.setAdapter(interestAdapter);
+
+        } else {
+            Utility.showToastMessage(mActivity, getString(R.string.increase_range_msg));
+
+        }
     }
 
 

@@ -51,14 +51,10 @@ public class MyProfileActivity extends BaseActivity {
     private static final String TAG = "MyProfileActivity";
 
 
-    private RelativeLayout mRelativeLayoutProfileContainer;
+//    private RelativeLayout mRelativeLayoutProfileContainer;
     private CoordinatorLayout mCoordinatorLayout;
-    private AppBarLayout mAppBarLayout;
-    private CollapsingToolbarLayout mCollapsingToolbarLayout;
-    private RelativeLayout mRelativeLayoutProfileDetailContainer;
     private ImageView mImageViewProfile;
     private TextView mTexViewGender, mTextViewEmail, mTextViewPhone, mTextViewCountry, mTextViewMyInterest, mTextViewBuzz;
-    private CollapsingToolbarLayout mCollapsingToolbar;
     private Button mButtonLogout;
 
 
@@ -73,15 +69,10 @@ public class MyProfileActivity extends BaseActivity {
 
         linkViews();
         requestProfileData();
-        updateDimension();
+//        updateDimension();
     }
 
     private void linkViews() {
-        mRelativeLayoutProfileContainer = (RelativeLayout) findViewById(R.id.relativelayout_profile_container);
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorlayout);
-        mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
-        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        mRelativeLayoutProfileDetailContainer = (RelativeLayout) findViewById(R.id.relativelayout_profile_detail_container);
         mImageViewProfile = (ImageView) findViewById(R.id.imageview_profile);
         mTexViewGender = (TextView) findViewById(R.id.textview_gender);
         mTextViewEmail = (TextView) findViewById(R.id.textview_email);
@@ -90,7 +81,6 @@ public class MyProfileActivity extends BaseActivity {
 
         mTextViewMyInterest = (TextView) findViewById(R.id.textview_interest);
         mTextViewBuzz = (TextView) findViewById(R.id.textview_total_buzz);
-        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
         mButtonLogout = (Button) findViewById(R.id.button_logout);
         mButtonLogout.setOnClickListener(new View.OnClickListener() {
@@ -152,14 +142,7 @@ public class MyProfileActivity extends BaseActivity {
     }
 
 
-    private void updateDimension() {
-        Point point = Utility.getDisplayPoint(mActivity);
-        int width = point.x;
-        int height = (int) (point.y / 1.25);
-        ViewGroup.LayoutParams layoutParams = mRelativeLayoutProfileContainer.getLayoutParams();
-        layoutParams.width = width;
-        layoutParams.height = height;
-    }
+
 
     private void requestProfileData() {
 
@@ -201,9 +184,9 @@ public class MyProfileActivity extends BaseActivity {
 
 
         if (myProfile.getName() != null) {
-            mCollapsingToolbar.setTitle(myProfile.getName());
+//            mCollapsingToolbar.setTitle(myProfile.getName());
         } else {
-            mCollapsingToolbar.setTitle("My Profile");
+//            mCollapsingToolbar.setTitle("My Profile");
         }
 
         if (myProfile.getGender() != null && !myProfile.getGender().name().isEmpty()) {
@@ -258,7 +241,7 @@ public class MyProfileActivity extends BaseActivity {
 
             }
 
-            if (buzzCreated.endsWith(",")) {
+            if (buzzCreated.endsWith(" , ")) {
                 buzzCreated = buzzCreated.substring(0, buzzCreated.length() - 3);
             }
             mTextViewBuzz.setText("My Buzzzz: " + buzzCreated);

@@ -116,10 +116,26 @@
         android:padding="5dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
-            android:id="@+id/textview_venue"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            >
+
+            <TextView
+                android:id="@+id/textview_venue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@+id/imageview_navigation"/>
+
+            <ImageButton
+                android:id="@+id/imageview_navigation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@mipmap/ic_navigation"/>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/textview_start"

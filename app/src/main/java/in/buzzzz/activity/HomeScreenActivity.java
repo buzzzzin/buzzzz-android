@@ -71,6 +71,7 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
     private String mRadius = "10000";
     List<String> mRadiusArrayList = new ArrayList<String>();
     List<String> mRadiusArrayToSend = new ArrayList<String>();
+    private TextView mTextViewBuzzHeader, mTextViewTrendingHeader;
 
 
     private GoogleApiClient mGoogleApiClient;
@@ -206,6 +207,11 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                 requestHomeBuzz(false);
             }
         });*/
+
+        mTextViewBuzzHeader = (TextView) findViewById(R.id.texview_buzz_header);
+        mTextViewTrendingHeader = (TextView) findViewById(R.id.texview_interest_header);
+        mTextViewBuzzHeader.setVisibility(View.GONE);
+        mTextViewTrendingHeader.setVisibility(View.GONE);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.VISIBLE);
         recyclerViewBuzz = (RecyclerView) findViewById(R.id.recyclerview_buzz);
@@ -302,40 +308,57 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
     }
 
     private void setData() {
-        BuzzAdapter interestAdapter = new BuzzAdapter(mActivity, mBuzzPreviewList, mLocation);
-        recyclerViewBuzz.setAdapter(interestAdapter);
+        if (mBuzzPreviewList != null && mBuzzPreviewList.size() > 0) {
+            BuzzAdapter interestAdapter = new BuzzAdapter(mActivity, mBuzzPreviewList, mLocation);
+            recyclerViewBuzz.setAdapter(interestAdapter);
+            mTextViewBuzzHeader.setVisibility(View.VISIBLE);
+
+        } else {
+            mTextViewBuzzHeader.setVisibility(View.GONE);
+            Utility.showToastMessage(mActivity, getString(R.string.increase_range_msg));
+
+        }
+
     }
 
     private void setInterestData() {
 
-        for (int i = 0; i < mInterestList.size(); i++) {
-            Interest interest = mInterestList.get(i);
-            View child = getLayoutInflater().inflate(R.layout.home_interest_header, null);
-            linearHorizontalView.addView(child);
+        if (mInterestList != null && mInterestList.size() > 0) {
+            mTextViewTrendingHeader.setVisibility(View.VISIBLE);
 
-            LinearLayout linearLayoutInterest = (LinearLayout) child.findViewById(R.id.shapeLayout);
-            linearLayoutInterest.setTag(i);
-            TextView textviewName = (TextView) child.findViewById(R.id.textview_interest_name);
-            textviewName.setText(interest.getName());
-            ImageView imageViewInterestPics = (ImageView) child.findViewById(R.id.imageview_interest_pic);
-            Utility.setImageFromUrl(Api.BASE_URL_CLOUDINARY_BUZZZZ + mInterestList.get(i).getImageName(), imageViewInterestPics, R.mipmap.ic_launcher);
-            linearLayoutInterest.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    int position = (Integer) v.getTag();
+            for (int i = 0; i < mInterestList.size(); i++) {
+                Interest interest = mInterestList.get(i);
+                View child = getLayoutInflater().inflate(R.layout.home_interest_header, null);
+                linearHorizontalView.addView(child);
 
-                    Interest pickedInterest = mInterestList.get(position);
-                    Intent intent = new Intent(mActivity, BuzzListActivity.class);
+                LinearLayout linearLayoutInterest = (LinearLayout) child.findViewById(R.id.shapeLayout);
+                linearLayoutInterest.setTag(i);
+                TextView textviewName = (TextView) child.findViewById(R.id.textview_interest_name);
+                textviewName.setText(interest.getName());
+                ImageView imageViewInterestPics = (ImageView) child.findViewById(R.id.imageview_interest_pic);
+                Utility.setImageFromUrl(Api.BASE_URL_CLOUDINARY_BUZZZZ + mInterestList.get(i).getImageName(), imageViewInterestPics, R.mipmap.ic_launcher);
+                linearLayoutInterest.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                    //sending Interest tag because both Interest activity and Home has same interest list
-                    intent.putExtra(AppConstants.EXTRA_FROM, InterestActivity.TAG);
-                    intent.putExtra(AppConstants.EXTRA_INTEREST_NAME, pickedInterest.getName());
-                    intent.putExtra(AppConstants.EXTRA_INTEREST_ID, pickedInterest.getId());
-                    mActivity.startActivity(intent);
-                }
-            });
+                        int position = (Integer) v.getTag();
 
+                        Interest pickedInterest = mInterestList.get(position);
+                        Intent intent = new Intent(mActivity, BuzzListActivity.class);
+
+                        //sending Interest tag because both Interest activity and Home has same interest list
+                        intent.putExtra(AppConstants.EXTRA_FROM, InterestActivity.TAG);
+                        intent.putExtra(AppConstants.EXTRA_INTEREST_NAME, pickedInterest.getName());
+                        intent.putExtra(AppConstants.EXTRA_INTEREST_ID, pickedInterest.getId());
+                        mActivity.startActivity(intent);
+                    }
+                });
+
+
+            }
+        } else {
+            mTextViewTrendingHeader.setVisibility(View.VISIBLE);
 
         }
 
