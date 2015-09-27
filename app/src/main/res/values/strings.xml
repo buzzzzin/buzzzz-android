@@ -18,4 +18,5 @@
     <string name="label_remove_image"><u>Remove Image</u></string>
     <string name="msg_image_not_uploaded">Please try again, unable to upload image</string>
     <string name="msg_image_not_deleted">Please try again, unable to delete image</string>
+    <string name="menu_title">filter</string>
 </resources>
