@@ -165,6 +165,7 @@ public final class ApiDetails {
     public static final String REQUEST_KEY_DATA = "data";
     public static final String REQUEST_KEY_TOKEN = "token";
     public static final String REQUEST_KEY_TYPE = "type";
+    public static final String REQUEST_KEY_RECEIVER_ID = "receiverId";
 
     //    Cloudinary keys
     public static final String REQUEST_KEY_CLOUDINARY_API_KEY = "api_key";

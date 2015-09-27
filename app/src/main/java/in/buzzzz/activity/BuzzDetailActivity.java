@@ -144,7 +144,7 @@ public class BuzzDetailActivity extends BaseActivity {
     private void connectWebSocket() {
         URI uri;
         try {
-            uri = new URI(Api.CHAT_HOST_URL + Api.CHAT_CHANNEL + mChannelId);
+            uri = new URI(Api.CHAT_HOST_URL + Api.CHAT_CHANNEL_BUZZ + mChannelId);
         } catch (URISyntaxException e) {
             e.printStackTrace();
             Logger.i("uri not valid", e.toString() + "");
@@ -203,7 +203,7 @@ public class BuzzDetailActivity extends BaseActivity {
                 + "/"
                 + SharedPreference.getString(mActivity, AppConstants.PREF_KEY_MEDIUM_ID);
         chatInfo.setImageUrl(imageName);
-        JSONObject jsonObject = getChatJson(chatInfo, Api.CHAT_CHANNEL + mChannelId);
+        JSONObject jsonObject = getChatJson(chatInfo, Api.CHAT_CHANNEL_BUZZ + mChannelId);
         mWebSocketClient.send(String.valueOf(jsonObject));
         Logger.i("send msg", jsonObject.toString());
     }
@@ -219,7 +219,7 @@ public class BuzzDetailActivity extends BaseActivity {
                     + "/"
                     + SharedPreference.getString(mActivity, AppConstants.PREF_KEY_MEDIUM_ID);
             chatInfo.setImageUrl(imageName);
-            JSONObject jsonObject = getChatJson(chatInfo, Api.CHAT_CHANNEL + mChannelId);
+            JSONObject jsonObject = getChatJson(chatInfo, Api.CHAT_CHANNEL_BUZZ + mChannelId);
             mWebSocketClient.send(String.valueOf(jsonObject));
             Logger.i("send msg", jsonObject.toString());
             mEditText.setText("");
@@ -229,7 +229,8 @@ public class BuzzDetailActivity extends BaseActivity {
     private void parseData(String message) {
         JSONObject jsonObject;
         try {
-            jsonObject = new JSONObject(message);
+            JSONObject djsonObject = new JSONObject(message);
+            jsonObject = djsonObject.getJSONObject(ApiDetails.RESPONSE_KEY_DATA);
             ChatInfo chatInfo = new ChatInfo();
             chatInfo.setMessage(jsonObject.getString(ApiDetails.REQUEST_KEY_MESSAGE));
             chatInfo.setImageUrl(jsonObject.getString(ApiDetails.REQUEST_KEY_IMAGE_URL));
@@ -269,6 +270,7 @@ public class BuzzDetailActivity extends BaseActivity {
             jsonObjectData.put(ApiDetails.REQUEST_KEY_SENDER_NAME, chatInfo.getSenderName());
             jsonObjectData.put(ApiDetails.REQUEST_KEY_MESSAGE, chatInfo.getMessage());
             jsonObjectData.put(ApiDetails.REQUEST_KEY_IMAGE_URL, chatInfo.getImageUrl());
+            jsonObjectData.put(ApiDetails.REQUEST_KEY_RECEIVER_ID, SharedPreference.getString(mActivity, AppConstants.PREF_KEY_USER_ID));
 
             jsonObject.put("data", jsonObjectData);
         } catch (JSONException e) {

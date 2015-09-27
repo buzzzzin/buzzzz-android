@@ -72,7 +72,8 @@ public class CreateBuzzActivity extends BaseActivity {
     private Spinner mSpinnerPeriod;
     private List<Interest> mInterestList;
     private AutoCompleteTextView mAutoCompleteTextViewInterest;
-    private JSONArray jsonArrayInterst = new JSONArray();
+    private JSONArray jsonArrayInterest = new JSONArray();
+    private JSONArray jsonArrayTag = new JSONArray();
     private String mStartDateTime = "", mEndDateTime = "";
     private String mImagePath = "";
 
@@ -159,8 +160,8 @@ public class CreateBuzzActivity extends BaseActivity {
                 HashMap<String, String> interestMap = (HashMap<String, String>) parent.getAdapter().getItem(position);
                 for (Interest interest : mInterestList) {
                     if (interest.getName().equals(interestMap.get(KEY_INTEREST_NAME))) {
-                        jsonArrayInterst.put(interest.getName());
-                        if (jsonArrayInterst.length() > 1)
+                        jsonArrayInterest.put(interest.getName());
+                        if (jsonArrayInterest.length() > 1)
                             mTextViewSelectedInterests.append(", ");
                         mTextViewSelectedInterests.append(interest.getName());
                         mAutoCompleteTextViewInterest.setText("");
@@ -182,8 +183,8 @@ public class CreateBuzzActivity extends BaseActivity {
         params.put(ApiDetails.REQUEST_KEY_START_TIME, mStartDateTime);
         params.put(ApiDetails.REQUEST_KEY_END_TIME, mEndDateTime);
         params.put(ApiDetails.REQUEST_KEY_PERIOD, ApiDetails.PERIOD.ONCE.name());
-        params.put(ApiDetails.REQUEST_KEY_TAGS, ""); // json array
-        params.put(ApiDetails.REQUEST_KEY_INTERESTS, jsonArrayInterst.toString()); // json array
+        params.put(ApiDetails.REQUEST_KEY_TAGS, jsonArrayTag.toString()); // json array
+        params.put(ApiDetails.REQUEST_KEY_INTERESTS, jsonArrayInterest.toString()); // json array
         Request request = new Request(ApiDetails.ACTION_NAME.CREATE_BUZZ);
         request.setParamMap(params);
         request.setShowDialog(true);
@@ -262,7 +263,7 @@ public class CreateBuzzActivity extends BaseActivity {
         String buzzTitle = mEditTextBuzzTitle.getText().toString().trim();
         if (buzzTitle.isEmpty()) {
             mEditTextBuzzTitle.setError("Enter title");
-        } else if (jsonArrayInterst.length() == 0) {
+        } else if (jsonArrayInterest.length() == 0) {
             mAutoCompleteTextViewInterest.setError("Select at least one interest");
         } else if (mStartDateTime.isEmpty()) {
             Utility.showToastMessage(mActivity, "Select a start time");
