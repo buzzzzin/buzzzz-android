@@ -49,7 +49,7 @@ public class BuzzDetailActivity extends BaseActivity {
     private TextView mTextViewVenue;
     private TextView mTextViewStart;
     private TextView mTextViewResponse;
-    private Button mButtonYes, mButtonNo, mButtonMayBe;
+    private TextView mButtonYes, mButtonNo, mButtonMayBe;
     private CollapsingToolbarLayout mCollapsingToolbar;
     private RelativeLayout mRelativeLayoutIsRsvp;
     private ImageView mImageViewBuzzPic;
@@ -122,9 +122,9 @@ public class BuzzDetailActivity extends BaseActivity {
         mTextViewStart = (TextView) findViewById(R.id.textview_start);
         mTextViewResponse = (TextView) findViewById(R.id.textview_response);
         mRelativeLayoutIsRsvp = (RelativeLayout) findViewById(R.id.relativelayout_is_rsvp);
-        mButtonYes = (Button) findViewById(R.id.button_yes);
-        mButtonNo = (Button) findViewById(R.id.button_no);
-        mButtonMayBe = (Button) findViewById(R.id.button_maybe);
+        mButtonYes = (TextView) findViewById(R.id.button_yes);
+        mButtonNo = (TextView) findViewById(R.id.button_no);
+        mButtonMayBe = (TextView) findViewById(R.id.button_maybe);
 
         mButtonYes.setOnClickListener(mOnClickListener);
         mButtonNo.setOnClickListener(mOnClickListener);

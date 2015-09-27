@@ -24,6 +24,17 @@
         android:layout_above="@+id/linear_bottombar"
         android:orientation="vertical">
 
+
+        <TextView
+            android:id="@+id/texview_interest_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/grey"
+            android:padding="5dp"
+            android:text="Trending Interests"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_size_medium"/>
+
         <HorizontalScrollView
 
             android:id="@+id/horizontalScrollView_interest"
@@ -44,6 +55,16 @@
             </LinearLayout>
         </HorizontalScrollView>
 
+        <TextView
+            android:id="@+id/texview_buzz_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/grey"
+            android:padding="5dp"
+            android:text="Buzz Arround"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_size_medium"/>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview_buzz"
             android:layout_width="match_parent"
@@ -57,7 +78,7 @@
     <LinearLayout
         android:id="@+id/linear_bottombar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         >
@@ -69,7 +90,8 @@
             android:layout_weight="1"
             android:background="@drawable/bg_favourites"
             android:text="Profile"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_size_medium"/>
 
         <Button
             android:id="@+id/btn_trending"
@@ -78,7 +100,8 @@
             android:layout_weight="1"
             android:background="@drawable/bg_fans"
             android:text="Trending"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_size_medium"/>
 
 
     </LinearLayout>

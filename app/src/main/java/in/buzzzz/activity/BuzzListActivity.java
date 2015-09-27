@@ -229,7 +229,7 @@ public class BuzzListActivity extends BaseActivity implements ResultCallback<Loc
     }
 
     private void setData() {
-        BuzzAdapter interestAdapter = new BuzzAdapter(mActivity, mBuzzPreviewList);
+        BuzzAdapter interestAdapter = new BuzzAdapter(mActivity, mBuzzPreviewList,mLocation);
         recyclerViewBuzz.setAdapter(interestAdapter);
     }
 
@@ -303,6 +303,8 @@ public class BuzzListActivity extends BaseActivity implements ResultCallback<Loc
         Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
         spinner.setAdapter(dataAdapter); // set the adapter to provide layout of rows and content
         spinner.setOnItemSelectedListener(onItemSelectedListener); // set the listener, to perform actions based on item selection
+        dataAdapter.setDropDownViewResource(R.layout.drop_down_item);
+
         return true;
     }
 
@@ -323,17 +325,17 @@ public class BuzzListActivity extends BaseActivity implements ResultCallback<Loc
 
     // add items into spinner dynamically
     public void addItemOnSpinner() {
-        mRadiusArrayList.add("Radius:1000 m");
-        mRadiusArrayList.add("Radius:2000 m");
-        mRadiusArrayList.add("Radius:3000 m");
-        mRadiusArrayList.add("Radius:4000 m");
-        mRadiusArrayList.add("Radius:5000 m");
+        mRadiusArrayList.add("Radius:10 km");
+        mRadiusArrayList.add("Radius:20 km");
+        mRadiusArrayList.add("Radius:30 km");
+        mRadiusArrayList.add("Radius:40 km");
+        mRadiusArrayList.add("Radius:50 km");
 
-        mRadiusArrayToSend.add("1000");
-        mRadiusArrayToSend.add("2000");
-        mRadiusArrayToSend.add("3000");
-        mRadiusArrayToSend.add("4000");
-        mRadiusArrayToSend.add("5000");
+        mRadiusArrayToSend.add("10000");
+        mRadiusArrayToSend.add("20000");
+        mRadiusArrayToSend.add("30000");
+        mRadiusArrayToSend.add("40000");
+        mRadiusArrayToSend.add("50000");
 
         dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, mRadiusArrayList);
@@ -341,10 +343,9 @@ public class BuzzListActivity extends BaseActivity implements ResultCallback<Loc
         onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                mRadius = mRadiusArrayToSend.get(position);
                 spinnerBugFistTimeLoad = spinnerBugFistTimeLoad + 1;
                 if (spinnerBugFistTimeLoad > 1) {
-                    mRadius = mRadiusArrayToSend.get(position);
                     if (mLocation != null) {
                         latitude = String.valueOf(mLocation.getLatitude());
                         longitude = String.valueOf(mLocation.getLongitude());
