@@ -12,6 +12,9 @@ public final class ApiDetails {
         PREVIEW("/buzz/preview/"),
         RSVP("/buzz/rsvp"),
         CREATE_BUZZ("/buzz/save"),
+        INTEREST_SUBSCRIBE("/interest/subscribe"),
+        BUZZ_BUZZ_BY_INTEREST("/buzz/buzzByInterest"),
+        BUZZ_TRENDING("/buzz/trending"),
         UPLOAD("UPLOAD"),
         NONE("");
 
@@ -112,6 +115,8 @@ public final class ApiDetails {
     public static final String REQUEST_KEY_PERIOD = "period";
     public static final String REQUEST_KEY_TAGS = "tags";
     public static final String REQUEST_KEY_INTERESTS = "interests";
+    public static final String REQUEST_KEY_INTEREST = "interest";
+    public static final String REQUEST_KEY_INTEREST_ID = "interestId";
 
     //    RESPONSE KEYS
     public static final String RESPONSE_KEY_MESSAGE = "message";

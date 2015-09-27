@@ -20,4 +20,6 @@
     <dimen name="home_interest_pic_height">75dp</dimen>
     <dimen name="home_buzz_pic_height">75dp</dimen>
     <dimen name="home_buzz_pic_width">120dp</dimen>
+    <dimen name="interest_pic_width">100dp</dimen>
+    <dimen name="interest_pic_height">75dp</dimen>
 </resources>
