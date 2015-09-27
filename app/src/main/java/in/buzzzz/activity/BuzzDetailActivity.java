@@ -366,14 +366,16 @@ public class BuzzDetailActivity extends BaseActivity {
         mCollapsingToolbar.setTitle(buzzPreview.getName());
         if (buzzPreview.isRSVP()) {
 //            mTextViewRsvbMessage.setText("You are going!!");
+            BuzzPreview.Stats stats = buzzPreview.getStats();
+            String response = String.format("%s Going | %s Not going | %s May be", stats.getGoingCount(), stats.getNotComingCount(), stats.getMayBeCount());
+            mTextViewResponse.setText(response);
         } else {
             mRelativeLayoutIsRsvp.setVisibility(View.GONE);
+            mTextViewResponse.setVisibility(View.GONE);
         }
         mTextViewVenue.setText(buzzPreview.getLocation().getAddress());
         mTextViewStart.setText(buzzPreview.getSchedule().getStartTime());
-        BuzzPreview.Stats stats = buzzPreview.getStats();
-        String response = String.format("%s Going | %s Not going | %s May be", stats.getGoingCount(), stats.getNotComingCount(), stats.getMayBeCount());
-        mTextViewResponse.setText(response);
+
         updateRsvbButton(buzzPreview.getRsvp());
         Utility.setImageFromUrl(Api.BASE_URL_CLOUDINARY_BUZZZZ + buzzPreview.getImageName(), mImageViewBuzzPic);
     }
