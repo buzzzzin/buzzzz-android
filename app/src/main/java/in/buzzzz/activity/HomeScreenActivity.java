@@ -239,7 +239,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                /* Intent intent = new Intent(mActivity,. class);
                 startActivity(intent);*/
 
-
             }
         });
 
@@ -282,7 +281,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                         mBuzzPreviewList = buzzList.getBuzzPreviewList();
                         setData();
                         setInterestData();
-
                     }
                 } else {
                     Utility.showToastMessage(mActivity, model.getMessage());
@@ -379,7 +377,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                 }
                 break;
         }
-
     }
 
     @Override
@@ -393,10 +390,8 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
             startActivity(intent);
             finish();
             return true;
-
         }
         return false;
-
     }
 
     @Override
@@ -407,7 +402,6 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
         spinner.setAdapter(dataAdapter); // set the adapter to provide layout of rows and content
         spinner.setOnItemSelectedListener(onItemSelectedListener); // set the listener, to perform actions based on item selection
         return true;
-
     }
 
     // add items into spinner dynamically
@@ -435,10 +429,8 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
                 if (mLocation != null) {
                     lat = String.valueOf(mLocation.getLatitude());
                     lon = String.valueOf(mLocation.getLongitude());
-
                 }
                 requestHomeBuzz(true, lat, lon);
-
             }
 
             @Override
