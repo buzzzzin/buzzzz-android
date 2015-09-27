@@ -19,6 +19,6 @@
     <string name="msg_image_not_uploaded">Please try again, unable to upload image</string>
     <string name="msg_image_not_deleted">Please try again, unable to delete image</string>
     <string name="menu_title">filter</string>
-    <string name="title_activity_trending">Buzz List</string>
+    <string name="title_activity_trending">Buzzzzs</string>
     <string name="title_activity_pick_venue_on_maps">Pick Venue on Map</string>
 </resources>

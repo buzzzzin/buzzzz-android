@@ -2,6 +2,7 @@ package in.buzzzz.utility;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -10,6 +11,7 @@ import android.location.LocationManager;
 import android.media.ExifInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Environment;
 import android.view.Display;
 import android.widget.ImageView;
@@ -366,5 +368,11 @@ public final class Utility {
             e.printStackTrace();
         }
         return bitmap;
+    }
+
+    public static void navigateTo(Context context, String latitude, String longitude) {
+        String uri = String.format("http://maps.google.com/maps?daddr=%s,%s", latitude, longitude);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        context.startActivity(intent);
     }
 }

@@ -50,14 +50,19 @@ public class BuzzAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             viewHolder.textViewInterestName.setText(buzzPreview.getName());
             if (buzzPreview.getStats() != null && !buzzPreview.getStats().getGoingCount().equalsIgnoreCase("0")) {
                 viewHolder.textViewSubscriberCount.setText("Going:" + buzzPreview.getStats().getGoingCount());
-
             } else {
                 viewHolder.textViewSubscriberCount.setText("Awaiting response");
-
             }
 
             Utility.setImageFromUrl(Api.BASE_URL_CLOUDINARY_BUZZZZ + buzzPreview.getImageName(), viewHolder.imageViewProfilePic, R.mipmap.ic_launcher);
             Logger.i("name", buzzPreview.getName());
+
+            viewHolder.imageViewNavigation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utility.navigateTo(mActivity, buzzPreview.getLocation().getLatitude(), buzzPreview.getLocation().getLongitude());
+                }
+            });
 
             viewHolder.relativeLayoutBuzz.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -91,7 +96,7 @@ public class BuzzAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageViewProfilePic, imageViewSubscribe;
+        ImageView imageViewProfilePic, imageViewSubscribe, imageViewNavigation;
         TextView textViewInterestName, textViewSubscriberCount;
         RelativeLayout relativeLayoutBuzz;
 
@@ -99,6 +104,7 @@ public class BuzzAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             super(itemView);
             imageViewProfilePic = (ImageView) itemView.findViewById(R.id.imageview_interest_pic);
             imageViewSubscribe = (ImageView) itemView.findViewById(R.id.imageview_subscribe);
+            imageViewNavigation = (ImageView) itemView.findViewById(R.id.imageview_navigation);
             textViewInterestName = (TextView) itemView.findViewById(R.id.textview_interest_name);
             textViewSubscriberCount = (TextView) itemView.findViewById(R.id.textview_subscriber_count);
             relativeLayoutBuzz = (RelativeLayout) itemView.findViewById(R.id.relativelayt_interest);
