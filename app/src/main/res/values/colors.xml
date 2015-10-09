@@ -8,5 +8,7 @@
     <color name="profile_placeholder">#C0C0C0</color>
     <color name="transparent_white">#B3000000</color>
 
+    <color name="card_parent">#f7f7f7</color>
+
 
 </resources>
