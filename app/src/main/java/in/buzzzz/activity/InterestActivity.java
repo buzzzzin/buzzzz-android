@@ -22,6 +22,8 @@ import in.buzzzz.model.Request;
 import in.buzzzz.parser.InterestParser;
 import in.buzzzz.utility.Api;
 import in.buzzzz.utility.ApiDetails;
+import in.buzzzz.utility.AppConstants;
+import in.buzzzz.utility.SharedPreference;
 import in.buzzzz.utility.Utility;
 
 public class InterestActivity extends BaseActivity {
@@ -58,7 +60,7 @@ public class InterestActivity extends BaseActivity {
         HashMap<String, String> params = new HashMap<>();
         params.put(ApiDetails.REQUEST_KEY_NAME, ApiDetails.ACTION_NAME.INTEREST.name());
         Request request = new Request(ApiDetails.ACTION_NAME.INTEREST);
-        request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.INTEREST.getActionName());
+        request.setUrl(SharedPreference.getString(mActivity, AppConstants.PREF_KEY_URL_API) + ApiDetails.ACTION_NAME.INTEREST.getActionName());
         request.setShowDialog(true);
         request.setDialogMessage(getString(R.string.progress_dialog_msg));
         request.setParamMap(params);

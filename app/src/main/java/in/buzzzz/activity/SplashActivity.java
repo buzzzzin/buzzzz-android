@@ -88,9 +88,6 @@ public class SplashActivity extends BaseActivity {
                     String apiUrl = Utility.getText(editTextApiUrl);
                     String chatUrl = Utility.getText(editTextChatUrl);
 
-                    Api.BASE_URL_API = apiUrl;
-                    Api.CHAT_HOST_URL = chatUrl;
-
                     SharedPreference.setString(mActivity, AppConstants.PREF_KEY_URL_API, apiUrl);
                     SharedPreference.setString(mActivity, AppConstants.PREF_KEY_URL_CHAT, chatUrl);
 

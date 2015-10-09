@@ -274,7 +274,7 @@ public class HomeScreenActivity extends BaseActivity implements ResultCallback<L
 
         params.put(ApiDetails.REQUEST_KEY_RADIUS, mRadius);
         Request request = new Request(ApiDetails.ACTION_NAME.HOME_BUZZ);
-        request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.HOME_BUZZ.getActionName());
+        request.setUrl(SharedPreference.getString(mActivity, AppConstants.PREF_KEY_URL_API) + ApiDetails.ACTION_NAME.HOME_BUZZ.getActionName());
         request.setShowDialog(showProgressDialog);
         request.setDialogMessage(getString(R.string.progress_dialog_msg));
         request.setParamMap(params);

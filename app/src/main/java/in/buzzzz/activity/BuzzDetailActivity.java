@@ -159,7 +159,7 @@ public class BuzzDetailActivity extends BaseActivity {
     private void connectWebSocket() {
         URI uri;
         try {
-            uri = new URI(Api.CHAT_HOST_URL + Api.CHAT_CHANNEL_BUZZ + mChannelId);
+            uri = new URI(SharedPreference.getString(mActivity, AppConstants.PREF_KEY_URL_CHAT) + Api.CHAT_CHANNEL_BUZZ + mChannelId);
         } catch (URISyntaxException e) {
             e.printStackTrace();
             Logger.i("uri not valid", e.toString() + "");
@@ -297,7 +297,7 @@ public class BuzzDetailActivity extends BaseActivity {
 
     private void requestBuzzDetail() {
         Request request = new Request(ApiDetails.ACTION_NAME.PREVIEW);
-        request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.PREVIEW.getActionName() + mBuzzzzId);
+        request.setUrl(SharedPreference.getString(mActivity, AppConstants.PREF_KEY_URL_API) + ApiDetails.ACTION_NAME.PREVIEW.getActionName() + mBuzzzzId);
         request.setDialogMessage(getString(R.string.progress_dialog_msg));
         request.setShowDialog(true);
         request.setRequestType(Request.HttpRequestType.GET);
@@ -332,7 +332,7 @@ public class BuzzDetailActivity extends BaseActivity {
         Request request = new Request(ApiDetails.ACTION_NAME.RSVP);
         request.setParamMap(params);
         request.setShowDialog(false);
-        request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.RSVP.getActionName());
+        request.setUrl(SharedPreference.getString(mActivity, AppConstants.PREF_KEY_URL_API) + ApiDetails.ACTION_NAME.RSVP.getActionName());
         request.setRequestType(Request.HttpRequestType.POST);
         LoaderCallback loaderCallback = new LoaderCallback(mActivity, new MessageParser());
         boolean hasNetwork = loaderCallback.requestToServer(request);

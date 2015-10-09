@@ -41,6 +41,7 @@ import in.buzzzz.model.Request;
 import in.buzzzz.parser.LoginParser;
 import in.buzzzz.utility.Api;
 import in.buzzzz.utility.ApiDetails;
+import in.buzzzz.utility.AppConstants;
 import in.buzzzz.utility.Logger;
 import in.buzzzz.utility.SharedPreference;
 import in.buzzzz.utility.Utility;
@@ -282,7 +283,7 @@ public class LoginActivity extends BaseActivity {
         params.put(ApiDetails.REQUEST_KEY_MEDIUM_TYPE, String.valueOf(medium));
 
         Request request = new Request(ApiDetails.ACTION_NAME.LOGIN);
-        request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.LOGIN.getActionName());
+        request.setUrl(SharedPreference.getString(mActivity, AppConstants.PREF_KEY_URL_API) + ApiDetails.ACTION_NAME.LOGIN.getActionName());
         request.setShowDialog(true);
         request.setDialogMessage(getString(R.string.msg_login_progress));
         request.setParamMap(params);

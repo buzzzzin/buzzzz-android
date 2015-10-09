@@ -47,6 +47,7 @@ import in.buzzzz.utility.Api;
 import in.buzzzz.utility.ApiDetails;
 import in.buzzzz.utility.AppConstants;
 import in.buzzzz.utility.Logger;
+import in.buzzzz.utility.SharedPreference;
 import in.buzzzz.utility.Utility;
 
 public class BuzzListActivity extends BaseActivity implements ResultCallback<LocationSettingsResult> {
@@ -200,7 +201,7 @@ public class BuzzListActivity extends BaseActivity implements ResultCallback<Loc
         }
         params.put(ApiDetails.REQUEST_KEY_RADIUS, mRadius);
         Request request = new Request(buzzBuzzByInterest);
-        request.setUrl(Api.BASE_URL_API + buzzBuzzByInterest.getActionName());
+        request.setUrl(SharedPreference.getString(mActivity, AppConstants.PREF_KEY_URL_API) + buzzBuzzByInterest.getActionName());
         request.setShowDialog(true);
         request.setDialogMessage(getString(R.string.progress_dialog_msg));
         request.setParamMap(params);

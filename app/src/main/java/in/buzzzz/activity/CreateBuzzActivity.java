@@ -154,7 +154,7 @@ public class CreateBuzzActivity extends BaseActivity implements GoogleApiClient.
         HashMap<String, String> params = new HashMap<>();
         params.put(ApiDetails.REQUEST_KEY_NAME, ApiDetails.ACTION_NAME.INTEREST.name());
         Request request = new Request(ApiDetails.ACTION_NAME.INTEREST);
-        request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.INTEREST.getActionName());
+        request.setUrl(SharedPreference.getString(mActivity, AppConstants.PREF_KEY_URL_API) + ApiDetails.ACTION_NAME.INTEREST.getActionName());
         request.setShowDialog(true);
         request.setDialogMessage(getString(R.string.progress_dialog_msg));
         request.setParamMap(params);
@@ -232,7 +232,7 @@ public class CreateBuzzActivity extends BaseActivity implements GoogleApiClient.
         request.setParamMap(params);
         request.setShowDialog(true);
         request.setDialogMessage(getString(R.string.progress_dialog_msg));
-        request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.CREATE_BUZZ.getActionName());
+        request.setUrl(SharedPreference.getString(mActivity, AppConstants.PREF_KEY_URL_API) + ApiDetails.ACTION_NAME.CREATE_BUZZ.getActionName());
         request.setRequestType(Request.HttpRequestType.POST);
         LoaderCallback loaderCallback = new LoaderCallback(mActivity, new BuzzPreviewParser());
         boolean hasNetwork = loaderCallback.requestToServer(request);
@@ -463,7 +463,7 @@ public class CreateBuzzActivity extends BaseActivity implements GoogleApiClient.
         request.setDialogMessage(getResources().getString(R.string.dialog_msg_upload_image));
         request.setParamMap(paramMap);
         request.setShowDialog(true);
-        request.setUrl(Api.BASE_URL_API);
+        request.setUrl(SharedPreference.getString(mActivity, AppConstants.PREF_KEY_URL_API));
         request.setRequestType(Request.HttpRequestType.CLOUDINARY);
         CloudinaryParser cloudinaryParser = new CloudinaryParser();
         final LoaderCallback loaderCallback = new LoaderCallback(mActivity, cloudinaryParser);

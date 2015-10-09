@@ -96,7 +96,7 @@ public class MyProfileActivity extends BaseActivity {
     private void requestLogout() {
         HashMap<String, String> params = new HashMap<>();
         Request request = new Request(ApiDetails.ACTION_NAME.AUTH_LOGOUT);
-        request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.AUTH_LOGOUT.getActionName());
+        request.setUrl(SharedPreference.getString(mActivity, AppConstants.PREF_KEY_URL_API) + ApiDetails.ACTION_NAME.AUTH_LOGOUT.getActionName());
         request.setParamMap(params);
         request.setShowDialog(true);
         request.setDialogMessage(getString(R.string.progress_dialog_msg));
@@ -148,7 +148,7 @@ public class MyProfileActivity extends BaseActivity {
 
 
         Request request = new Request(ApiDetails.ACTION_NAME.MY_PROFILE);
-        request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.MY_PROFILE.getActionName());
+        request.setUrl(SharedPreference.getString(mActivity, AppConstants.PREF_KEY_URL_API) + ApiDetails.ACTION_NAME.MY_PROFILE.getActionName());
         request.setShowDialog(true);
         request.setDialogMessage(getString(R.string.progress_dialog_msg));
         request.setRequestType(Request.HttpRequestType.GET);

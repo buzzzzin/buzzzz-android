@@ -106,7 +106,7 @@ public class InterestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
         Request request = new Request(ApiDetails.ACTION_NAME.INTEREST_SUBSCRIBE);
-        request.setUrl(Api.BASE_URL_API + ApiDetails.ACTION_NAME.INTEREST_SUBSCRIBE.getActionName());
+        request.setUrl(SharedPreference.getString(mActivity, AppConstants.PREF_KEY_URL_API) + ApiDetails.ACTION_NAME.INTEREST_SUBSCRIBE.getActionName());
         request.setShowDialog(true);
         request.setDialogMessage(mActivity.getString(R.string.progress_dialog_msg));
         request.setParamMap(params);
