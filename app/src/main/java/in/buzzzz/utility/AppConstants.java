@@ -26,4 +26,7 @@ public final class AppConstants {
     public static final String EXTRA_IS_REMOVE_IMAGE = "isRemoveEvent";
     public static final String EXTRA_IMAGE_PATH = "imagePath";
     public static final String EXTRA_CAMERAPIC_STATUS = "cameraPic";
+
+    public static final String PREF_KEY_URL_API = "api_url";
+    public static final String PREF_KEY_URL_CHAT = "chat_url";
 }

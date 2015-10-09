@@ -12,6 +12,33 @@
         android:layout_centerInParent="true"
         android:background="@drawable/ic_launcher_web"/>
 
+    <EditText
+        android:id="@+id/edittext_api_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:hint="Api"
+        android:inputType="textUri"
+        android:text="http://"
+        android:textColor="@android:color/white"/>
+
+    <EditText
+        android:id="@+id/edittext_chat_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edittext_api_url"
+        android:hint="Chat"
+        android:inputType="textUri"
+        android:text="ws://"
+        android:textColor="@android:color/white"/>
+
+    <Button
+        android:id="@+id/button_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edittext_chat_url"
+        android:text="@string/label_next"/>
+
     <TextView
         style="@style/TextAppearance.AppCompat.Headline"
         android:layout_width="wrap_content"
