@@ -32,10 +32,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import in.buzzzz.R;
 import in.buzzzz.model.Response;
@@ -99,7 +103,6 @@ public final class Utility {
         try {
             String encodeUrl = encodeURL(url);
             HttpURLConnection urlConnection = (HttpURLConnection) new URL(encodeUrl).openConnection();
-            urlConnection.setDoOutput(true);
             urlConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             urlConnection.setRequestProperty("User-Agent", System.getProperty("http.agent"));
             urlConnection.setRequestProperty("Accept-Language", getLocaleLanguageTag(context));
@@ -108,6 +111,7 @@ public final class Utility {
 
             urlConnection.setRequestMethod("GET");
             urlConnection.setConnectTimeout(timeoutConnection);
+            printRequestProperties(urlConnection);
             generateResponse(context, response, urlConnection);
             urlConnection.disconnect();
         } catch (Exception e) {
@@ -116,6 +120,27 @@ public final class Utility {
         }
         Logger.i("print response", response.getResponse());
         return response;
+    }
+
+    private static void printRequestProperties(HttpURLConnection httpURLConnection) {
+        Map<String, List<String>> requestProperties = httpURLConnection.getRequestProperties();
+        Set<String> propertyKeys = requestProperties.keySet();
+        Logger.i("--------------------", "--------------------");
+        for (String key : propertyKeys) {
+            List<String> value = requestProperties.get(key);
+            Logger.i("PROPERTY", "Key: " + key + " | Value: " + value);
+        }
+    }
+
+    private static void printHeaderContent(URLConnection urlConnection) {
+        Map<String, List<String>> headerFields = urlConnection.getHeaderFields();
+        Set<String> headerKeys = headerFields.keySet();
+
+        for (String key : headerKeys) {
+            List<String> value = headerFields.get(key);
+            Logger.i("HEADER", "Key: " + key + " | Value: " + value);
+        }
+        Logger.i("--------------------", "--------------------");
     }
 
     public static Response uploadOnCloudinary(Context context, HashMap<String, String> config, String imagePath) {
@@ -180,6 +205,7 @@ public final class Utility {
     }
 
     private static void generateResponse(Context context, Response response, HttpURLConnection urlConnection) throws IOException {
+        printHeaderContent(urlConnection);
         final int responseCode = urlConnection.getResponseCode();
         Logger.i("Response Code: " + responseCode);
         response.setHttpStatusCode(responseCode);

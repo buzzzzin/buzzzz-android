@@ -6,6 +6,7 @@ package in.buzzzz.utility;
 public final class ApiDetails {
 
     public enum ACTION_NAME {
+        CONFIG("config"),
         LOGIN("/auth/login"),
         INTEREST("/interest/list"),
         HOME_BUZZ("/v1/home/buzz"),
@@ -124,6 +125,11 @@ public final class ApiDetails {
     public static final String RESPONSE_KEY_MESSAGE = "message";
     public static final String RESPONSE_KEY_STATUS = "status";
     public static final String RESPONSE_KEY_DATA = "data";
+
+    // Config
+    public static final String RESPONSE_KEY_URL = "url";
+    public static final String RESPONSE_KEY_API = "api";
+    public static final String RESPONSE_KEY_CHAT = "chat";
 
     //    Login Keys
     public static final String RESPONSE_KEY_USER = "user";

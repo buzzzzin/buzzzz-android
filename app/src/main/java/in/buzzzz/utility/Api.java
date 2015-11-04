@@ -4,6 +4,7 @@ package in.buzzzz.utility;
  * Created by Navkrishna on September 26, 2015
  */
 public final class Api {
+    public static final String BASE_URL_CONFIG = "http://resources.buzzzz.in/config.json";
     public static final String BASE_URL_CLOUDINARY_SOCIAL = "http://res.cloudinary.com/buzzzz/image/";
     public static final String BASE_URL_CLOUDINARY_BUZZZZ = "http://res.cloudinary.com/buzzzz/image/upload/";
 
