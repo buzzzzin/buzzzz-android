@@ -32,6 +32,14 @@ public final class SharedPreference {
         return getPref(context).getBoolean(key, false);
     }
 
+    public static void setLong(Context context, String key, long value) {
+        getPref(context).edit().putLong(key, value).commit();
+    }
+
+    public static long getLong(Context context, String key) {
+        return getPref(context).getLong(key, 0);
+    }
+
     public static void clearLoggedInInfo(Context context) {
         getPref(context).edit().clear().commit();
     }

@@ -29,4 +29,6 @@ public final class AppConstants {
 
     public static final String PREF_KEY_URL_API = "api_url";
     public static final String PREF_KEY_URL_CHAT = "chat_url";
+
+    public static final String PREF_KEY_LAST_CONFIG_CALL = "last_config_call";
 }
