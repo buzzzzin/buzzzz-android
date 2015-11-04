@@ -15,7 +15,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.view.Display;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cloudinary.Cloudinary;
@@ -375,9 +374,5 @@ public final class Utility {
         String uri = String.format("http://maps.google.com/maps?daddr=%s,%s", latitude, longitude);
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
         context.startActivity(intent);
-    }
-
-    public static String getText(TextView textView) {
-        return textView != null ? textView.getText().toString().trim() : "";
     }
 }
